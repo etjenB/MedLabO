@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MedLabO.Services.Database
@@ -13,6 +14,11 @@ namespace MedLabO.Services.Database
     {
         //[Key]
         //public Guid AdministratorID { get; set; } = Guid.NewGuid();
+
+        [Required]
+        public string? Ime { get; set; }
+        [Required]
+        public string? Prezime { get; set; }
 
         [Required]
         public bool IsKontakt { get; set; } = false;

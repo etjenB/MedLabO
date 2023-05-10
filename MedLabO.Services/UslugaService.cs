@@ -1,4 +1,5 @@
 ﻿using MedLabO.Models;
+using MedLabO.Services.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,14 @@ namespace MedLabO.Services
 {
     public class UslugaService : IUslugaService
     {
+        
+        private readonly MedLabOContext _db;
+
+        public UslugaService(MedLabOContext db)
+        {
+            _db = db;
+        }
+
         List<Usluga> Usluge = new List<Usluga>()
         {
             new Usluga()
@@ -27,7 +36,7 @@ namespace MedLabO.Services
 
         public IList<Usluga> Get()
         {
-            return Usluge;
+            return _db.Usluge.ToList();
         }
     }
 }

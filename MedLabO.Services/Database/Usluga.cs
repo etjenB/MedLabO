@@ -58,6 +58,7 @@ namespace MedLabO.Models
         //Foreign Key na tabelu Administrator
         [ForeignKey("Administrator")]
         public string? AdministratorID { get; set; }
+        [NotMapped]
         public virtual Administrator? Administrator { get; set; } = null!;
 
     }

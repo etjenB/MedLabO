@@ -17,21 +17,26 @@ namespace MedLabO.Services.Database
 
         }
 
-        public DbSet<IdentityUser> Korisnici { get; set; }
-        public DbSet<Administrator> Administratori { get; set; }
-        public DbSet<MedicinskoOsoblje> MedicinskoOsoblje { get; set; }
-        public DbSet<Pacijent> Pacijenti { get; set; }
+        public virtual DbSet<IdentityUser> Korisnici { get; set; }
+        public virtual DbSet<Administrator> Administratori { get; set; }
+        public virtual DbSet<MedicinskoOsoblje> MedicinskoOsoblje { get; set; }
+        public virtual DbSet<Pacijent> Pacijenti { get; set; }
 
 
-        public DbSet<Novost> Novosti { get; set; }
-        public DbSet<Obavijest> Obavijesti { get; set; }
-        public DbSet<Zvanje> Zvanja { get; set; }
-        public DbSet<Termin> Termini { get; set; }
-        public DbSet<Racun> Racuni { get; set; }
-        public DbSet<Zakljucak> Zakljucci { get; set; }
-        public DbSet<Rezultat> Rezultati { get; set; }
-        public DbSet<Test> Testovi { get; set; }
-        public DbSet<TestParametar> TestParametri { get; set; }
-        public DbSet<Usluga> Usluge { get; set; }
+        public virtual DbSet<Novost> Novosti { get; set; }
+        public virtual DbSet<Obavijest> Obavijesti { get; set; }
+        public virtual DbSet<Zvanje> Zvanja { get; set; }
+        public virtual DbSet<Termin> Termini { get; set; }
+        public virtual DbSet<Racun> Racuni { get; set; }
+        public virtual DbSet<Zakljucak> Zakljucci { get; set; }
+        public virtual DbSet<Rezultat> Rezultati { get; set; }
+        public virtual DbSet<Test> Testovi { get; set; }
+        public virtual DbSet<TestParametar> TestParametri { get; set; }
+        public virtual DbSet<Usluga> Usluge { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 //Dependency injection za Usluga
 builder.Services.AddTransient<IUslugaService, UslugaService>();
+builder.Services.AddTransient<IAdministratorService, AdministratorService>();
 
 //Inject DbContext
 //NuGet Potrebno Microsoft.EntityFrameworkCore.SqlServer
