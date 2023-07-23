@@ -33,8 +33,8 @@ namespace MedLabO.Services.Database
         [Required]
         public DateTime DTKreiranja { get; set; } = DateTime.Now;
 
-        public ICollection<Termin> TestTermini { get; set; } = new List<Termin>();
-        public ICollection<Usluga> TestUsluge { get; set; } = new List<Usluga>();
+        public virtual ICollection<Termin> TestTermini { get; set; } = new List<Termin>();
+        public virtual ICollection<Usluga> TestUsluge { get; set; } = new List<Usluga>();
 
         //Foreign Key na tabelu Administrator
         [ForeignKey("Administrator")]

@@ -27,10 +27,10 @@ namespace MedLabO.Services.Database
         //npr. KontaktInfo = "Podrska za korisnike";
         public string? KontaktInfo { get; set; }
 
-        public ICollection<Usluga> KreiraneUsluge { get; set; } = new List<Usluga>();
-        public ICollection<Test> KreiraniTestovi { get; set; } = new List<Test>();
-        public ICollection<Novost> KreiraneNovosti { get; set; } = new List<Novost>();
-        public ICollection<Obavijest> KreiraneObavijesti { get; set; } = new List<Obavijest>();
+        public virtual ICollection<Usluga> KreiraneUsluge { get; set; } = new List<Usluga>();
+        public virtual ICollection<Test> KreiraniTestovi { get; set; } = new List<Test>();
+        public virtual ICollection<Novost> KreiraneNovosti { get; set; } = new List<Novost>();
+        public virtual ICollection<Obavijest> KreiraneObavijesti { get; set; } = new List<Obavijest>();
 
     }
 }

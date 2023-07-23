@@ -36,7 +36,7 @@ namespace MedLabO.Services.Database
         public string Spol { get; set; } = null!;
 
         //Lista odobrenih termina
-        public ICollection<Termin> OdobreniTermini { get; set; } = new List<Termin>();
+        public virtual ICollection<Termin> OdobreniTermini { get; set; } = new List<Termin>();
 
         //Jedan zaposlenik moze imati samo jedno zvanje tj. ulogu koju obavlja u laboratoriju
         //Npr. Doktor, LaboratorijskiTehnicar itd.

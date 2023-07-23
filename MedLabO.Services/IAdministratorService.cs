@@ -1,4 +1,6 @@
 ﻿using MedLabO.Models;
+using MedLabO.Models.Requests;
+using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using System;
 using System.Collections.Generic;
@@ -8,8 +10,10 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
-    public interface IAdministratorService
+    public interface IAdministratorService : IService<Models.Administrator, AdministratorSearchObject>
     {
-        IList<Models.Administrator> Get();
+        //Task<IList<Models.Administrator>> Get();
+        Task<Models.Administrator> Insert(AdministratorInsertRequest administrator);
+        Task<Models.Administrator> Update(string Id, AdministratorUpdateRequest administrator);
     }
 }

@@ -29,6 +29,6 @@ namespace MedLabO.Services.Database
         public string? Spol { get; set; }
 
         //Lista svih termina pacijenta
-        public ICollection<Termin> Termini { get; set; } = new List<Termin>();
+        public virtual ICollection<Termin> Termini { get; set; } = new List<Termin>();
     }
 }

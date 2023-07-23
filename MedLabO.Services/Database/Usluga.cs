@@ -52,8 +52,8 @@ namespace MedLabO.Models
 
         public byte[]? Slika { get; set; }
 
-        public ICollection<Termin> UslugaTermini { get; set; } = new List<Termin>();
-        public ICollection<Test> UslugaTestovi { get; set; } = new List<Test>();
+        public virtual ICollection<Termin> UslugaTermini { get; set; } = new List<Termin>();
+        public virtual ICollection<Test> UslugaTestovi { get; set; } = new List<Test>();
 
         //Foreign Key na tabelu Administrator
         [ForeignKey("Administrator")]

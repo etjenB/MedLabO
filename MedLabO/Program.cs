@@ -1,3 +1,4 @@
+using MedLabO.Models.SearchObjects;
 using MedLabO.Services;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Identity;
@@ -14,12 +15,21 @@ builder.Services.AddSwaggerGen();
 
 //Dependency injection za Usluga
 builder.Services.AddTransient<IUslugaService, UslugaService>();
-builder.Services.AddTransient<IAdministratorService, AdministratorService>();
+//builder.Services.AddTransient<IAdministratorService, AdministratorService>();
+
+//builder.Services.AddTransient<ITestService, TestService>();
+builder.Services.AddTransient<IService<MedLabO.Models.Test, TestSearchObject>, TestService>();
+
+builder.Services.AddTransient<IService<MedLabO.Models.TestParametar, SearchObject>, Service<MedLabO.Models.TestParametar, MedLabO.Services.Database.TestParametar, SearchObject>>();
+
+builder.Services.AddTransient<IService<MedLabO.Models.Administrator, AdministratorSearchObject>, AdministratorService>();
 
 //Inject DbContext
 //NuGet Potrebno Microsoft.EntityFrameworkCore.SqlServer
 builder.Services.AddDbContext<MedLabOContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("MedLabOContextConnectionString")));
+
+builder.Services.AddAutoMapper(typeof(IAdministratorService));
 
 //Dodavanje DefaultIdentity
 //NuGet Potrebno Microsoft.AspNetCore.Identity.UI

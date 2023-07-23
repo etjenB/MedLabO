@@ -10,8 +10,8 @@ namespace MedLabO.Services.Database
 {
     public class TestParametar
     {
-        //[Key]
-        //public Guid TestParametarID { get; set; } = Guid.NewGuid();
+        [Key]
+        public Guid TestParametarID { get; set; } = Guid.NewGuid();
 
         //Ukoliko postoji minimalna referentna vrijednost za odredjeni test
         public float? MinVrijednost { get; set; }
@@ -25,8 +25,11 @@ namespace MedLabO.Services.Database
         //Mjerne jedinice npr. umol/L, g/L, pg itd.
         public string? Jedinica { get; set; }
 
-        [Key]
-        public Guid TestID { get; set; }
-        public virtual Test Test { get; set; } = null!;
+        //[ForeignKey("Test")]
+        //public Guid? TestID { get; set; }
+        //public virtual Test? Test { get; set; } = null!;
+        //[Key]
+        //public Guid TestParametarID { get; set; }
+        //public virtual Test Test { get; set; } = null!;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MedLabO.Models;
 using MedLabO.Services.Database;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,9 +35,9 @@ namespace MedLabO.Services
             }
         };
 
-        public IList<Usluga> Get()
+        public async Task<IList<Usluga>> Get()
         {
-            return _db.Usluge.ToList();
+            return await _db.Usluge.ToListAsync();
         }
     }
 }

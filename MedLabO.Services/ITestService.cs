@@ -1,4 +1,4 @@
-﻿using MedLabO.Models;
+﻿using MedLabO.Models.SearchObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
-    public interface IUslugaService
+    public interface ITestService : IService<Models.Test, TestSearchObject>
     {
-        Task<IList<Usluga>> Get();
     }
 }

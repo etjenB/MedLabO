@@ -18,7 +18,7 @@ namespace MedLabO.Services.Database
         public string? Opis { get; set; }
 
         //Lista zaposlenika sa datim zvanjem
-        public ICollection<MedicinskoOsoblje> MedicinskoOsoblje { get; set; } = new List<MedicinskoOsoblje>();
+        public virtual ICollection<MedicinskoOsoblje> MedicinskoOsoblje { get; set; } = new List<MedicinskoOsoblje>();
 
     }
 }

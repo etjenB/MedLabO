@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
-    public interface IUslugaService
+    public interface IService<T, TSearch> where TSearch : class
     {
-        Task<IList<Usluga>> Get();
+        Task<PagedResult<T>> Get(TSearch search = null);
+        Task<T> GetById(Guid Id);
     }
 }
