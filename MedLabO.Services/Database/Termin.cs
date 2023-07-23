@@ -37,7 +37,7 @@ namespace MedLabO.Services.Database
         public byte[]? RezultatTerminaPDF { get; set; }
 
         public virtual ICollection<Usluga> TerminUsluge { get; set; } = new List<Usluga>();
-        public virtual ICollection<Test> TerminTestovi { get; set; } = new List<Test>();
+        public virtual ICollection<TestTerminRezultat> TestTerminRezultati { get; set; } = new List<TestTerminRezultat>();
 
 
 

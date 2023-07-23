@@ -45,6 +45,11 @@ namespace MedLabO.Services
                 query = query.Include("TestParametar");
             }
 
+            if (search?.IncludeRezultat == true)
+            {
+                query = query.Include("Rezultat");
+            }
+
             return base.AddInclude(query, search);
         }
     }

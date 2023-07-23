@@ -4,6 +4,7 @@ using MedLabO.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedLabO.Services.Migrations
 {
     [DbContext(typeof(MedLabOContext))]
-    partial class MedLabOContextModelSnapshot : ModelSnapshot
+    [Migration("20230723174238_TestTerminRezultat")]
+    partial class TestTerminRezultat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -352,6 +354,9 @@ namespace MedLabO.Services.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("RezultatID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("TestParametarID")
                         .HasColumnType("uniqueidentifier");
 
@@ -361,6 +366,8 @@ namespace MedLabO.Services.Migrations
                     b.HasKey("TestID");
 
                     b.HasIndex("AdministratorID");
+
+                    b.HasIndex("RezultatID");
 
                     b.HasIndex("TestParametarID");
 
@@ -392,20 +399,26 @@ namespace MedLabO.Services.Migrations
 
             modelBuilder.Entity("MedLabO.Services.Database.TestTerminRezultat", b =>
                 {
-                    b.Property<Guid>("TestID")
+                    b.Property<Guid>("TestTerminRezultatID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TerminID")
+                    b.Property<Guid?>("RezultatID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RezultatID")
+                    b.Property<Guid?>("TerminID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("TestID", "TerminID", "RezultatID");
+                    b.Property<Guid?>("TestID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("TestTerminRezultatID");
 
                     b.HasIndex("RezultatID");
 
                     b.HasIndex("TerminID");
+
+                    b.HasIndex("TestID");
 
                     b.ToTable("TestTerminRezultati");
                 });
@@ -834,11 +847,17 @@ namespace MedLabO.Services.Migrations
                         .WithMany("KreiraniTestovi")
                         .HasForeignKey("AdministratorID");
 
+                    b.HasOne("MedLabO.Services.Database.Rezultat", "Rezultat")
+                        .WithMany()
+                        .HasForeignKey("RezultatID");
+
                     b.HasOne("MedLabO.Services.Database.TestParametar", "TestParametar")
                         .WithMany()
                         .HasForeignKey("TestParametarID");
 
                     b.Navigation("Administrator");
+
+                    b.Navigation("Rezultat");
 
                     b.Navigation("TestParametar");
                 });
@@ -847,21 +866,15 @@ namespace MedLabO.Services.Migrations
                 {
                     b.HasOne("MedLabO.Services.Database.Rezultat", "Rezultat")
                         .WithMany("TestTerminRezultati")
-                        .HasForeignKey("RezultatID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RezultatID");
 
                     b.HasOne("MedLabO.Services.Database.Termin", "Termin")
                         .WithMany("TestTerminRezultati")
-                        .HasForeignKey("TerminID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TerminID");
 
                     b.HasOne("MedLabO.Services.Database.Test", "Test")
                         .WithMany("TestTerminRezultati")
-                        .HasForeignKey("TestID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TestID");
 
                     b.Navigation("Rezultat");
 

@@ -33,7 +33,7 @@ namespace MedLabO.Services.Database
         [Required]
         public DateTime DTKreiranja { get; set; } = DateTime.Now;
 
-        public virtual ICollection<Termin> TestTermini { get; set; } = new List<Termin>();
+        public virtual ICollection<TestTerminRezultat> TestTerminRezultati { get; set; } = new List<TestTerminRezultat>();
         public virtual ICollection<Usluga> TestUsluge { get; set; } = new List<Usluga>();
 
         //Foreign Key na tabelu Administrator
@@ -44,11 +44,5 @@ namespace MedLabO.Services.Database
         [ForeignKey("TestParametar")]
         public Guid? TestParametarID { get; set; }
         public virtual TestParametar? TestParametar { get; set; } = null!;
-
-        [ForeignKey("Rezultat")]
-        public Guid? RezultatID { get; set; }
-        //[InverseProperty("Test")]
-        public virtual Rezultat? Rezultat { get; set; }
-
     }
 }

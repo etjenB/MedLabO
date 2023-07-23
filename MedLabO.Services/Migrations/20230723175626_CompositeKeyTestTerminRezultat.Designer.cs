@@ -4,6 +4,7 @@ using MedLabO.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedLabO.Services.Migrations
 {
     [DbContext(typeof(MedLabOContext))]
-    partial class MedLabOContextModelSnapshot : ModelSnapshot
+    [Migration("20230723175626_CompositeKeyTestTerminRezultat")]
+    partial class CompositeKeyTestTerminRezultat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -352,6 +354,9 @@ namespace MedLabO.Services.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("RezultatID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("TestParametarID")
                         .HasColumnType("uniqueidentifier");
 
@@ -361,6 +366,8 @@ namespace MedLabO.Services.Migrations
                     b.HasKey("TestID");
 
                     b.HasIndex("AdministratorID");
+
+                    b.HasIndex("RezultatID");
 
                     b.HasIndex("TestParametarID");
 
@@ -834,11 +841,17 @@ namespace MedLabO.Services.Migrations
                         .WithMany("KreiraniTestovi")
                         .HasForeignKey("AdministratorID");
 
+                    b.HasOne("MedLabO.Services.Database.Rezultat", "Rezultat")
+                        .WithMany()
+                        .HasForeignKey("RezultatID");
+
                     b.HasOne("MedLabO.Services.Database.TestParametar", "TestParametar")
                         .WithMany()
                         .HasForeignKey("TestParametarID");
 
                     b.Navigation("Administrator");
+
+                    b.Navigation("Rezultat");
 
                     b.Navigation("TestParametar");
                 });

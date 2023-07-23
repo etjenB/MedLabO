@@ -10,8 +10,8 @@ namespace MedLabO.Services.Database
 {
     public class Rezultat
     {
-        //[Key]
-        //public Guid RezultatID { get; set; } = Guid.NewGuid();
+        [Key]
+        public Guid RezultatID { get; set; } = Guid.NewGuid();
 
         [Required]
         public DateTime DTRezultata { get; set; } = DateTime.Now;
@@ -34,10 +34,12 @@ namespace MedLabO.Services.Database
         //Ukoliko ona postoji Obiljezen = true
         public float? RazlikaOdNormalne { get; set; }
 
+        public virtual ICollection<TestTerminRezultat> TestTerminRezultati { get; set; } = new List<TestTerminRezultat>();
 
-        [Key]
-        public Guid TestID { get; set; }
-        public virtual Test Test { get; set; } = null!;
+
+        //[Key]
+        //public Guid TestID { get; set; }
+        //public virtual Test Test { get; set; } = null!;
 
     }
 }

@@ -35,8 +35,13 @@ namespace MedLabO.Services.Database
         public virtual DbSet<TestParametar> TestParametri { get; set; }
         public virtual DbSet<Usluga> Usluge { get; set; }
 
+        public virtual DbSet<TestTerminRezultat> TestTerminRezultati { get; set;  }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TestTerminRezultat>()
+            .HasKey(ttr => new { ttr.TestID, ttr.TerminID, ttr.RezultatID });
+
             base.OnModelCreating(modelBuilder);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
