@@ -1,16 +1,8 @@
 ﻿using AutoMapper;
-using MedLabO.Models;
 using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
@@ -29,11 +21,11 @@ namespace MedLabO.Services
         //    //var list = new List<Models.Administrator>();
         //    //foreach (var item in entityList)
         //    //{
-        //    //    list.Add(new Models.Administrator() { 
+        //    //    list.Add(new Models.Administrator() {
         //    //        Ime = item.Ime,
         //    //        Prezime = item.Prezime,
-        //    //        IsKontakt = item.IsKontakt, 
-        //    //        KontaktInfo = item.KontaktInfo 
+        //    //        IsKontakt = item.IsKontakt,
+        //    //        KontaktInfo = item.KontaktInfo
         //    //    });
         //    //}
         //    //return list;

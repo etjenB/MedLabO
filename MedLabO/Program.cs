@@ -24,6 +24,8 @@ builder.Services.AddTransient<IService<MedLabO.Models.TestParametar, SearchObjec
 
 builder.Services.AddTransient<IService<MedLabO.Models.Administrator, AdministratorSearchObject>, AdministratorService>();
 
+builder.Services.AddTransient<IService<MedLabO.Models.Termin, TerminSearchObject>, TerminService>();
+
 //Inject DbContext
 //NuGet Potrebno Microsoft.EntityFrameworkCore.SqlServer
 builder.Services.AddDbContext<MedLabOContext>(options =>

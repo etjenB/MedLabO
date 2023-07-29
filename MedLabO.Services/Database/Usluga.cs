@@ -1,14 +1,8 @@
 ﻿using MedLabO.Services.Database;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MedLabO.Models
+namespace MedLabO.Services.Database
 {
     public class Usluga
     {
@@ -58,8 +52,8 @@ namespace MedLabO.Models
         //Foreign Key na tabelu Administrator
         [ForeignKey("Administrator")]
         public string? AdministratorID { get; set; }
+
         [NotMapped]
         public virtual Administrator? Administrator { get; set; } = null!;
-
     }
 }

@@ -1,12 +1,5 @@
-﻿using MedLabO.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MedLabO.Services.Database
 {
@@ -37,9 +30,7 @@ namespace MedLabO.Services.Database
         public byte[]? RezultatTerminaPDF { get; set; }
 
         public virtual ICollection<Usluga> TerminUsluge { get; set; } = new List<Usluga>();
-        public virtual ICollection<TestTerminRezultat> TestTerminRezultati { get; set; } = new List<TestTerminRezultat>();
-
-
+        public virtual ICollection<TerminTest> TestTerminRezultati { get; set; } = new List<TerminTest>();
 
         //[ForeignKey("Pacijent")]
         //public string PacijentID { get; set; }
@@ -47,20 +38,23 @@ namespace MedLabO.Services.Database
 
         [ForeignKey("Pacijent")]
         public string? PacijentID { get; set; }
+
         public virtual Pacijent? Pacijent { get; set; } = null!;
 
         //Zaposlenik koji je odobrio termin
         [ForeignKey("MedicinskoOsoblje")]
         public string? MedicinskoOsobljeID { get; set; }
+
         public virtual MedicinskoOsoblje? MedicinskoOsoblje { get; set; } = null!;
 
         [ForeignKey("Racun")]
         public Guid? RacunID { get; set; }
+
         public virtual Racun? Racun { get; set; } = null!;
 
         [ForeignKey("Zakljucak")]
         public Guid? ZakljucakID { get; set; }
-        public virtual Zakljucak? Zakljucak { get; set; } = null!;
 
+        public virtual Zakljucak? Zakljucak { get; set; } = null!;
     }
 }

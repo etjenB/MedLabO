@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MedLabO.Services.Database
 {
@@ -19,6 +14,5 @@ namespace MedLabO.Services.Database
 
         //Lista zaposlenika sa datim zvanjem
         public virtual ICollection<MedicinskoOsoblje> MedicinskoOsoblje { get; set; } = new List<MedicinskoOsoblje>();
-
     }
 }
