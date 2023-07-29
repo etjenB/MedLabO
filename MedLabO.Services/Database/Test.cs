@@ -1,11 +1,5 @@
-﻿using MedLabO.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MedLabO.Services.Database
 {
@@ -33,22 +27,23 @@ namespace MedLabO.Services.Database
         [Required]
         public DateTime DTKreiranja { get; set; } = DateTime.Now;
 
-        public virtual ICollection<Termin> TestTermini { get; set; } = new List<Termin>();
+        public virtual ICollection<TerminTest> TerminTestovi { get; set; } = new List<TerminTest>();
         public virtual ICollection<Usluga> TestUsluge { get; set; } = new List<Usluga>();
 
         //Foreign Key na tabelu Administrator
         [ForeignKey("Administrator")]
         public string? AdministratorID { get; set; }
+
         public virtual Administrator? Administrator { get; set; } = null!;
 
         [ForeignKey("TestParametar")]
         public Guid? TestParametarID { get; set; }
+
         public virtual TestParametar? TestParametar { get; set; } = null!;
 
-        [ForeignKey("Rezultat")]
-        public Guid? RezultatID { get; set; }
-        //[InverseProperty("Test")]
-        public virtual Rezultat? Rezultat { get; set; }
+        //[ForeignKey("Rezultat")]
+        //public Guid? RezultatID { get; set; }
 
+        //public virtual Rezultat? Rezultat { get; set; } = null!;
     }
 }

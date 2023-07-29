@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MedLabO.Services.Migrations
 {
-    public partial class init : Migration
+    public partial class _1_init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,7 +40,7 @@ namespace MedLabO.Services.Migrations
                 name: "Rezultati",
                 columns: table => new
                 {
-                    TestID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RezultatID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DTRezultata = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TestZakljucak = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Obiljezen = table.Column<bool>(type: "bit", nullable: false),
@@ -50,14 +50,14 @@ namespace MedLabO.Services.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rezultati", x => x.TestID);
+                    table.PrimaryKey("PK_Rezultati", x => x.RezultatID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "TestParametri",
                 columns: table => new
                 {
-                    TestID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TestParametarID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MinVrijednost = table.Column<float>(type: "real", nullable: true),
                     MaxVrijednost = table.Column<float>(type: "real", nullable: true),
                     NormalnaVrijednost = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -65,7 +65,7 @@ namespace MedLabO.Services.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestParametri", x => x.TestID);
+                    table.PrimaryKey("PK_TestParametri", x => x.TestParametarID);
                 });
 
             migrationBuilder.CreateTable(
@@ -121,13 +121,19 @@ namespace MedLabO.Services.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Administrator_Ime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Administrator_Prezime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsKontakt = table.Column<bool>(type: "bit", nullable: true),
                     KontaktInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MedicinskoOsoblje_Ime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MedicinskoOsoblje_Prezime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: true),
                     DTZaposlenja = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DTPrekidRadnogOdnosa = table.Column<DateTime>(type: "datetime2", nullable: true),
                     MedicinskoOsoblje_Spol = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ZvanjeID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Ime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Prezime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DatumRodjenja = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Adresa = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Spol = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -352,12 +358,12 @@ namespace MedLabO.Services.Migrations
                         name: "FK_Testovi_Rezultati_RezultatID",
                         column: x => x.RezultatID,
                         principalTable: "Rezultati",
-                        principalColumn: "TestID");
+                        principalColumn: "RezultatID");
                     table.ForeignKey(
                         name: "FK_Testovi_TestParametri_TestParametarID",
                         column: x => x.TestParametarID,
                         principalTable: "TestParametri",
-                        principalColumn: "TestID");
+                        principalColumn: "TestParametarID");
                 });
 
             migrationBuilder.CreateTable(
@@ -390,21 +396,21 @@ namespace MedLabO.Services.Migrations
                 name: "TerminTest",
                 columns: table => new
                 {
-                    TerminTestoviTestID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TestTerminiTerminID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    TestID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TerminID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TerminTest", x => new { x.TerminTestoviTestID, x.TestTerminiTerminID });
+                    table.PrimaryKey("PK_TerminTest", x => new { x.TestID, x.TerminID });
                     table.ForeignKey(
-                        name: "FK_TerminTest_Termini_TestTerminiTerminID",
-                        column: x => x.TestTerminiTerminID,
+                        name: "FK_TerminTest_Termini_TerminID",
+                        column: x => x.TerminID,
                         principalTable: "Termini",
                         principalColumn: "TerminID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TerminTest_Testovi_TerminTestoviTestID",
-                        column: x => x.TerminTestoviTestID,
+                        name: "FK_TerminTest_Testovi_TestID",
+                        column: x => x.TestID,
                         principalTable: "Testovi",
                         principalColumn: "TestID",
                         onDelete: ReferentialAction.Cascade);
@@ -537,9 +543,9 @@ namespace MedLabO.Services.Migrations
                 filter: "[ZakljucakID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TerminTest_TestTerminiTerminID",
+                name: "IX_TerminTest_TerminID",
                 table: "TerminTest",
-                column: "TestTerminiTerminID");
+                column: "TerminID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TerminUsluga_UslugaTerminiTerminID",
@@ -554,16 +560,12 @@ namespace MedLabO.Services.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Testovi_RezultatID",
                 table: "Testovi",
-                column: "RezultatID",
-                unique: true,
-                filter: "[RezultatID] IS NOT NULL");
+                column: "RezultatID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Testovi_TestParametarID",
                 table: "Testovi",
-                column: "TestParametarID",
-                unique: true,
-                filter: "[TestParametarID] IS NOT NULL");
+                column: "TestParametarID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TestUsluga_UslugaTestoviTestID",

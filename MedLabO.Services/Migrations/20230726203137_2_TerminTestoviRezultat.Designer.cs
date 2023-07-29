@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedLabO.Services.Migrations
 {
     [DbContext(typeof(MedLabOContext))]
-    [Migration("20230722224816_TestParametarKEy")]
-    partial class TestParametarKEy
+    [Migration("20230726203137_2_TerminTestoviRezultat")]
+    partial class _2_TerminTestoviRezultat
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,145 +23,6 @@ namespace MedLabO.Services.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("MedLabO.Models.Administrator", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Ime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsKontakt")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("KontaktInfo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Prezime")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Administrator");
-                });
-
-            modelBuilder.Entity("MedLabO.Models.Test", b =>
-                {
-                    b.Property<string>("TestID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AdministratorID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("Cijena")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("DTKreiranja")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NapomenaZaPripremu")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Naziv")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Opis")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TestParametarID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TipUzorka")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("UslugaID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("TestID");
-
-                    b.HasIndex("AdministratorID");
-
-                    b.HasIndex("TestParametarID");
-
-                    b.HasIndex("UslugaID");
-
-                    b.ToTable("Test");
-                });
-
-            modelBuilder.Entity("MedLabO.Models.TestParametar", b =>
-                {
-                    b.Property<string>("TestParametarID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Jedinica")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float?>("MaxVrijednost")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("MinVrijednost")
-                        .HasColumnType("real");
-
-                    b.Property<string>("NormalnaVrijednost")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TestParametarID");
-
-                    b.ToTable("TestParametar");
-                });
-
-            modelBuilder.Entity("MedLabO.Models.Usluga", b =>
-                {
-                    b.Property<Guid>("UslugaID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AdministratorID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("Cijena")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("DTKreiranja")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DTZadnjeModifikacije")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Dostupno")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Naziv")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Opis")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("RezultatUH")
-                        .HasColumnType("real");
-
-                    b.Property<byte[]>("Slika")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<Guid?>("TestID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("TrajanjeUMin")
-                        .HasColumnType("int");
-
-                    b.HasKey("UslugaID");
-
-                    b.HasIndex("AdministratorID");
-
-                    b.HasIndex("TestID");
-
-                    b.ToTable("Usluge");
-                });
 
             modelBuilder.Entity("MedLabO.Services.Database.Novost", b =>
                 {
@@ -244,7 +105,7 @@ namespace MedLabO.Services.Migrations
 
             modelBuilder.Entity("MedLabO.Services.Database.Rezultat", b =>
                 {
-                    b.Property<Guid>("TestID")
+                    b.Property<Guid>("RezultatID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -267,7 +128,7 @@ namespace MedLabO.Services.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TestID");
+                    b.HasKey("RezultatID");
 
                     b.ToTable("Rezultati");
                 });
@@ -328,6 +189,26 @@ namespace MedLabO.Services.Migrations
                     b.ToTable("Termini");
                 });
 
+            modelBuilder.Entity("MedLabO.Services.Database.TerminTest", b =>
+                {
+                    b.Property<Guid?>("TestID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("TerminID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RezultatID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("TestID", "TerminID");
+
+                    b.HasIndex("RezultatID");
+
+                    b.HasIndex("TerminID");
+
+                    b.ToTable("TerminTest");
+                });
+
             modelBuilder.Entity("MedLabO.Services.Database.Test", b =>
                 {
                     b.Property<Guid>("TestID")
@@ -354,9 +235,6 @@ namespace MedLabO.Services.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("RezultatID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("TestParametarID")
                         .HasColumnType("uniqueidentifier");
 
@@ -366,10 +244,6 @@ namespace MedLabO.Services.Migrations
                     b.HasKey("TestID");
 
                     b.HasIndex("AdministratorID");
-
-                    b.HasIndex("RezultatID")
-                        .IsUnique()
-                        .HasFilter("[RezultatID] IS NOT NULL");
 
                     b.HasIndex("TestParametarID");
 
@@ -397,6 +271,51 @@ namespace MedLabO.Services.Migrations
                     b.HasKey("TestParametarID");
 
                     b.ToTable("TestParametri");
+                });
+
+            modelBuilder.Entity("MedLabO.Services.Database.Usluga", b =>
+                {
+                    b.Property<Guid>("UslugaID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AdministratorID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Cijena")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("DTKreiranja")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DTZadnjeModifikacije")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Dostupno")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Naziv")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Opis")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("RezultatUH")
+                        .HasColumnType("real");
+
+                    b.Property<byte[]>("Slika")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("TrajanjeUMin")
+                        .HasColumnType("int");
+
+                    b.HasKey("UslugaID");
+
+                    b.HasIndex("AdministratorID");
+
+                    b.ToTable("Usluge");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Zakljucak", b =>
@@ -644,21 +563,6 @@ namespace MedLabO.Services.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TerminTest", b =>
-                {
-                    b.Property<Guid>("TerminTestoviTestID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TestTerminiTerminID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("TerminTestoviTestID", "TestTerminiTerminID");
-
-                    b.HasIndex("TestTerminiTerminID");
-
-                    b.ToTable("TerminTest");
-                });
-
             modelBuilder.Entity("TerminUsluga", b =>
                 {
                     b.Property<Guid>("TerminUslugeUslugaID")
@@ -672,6 +576,21 @@ namespace MedLabO.Services.Migrations
                     b.HasIndex("UslugaTerminiTerminID");
 
                     b.ToTable("TerminUsluga");
+                });
+
+            modelBuilder.Entity("TestUsluga", b =>
+                {
+                    b.Property<Guid>("TestUslugeUslugaID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UslugaTestoviTestID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("TestUslugeUslugaID", "UslugaTestoviTestID");
+
+                    b.HasIndex("UslugaTestoviTestID");
+
+                    b.ToTable("TestUsluga");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Administrator", b =>
@@ -757,36 +676,6 @@ namespace MedLabO.Services.Migrations
                     b.HasDiscriminator().HasValue("Pacijent");
                 });
 
-            modelBuilder.Entity("MedLabO.Models.Test", b =>
-                {
-                    b.HasOne("MedLabO.Models.Administrator", "Administrator")
-                        .WithMany()
-                        .HasForeignKey("AdministratorID");
-
-                    b.HasOne("MedLabO.Models.TestParametar", "TestParametar")
-                        .WithMany()
-                        .HasForeignKey("TestParametarID");
-
-                    b.HasOne("MedLabO.Models.Usluga", null)
-                        .WithMany("UslugaTestovi")
-                        .HasForeignKey("UslugaID");
-
-                    b.Navigation("Administrator");
-
-                    b.Navigation("TestParametar");
-                });
-
-            modelBuilder.Entity("MedLabO.Models.Usluga", b =>
-                {
-                    b.HasOne("MedLabO.Services.Database.Administrator", null)
-                        .WithMany("KreiraneUsluge")
-                        .HasForeignKey("AdministratorID");
-
-                    b.HasOne("MedLabO.Services.Database.Test", null)
-                        .WithMany("TestUsluge")
-                        .HasForeignKey("TestID");
-                });
-
             modelBuilder.Entity("MedLabO.Services.Database.Novost", b =>
                 {
                     b.HasOne("MedLabO.Services.Database.Administrator", "Administrator")
@@ -832,15 +721,36 @@ namespace MedLabO.Services.Migrations
                     b.Navigation("Zakljucak");
                 });
 
+            modelBuilder.Entity("MedLabO.Services.Database.TerminTest", b =>
+                {
+                    b.HasOne("MedLabO.Services.Database.Rezultat", "Rezultat")
+                        .WithMany()
+                        .HasForeignKey("RezultatID");
+
+                    b.HasOne("MedLabO.Services.Database.Termin", "Termin")
+                        .WithMany("TestTerminRezultati")
+                        .HasForeignKey("TerminID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MedLabO.Services.Database.Test", "Test")
+                        .WithMany("TerminTestovi")
+                        .HasForeignKey("TestID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Rezultat");
+
+                    b.Navigation("Termin");
+
+                    b.Navigation("Test");
+                });
+
             modelBuilder.Entity("MedLabO.Services.Database.Test", b =>
                 {
                     b.HasOne("MedLabO.Services.Database.Administrator", "Administrator")
                         .WithMany("KreiraniTestovi")
                         .HasForeignKey("AdministratorID");
-
-                    b.HasOne("MedLabO.Services.Database.Rezultat", "Rezultat")
-                        .WithOne("Test")
-                        .HasForeignKey("MedLabO.Services.Database.Test", "RezultatID");
 
                     b.HasOne("MedLabO.Services.Database.TestParametar", "TestParametar")
                         .WithMany()
@@ -848,9 +758,14 @@ namespace MedLabO.Services.Migrations
 
                     b.Navigation("Administrator");
 
-                    b.Navigation("Rezultat");
-
                     b.Navigation("TestParametar");
+                });
+
+            modelBuilder.Entity("MedLabO.Services.Database.Usluga", b =>
+                {
+                    b.HasOne("MedLabO.Services.Database.Administrator", null)
+                        .WithMany("KreiraneUsluge")
+                        .HasForeignKey("AdministratorID");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -904,24 +819,9 @@ namespace MedLabO.Services.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TerminTest", b =>
-                {
-                    b.HasOne("MedLabO.Services.Database.Test", null)
-                        .WithMany()
-                        .HasForeignKey("TerminTestoviTestID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MedLabO.Services.Database.Termin", null)
-                        .WithMany()
-                        .HasForeignKey("TestTerminiTerminID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("TerminUsluga", b =>
                 {
-                    b.HasOne("MedLabO.Models.Usluga", null)
+                    b.HasOne("MedLabO.Services.Database.Usluga", null)
                         .WithMany()
                         .HasForeignKey("TerminUslugeUslugaID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -930,6 +830,21 @@ namespace MedLabO.Services.Migrations
                     b.HasOne("MedLabO.Services.Database.Termin", null)
                         .WithMany()
                         .HasForeignKey("UslugaTerminiTerminID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TestUsluga", b =>
+                {
+                    b.HasOne("MedLabO.Services.Database.Usluga", null)
+                        .WithMany()
+                        .HasForeignKey("TestUslugeUslugaID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MedLabO.Services.Database.Test", null)
+                        .WithMany()
+                        .HasForeignKey("UslugaTestoviTestID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -943,26 +858,20 @@ namespace MedLabO.Services.Migrations
                     b.Navigation("Zvanje");
                 });
 
-            modelBuilder.Entity("MedLabO.Models.Usluga", b =>
-                {
-                    b.Navigation("UslugaTestovi");
-                });
-
             modelBuilder.Entity("MedLabO.Services.Database.Racun", b =>
                 {
                     b.Navigation("Termin")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MedLabO.Services.Database.Rezultat", b =>
+            modelBuilder.Entity("MedLabO.Services.Database.Termin", b =>
                 {
-                    b.Navigation("Test")
-                        .IsRequired();
+                    b.Navigation("TestTerminRezultati");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Test", b =>
                 {
-                    b.Navigation("TestUsluge");
+                    b.Navigation("TerminTestovi");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Zakljucak", b =>

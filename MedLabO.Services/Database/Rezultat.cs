@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MedLabO.Services.Database
 {
     public class Rezultat
     {
-        //[Key]
-        //public Guid RezultatID { get; set; } = Guid.NewGuid();
+        [Key]
+        public Guid RezultatID { get; set; } = Guid.NewGuid();
 
         [Required]
         public DateTime DTRezultata { get; set; } = DateTime.Now;
@@ -20,7 +15,7 @@ namespace MedLabO.Services.Database
         public string TestZakljucak { get; set; } = null!;
 
         [Required]
-        public bool Obiljezen { get; set; } =false;
+        public bool Obiljezen { get; set; } = false;
 
         //Ukoliko je rezultat brojcana vrijednost
         public float? RezFlo { get; set; }
@@ -34,10 +29,10 @@ namespace MedLabO.Services.Database
         //Ukoliko ona postoji Obiljezen = true
         public float? RazlikaOdNormalne { get; set; }
 
+        //public virtual ICollection<TestTerminRezultat> TestTerminRezultati { get; set; } = new List<TestTerminRezultat>();
 
-        [Key]
-        public Guid TestID { get; set; }
-        public virtual Test Test { get; set; } = null!;
-
+        //[Key]
+        //public Guid TestID { get; set; }
+        //public virtual Test Test { get; set; } = null!;
     }
 }

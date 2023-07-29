@@ -1,12 +1,5 @@
-﻿using MedLabO.Models;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace MedLabO.Services.Database
 {
@@ -17,6 +10,7 @@ namespace MedLabO.Services.Database
 
         [Required]
         public string? Ime { get; set; }
+
         [Required]
         public string? Prezime { get; set; }
 
@@ -31,6 +25,5 @@ namespace MedLabO.Services.Database
         public virtual ICollection<Test> KreiraniTestovi { get; set; } = new List<Test>();
         public virtual ICollection<Novost> KreiraneNovosti { get; set; } = new List<Novost>();
         public virtual ICollection<Obavijest> KreiraneObavijesti { get; set; } = new List<Obavijest>();
-
     }
 }

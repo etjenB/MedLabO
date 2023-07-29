@@ -1,13 +1,6 @@
-﻿using MedLabO.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MedLabO.Services.Database
 {
@@ -15,14 +8,12 @@ namespace MedLabO.Services.Database
     {
         public MedLabOContext(DbContextOptions options) : base(options)
         {
-
         }
 
         public virtual DbSet<IdentityUser> Korisnici { get; set; }
         public virtual DbSet<Administrator> Administratori { get; set; }
         public virtual DbSet<MedicinskoOsoblje> MedicinskoOsoblje { get; set; }
         public virtual DbSet<Pacijent> Pacijenti { get; set; }
-
 
         public virtual DbSet<Novost> Novosti { get; set; }
         public virtual DbSet<Obavijest> Obavijesti { get; set; }
@@ -35,10 +26,22 @@ namespace MedLabO.Services.Database
         public virtual DbSet<TestParametar> TestParametri { get; set; }
         public virtual DbSet<Usluga> Usluge { get; set; }
 
+        public virtual DbSet<TerminTest> TerminTest { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TerminTest>()
+                .HasKey(ttr => new { ttr.TestID, ttr.TerminID });
+
+            //modelBuilder.Entity<TestTerminRezultat>()
+            //    .HasOne(ttr => ttr.Rezultat)
+            //    .WithMany()
+            //    .HasForeignKey(ttr => ttr.RezultatID)
+            //    .IsRequired(false);
+
             base.OnModelCreating(modelBuilder);
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //za lazy loading npr. administrator u test.cs

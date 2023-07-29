@@ -1,14 +1,7 @@
 ﻿using AutoMapper;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
@@ -43,6 +36,11 @@ namespace MedLabO.Services
             if (search?.IncludeTestParametar == true)
             {
                 query = query.Include("TestParametar");
+            }
+
+            if (search?.IncludeRezultat == true)
+            {
+                query = query.Include("TerminTestovi.Rezultat");
             }
 
             return base.AddInclude(query, search);

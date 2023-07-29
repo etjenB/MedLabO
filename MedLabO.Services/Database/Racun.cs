@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MedLabO.Services.Database
 {
@@ -22,7 +16,7 @@ namespace MedLabO.Services.Database
 
         [Key]
         public Guid TerminID { get; set; }
-        public virtual Termin Termin { get; set; } = null!;
 
+        public virtual Termin Termin { get; set; } = null!;
     }
 }

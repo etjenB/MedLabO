@@ -1,4 +1,4 @@
-﻿using MedLabO.Services.Database;
+﻿using MedLabO.Models.SearchObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
-    public interface IUslugaService
+    public interface ITerminService : IService<Models.Termin, TerminSearchObject>
     {
-        Task<IList<Usluga>> Get();
     }
 }

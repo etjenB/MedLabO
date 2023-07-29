@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MedLabO.Services.Database
 {
@@ -16,6 +11,7 @@ namespace MedLabO.Services.Database
 
         [Required]
         public string? Ime { get; set; }
+
         [Required]
         public string? Prezime { get; set; }
 
@@ -43,7 +39,7 @@ namespace MedLabO.Services.Database
         //Dok potencijalno postoji vise zaposlenika sa istim zvanjem
         [ForeignKey("Zvanje")]
         public Guid? ZvanjeID { get; set; }
-        public virtual Zvanje? Zvanje { get; set; } = null!;
 
+        public virtual Zvanje? Zvanje { get; set; } = null!;
     }
 }
