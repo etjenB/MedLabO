@@ -12,8 +12,9 @@
         public string? AdministratorID { get; set; }
         public virtual Administrator? Administrator { get; set; }
         public string? TestParametarID { get; set; }
-        public virtual TestParametar? TestParametar { get; set; } = null!;
-        //public Guid? RezultatID { get; set; }
+        public virtual TestParametar? TestParametar { get; set; }
+        public virtual ICollection<TerminTest> TerminTestovi { get; set; } = new List<TerminTest>();
+        //public string? RezultatID { get; set; }
         //public virtual Rezultat? Rezultat { get; set; }
     }
 }

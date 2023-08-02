@@ -10,12 +10,12 @@ namespace MedLabO.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AdministratorController : BaseController<Models.Administrator, AdministratorSearchObject>
+    public class AdministratorController : BaseCRUDController<Models.Administrator, AdministratorSearchObject, AdministratorInsertRequest, AdministratorUpdateRequest>
     {
         //private readonly IAdministratorService _service;
         //private readonly ILogger<AdministratorController> _logger;
 
-        public AdministratorController(ILogger<BaseController<Administrator, AdministratorSearchObject>> logger, IService<Administrator, AdministratorSearchObject> service) : base(logger, service)
+        public AdministratorController(ILogger<BaseController<Administrator, AdministratorSearchObject>> logger, IAdministratorService service) : base(logger, service)
         {
         }
 
@@ -25,16 +25,16 @@ namespace MedLabO.Controllers
         //    return await _service.Get();
         //}
 
-        [HttpPost]
-        public Task<Models.Administrator> Insert(AdministratorInsertRequest administrator)
-        {
-            return (_service as IAdministratorService).Insert(administrator);
-        }
+        //[HttpPost]
+        //public Task<Models.Administrator> Insert(AdministratorInsertRequest administrator)
+        //{
+        //    return (_service as IAdministratorService).Insert(administrator);
+        //}
 
-        [HttpPut("{Id}")]
-        public Task<Models.Administrator> Update(string Id, AdministratorUpdateRequest administrator)
-        {
-            return (_service as IAdministratorService).Update(Id, administrator);
-        }
+        //[HttpPut("{Id}")]
+        //public Task<Models.Administrator> Update(string Id, AdministratorUpdateRequest administrator)
+        //{
+        //    return (_service as IAdministratorService).Update(Id, administrator);
+        //}
     }
 }

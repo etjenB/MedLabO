@@ -51,9 +51,9 @@ namespace MedLabO.Services
             return query;
         }
 
-        public virtual async Task<T> GetById(Guid Id)
+        public virtual async Task<T> GetById(string id)
         {
-            var entity = await _db.Set<TDb>().FindAsync(Id);
+            var entity = await _db.Set<TDb>().FindAsync(id);
             return _mapper.Map<T>(entity);
         }
     }

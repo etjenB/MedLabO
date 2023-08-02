@@ -1,3 +1,4 @@
+using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services;
 using MedLabO.Services.Database;
@@ -15,7 +16,8 @@ builder.Services.AddSwaggerGen();
 
 //Dependency injection za Usluga
 builder.Services.AddTransient<IUslugaService, UslugaService>();
-//builder.Services.AddTransient<IAdministratorService, AdministratorService>();
+builder.Services.AddTransient<IAdministratorService, AdministratorService>();
+builder.Services.AddTransient<ITestService, TestService>();
 
 //builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<IService<MedLabO.Models.Test, TestSearchObject>, TestService>();

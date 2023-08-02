@@ -10,7 +10,7 @@ namespace MedLabO.Models
     public class TerminTest
     {
         public Guid? TestID { get; set; }
-        public virtual Test? Test { get; set; }
+        public Guid? TerminID { get; set; }
         public Guid? RezultatID { get; set; }
         public virtual Rezultat? Rezultat { get; set; } = null!;
     }

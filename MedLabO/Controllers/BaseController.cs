@@ -9,6 +9,8 @@ namespace MedLabO.Controllers
     {
         protected readonly IService<T, TSearch> _service;
         protected readonly ILogger<BaseController<T, TSearch>> _logger;
+        private ILogger<BaseController<T, TSearch>> logger;
+        private ICRUDService<T, TSearch, object, object> service;
 
         public BaseController(ILogger<BaseController<T, TSearch>> logger, IService<T, TSearch> service)
         {
@@ -22,10 +24,10 @@ namespace MedLabO.Controllers
             return await _service.Get(search);
         }
 
-        [HttpGet("{Id}")]
-        public async Task<T> GetById(Guid Id)
+        [HttpGet("{id}")]
+        public async Task<T> GetById(string id)
         {
-            return await _service.GetById(Id);
+            return await _service.GetById(id);
         }
     }
 }
