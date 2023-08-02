@@ -25,7 +25,7 @@ namespace MedLabO.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<T> GetById(string id)
+        public async Task<T> GetById(Guid id)
         {
             return await _service.GetById(id);
         }

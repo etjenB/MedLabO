@@ -37,13 +37,13 @@ namespace MedLabO.Services.Database
         //public virtual Pacijent Pacijent { get; set; } = null!;
 
         [ForeignKey("Pacijent")]
-        public string? PacijentID { get; set; }
+        public Guid? PacijentID { get; set; }
 
         public virtual Pacijent? Pacijent { get; set; } = null!;
 
         //Zaposlenik koji je odobrio termin
         [ForeignKey("MedicinskoOsoblje")]
-        public string? MedicinskoOsobljeID { get; set; }
+        public Guid? MedicinskoOsobljeID { get; set; }
 
         public virtual MedicinskoOsoblje? MedicinskoOsoblje { get; set; } = null!;
 

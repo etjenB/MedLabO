@@ -32,7 +32,7 @@ namespace MedLabO.Services.Database
 
         //Foreign Key na tabelu Administrator
         [ForeignKey("Administrator")]
-        public string? AdministratorID { get; set; }
+        public Guid? AdministratorID { get; set; }
 
         public virtual Administrator? Administrator { get; set; } = null!;
 

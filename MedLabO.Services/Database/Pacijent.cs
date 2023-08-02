@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MedLabO.Services.Database
 {
-    public class Pacijent : IdentityUser
+    public class Pacijent : ApplicationUser
     {
         //[Key]
         //public Guid PacijentID { get; set; } = Guid.NewGuid();

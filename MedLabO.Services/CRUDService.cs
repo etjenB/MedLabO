@@ -31,7 +31,7 @@ namespace MedLabO.Services
             return _mapper.Map<T>(entity);
         }
 
-        public virtual async Task<T> Update(string id, TUpdate update)
+        public virtual async Task<T> Update(Guid id, TUpdate update)
         {
             var set = _db.Set<TDb>();
             var entity = await set.FindAsync(id);

@@ -6,6 +6,6 @@ namespace MedLabO.Services
     {
         Task<PagedResult<T>> Get(TSearch search = null);
 
-        Task<T> GetById(string id);
+        Task<T> GetById(Guid id);
     }
 }
