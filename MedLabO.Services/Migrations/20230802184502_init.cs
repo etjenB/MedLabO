@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MedLabO.Services.Migrations
 {
-    public partial class _1_init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace MedLabO.Services.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -100,7 +100,7 @@ namespace MedLabO.Services.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -119,10 +119,10 @@ namespace MedLabO.Services.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Administrator_Ime = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Administrator_Prezime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Prezime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsKontakt = table.Column<bool>(type: "bit", nullable: true),
                     KontaktInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MedicinskoOsoblje_Ime = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -130,13 +130,13 @@ namespace MedLabO.Services.Migrations
                     IsActive = table.Column<bool>(type: "bit", nullable: true),
                     DTZaposlenja = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DTPrekidRadnogOdnosa = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    MedicinskoOsoblje_Spol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Spol = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ZvanjeID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Ime = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Prezime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Pacijent_Ime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Pacijent_Prezime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DatumRodjenja = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Adresa = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Spol = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Pacijent_Spol = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -168,7 +168,7 @@ namespace MedLabO.Services.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -190,7 +190,7 @@ namespace MedLabO.Services.Migrations
                     LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -207,8 +207,8 @@ namespace MedLabO.Services.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -231,7 +231,7 @@ namespace MedLabO.Services.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -256,7 +256,7 @@ namespace MedLabO.Services.Migrations
                     Sadrzaj = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DTKreiranja = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Slika = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    AdministratorID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    AdministratorID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -277,7 +277,7 @@ namespace MedLabO.Services.Migrations
                     Sadrzaj = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DTKreiranja = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Slika = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    AdministratorID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    AdministratorID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -301,8 +301,8 @@ namespace MedLabO.Services.Migrations
                     Obavljen = table.Column<bool>(type: "bit", nullable: false),
                     RezultatTermina = table.Column<bool>(type: "bit", nullable: false),
                     RezultatTerminaPDF = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    PacijentID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    MedicinskoOsobljeID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    PacijentID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MedicinskoOsobljeID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     RacunID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ZakljucakID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
@@ -342,9 +342,8 @@ namespace MedLabO.Services.Migrations
                     NapomenaZaPripremu = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TipUzorka = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DTKreiranja = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AdministratorID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TestParametarID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    RezultatID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    AdministratorID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TestParametarID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -354,11 +353,6 @@ namespace MedLabO.Services.Migrations
                         column: x => x.AdministratorID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Testovi_Rezultati_RezultatID",
-                        column: x => x.RezultatID,
-                        principalTable: "Rezultati",
-                        principalColumn: "RezultatID");
                     table.ForeignKey(
                         name: "FK_Testovi_TestParametri_TestParametarID",
                         column: x => x.TestParametarID,
@@ -380,7 +374,7 @@ namespace MedLabO.Services.Migrations
                     DTKreiranja = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DTZadnjeModifikacije = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Slika = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    AdministratorID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    AdministratorID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -397,11 +391,17 @@ namespace MedLabO.Services.Migrations
                 columns: table => new
                 {
                     TestID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TerminID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    TerminID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RezultatID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TerminTest", x => new { x.TestID, x.TerminID });
+                    table.ForeignKey(
+                        name: "FK_TerminTest_Rezultati_RezultatID",
+                        column: x => x.RezultatID,
+                        principalTable: "Rezultati",
+                        principalColumn: "RezultatID");
                     table.ForeignKey(
                         name: "FK_TerminTest_Termini_TerminID",
                         column: x => x.TerminID,
@@ -543,6 +543,11 @@ namespace MedLabO.Services.Migrations
                 filter: "[ZakljucakID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TerminTest_RezultatID",
+                table: "TerminTest",
+                column: "RezultatID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TerminTest_TerminID",
                 table: "TerminTest",
                 column: "TerminID");
@@ -556,11 +561,6 @@ namespace MedLabO.Services.Migrations
                 name: "IX_Testovi_AdministratorID",
                 table: "Testovi",
                 column: "AdministratorID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Testovi_RezultatID",
-                table: "Testovi",
-                column: "RezultatID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Testovi_TestParametarID",
@@ -614,6 +614,9 @@ namespace MedLabO.Services.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Rezultati");
+
+            migrationBuilder.DropTable(
                 name: "Termini");
 
             migrationBuilder.DropTable(
@@ -627,9 +630,6 @@ namespace MedLabO.Services.Migrations
 
             migrationBuilder.DropTable(
                 name: "Zakljucci");
-
-            migrationBuilder.DropTable(
-                name: "Rezultati");
 
             migrationBuilder.DropTable(
                 name: "TestParametri");

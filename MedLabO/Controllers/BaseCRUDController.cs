@@ -25,7 +25,7 @@ namespace MedLabO.Controllers
         }
 
         [HttpPut("{id}")]
-        public virtual async Task<T> Update(string id, [FromBody]TUpdate update)
+        public virtual async Task<T> Update(Guid id, [FromBody]TUpdate update)
         {
             return await _service.Update(id, update);
         }

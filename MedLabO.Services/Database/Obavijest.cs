@@ -21,7 +21,7 @@ namespace MedLabO.Services.Database
         public byte[] Slika { get; set; } = new byte[0];
 
         [ForeignKey("Administrator")]
-        public string? AdministratorID { get; set; }
+        public Guid? AdministratorID { get; set; }
 
         public virtual Administrator? Administrator { get; set; } = null!;
     }

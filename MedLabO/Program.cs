@@ -37,8 +37,8 @@ builder.Services.AddAutoMapper(typeof(IAdministratorService));
 
 //Dodavanje DefaultIdentity
 //NuGet Potrebno Microsoft.AspNetCore.Identity.UI
-builder.Services.AddDefaultIdentity<IdentityUser>()
-    .AddRoles<IdentityRole>()
+builder.Services.AddDefaultIdentity<ApplicationUser>()
+    .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<MedLabOContext>();
 
 //Odrediti kakav password je potreban

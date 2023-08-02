@@ -10,9 +10,9 @@ namespace MedLabO.Services
 {
     public class AdministratorService : CRUDService<Models.Administrator, Database.Administrator, AdministratorSearchObject, AdministratorInsertRequest, AdministratorUpdateRequest>, IAdministratorService
     {
-        private UserManager<IdentityUser> _userManager;
+        private UserManager<ApplicationUser> _userManager;
 
-        public AdministratorService(MedLabOContext db, IMapper mapper, UserManager<IdentityUser> userManager) : base(db, mapper)
+        public AdministratorService(MedLabOContext db, IMapper mapper, UserManager<ApplicationUser> userManager) : base(db, mapper)
         {
             _userManager = userManager;
         }

@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedLabO.Services.Database
 {
-    public class MedLabOContext : IdentityDbContext
+    public class MedLabOContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public MedLabOContext(DbContextOptions options) : base(options)
         {
         }
 
-        public virtual DbSet<IdentityUser> Korisnici { get; set; }
+        public virtual DbSet<ApplicationUser> Korisnici { get; set; }
         public virtual DbSet<Administrator> Administratori { get; set; }
         public virtual DbSet<MedicinskoOsoblje> MedicinskoOsoblje { get; set; }
         public virtual DbSet<Pacijent> Pacijenti { get; set; }

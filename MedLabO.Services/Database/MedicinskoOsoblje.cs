@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedLabO.Services.Database
 {
-    public class MedicinskoOsoblje : IdentityUser
+    public class MedicinskoOsoblje : ApplicationUser
     {
         //[Key]
         //public Guid MedicinskoOsobljeID { get; set; } = Guid.NewGuid();
