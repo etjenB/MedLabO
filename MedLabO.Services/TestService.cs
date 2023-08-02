@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedLabO.Services
 {
-    public class TestService : Service<Models.Test, Database.Test, TestSearchObject>, ITestService
+    public class TestService : CRUDService<Models.Test, Database.Test, TestSearchObject, TestInsertRequest, TestUpdateRequest>, ITestService
     {
         public TestService(MedLabOContext db, IMapper mapper) : base(db, mapper)
         {
