@@ -13,5 +13,11 @@ namespace MedLabO.Controllers
         public TestController(ILogger<BaseController<Test, TestSearchObject>> logger, ITestService service) : base(logger, service)
         {
         }
+
+        [HttpPut("{Id}/ChangeName")]
+        public virtual async Task<Test> ChangeName(Guid Id, [FromBody]string newName)
+        {
+            return await (_service as ITestService).ChangeName(Id, newName);
+        }
     }
 }
