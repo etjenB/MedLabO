@@ -12,6 +12,18 @@ namespace MedLabO.Services
         {
         }
 
+        public async Task<Models.Test> ChangeName(Guid Id, string newName)
+        {
+            var test = await _db.FindAsync<Test>(Id);
+            if (test!=null)
+            {
+                test.Naziv = newName;
+                await _db.SaveChangesAsync();
+                return _mapper.Map<Models.Test>(test); ;
+            }
+            return null;
+        }
+
         public override IQueryable<Test> AddFilter(IQueryable<Test> query, TestSearchObject? search = null)
         {
             if (!string.IsNullOrWhiteSpace(search?.Naziv))
