@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using MedLabO.Models;
 using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedLabO.Services
@@ -14,17 +16,18 @@ namespace MedLabO.Services
 
         public async Task<Models.Test> ChangeName(Guid Id, string newName)
         {
-            var test = await _db.FindAsync<Test>(Id);
-            if (test!=null)
+            var test = await _db.FindAsync<Database.Test>(Id);
+            if (test == null)
             {
-                test.Naziv = newName;
-                await _db.SaveChangesAsync();
-                return _mapper.Map<Models.Test>(test); ;
+                throw new UserException("Test not found.");
             }
-            return null;
+
+            test.Naziv = newName;
+            await _db.SaveChangesAsync();
+            return _mapper.Map<Models.Test>(test);
         }
 
-        public override IQueryable<Test> AddFilter(IQueryable<Test> query, TestSearchObject? search = null)
+        public override IQueryable<Database.Test> AddFilter(IQueryable<Database.Test> query, TestSearchObject? search = null)
         {
             if (!string.IsNullOrWhiteSpace(search?.Naziv))
             {
@@ -39,7 +42,7 @@ namespace MedLabO.Services
             return base.AddFilter(query, search);
         }
 
-        public override IQueryable<Test> AddInclude(IQueryable<Test> query, TestSearchObject? search = null)
+        public override IQueryable<Database.Test> AddInclude(IQueryable<Database.Test> query, TestSearchObject? search = null)
         {
             if (search?.IncludeAdministrator == true)
             {
