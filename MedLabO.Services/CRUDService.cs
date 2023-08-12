@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MedLabO.Models;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using System;
@@ -41,7 +42,14 @@ namespace MedLabO.Services
             var set = _db.Set<TDb>();
             var entity = await set.FindAsync(id);
             _mapper.Map(update, entity);
-            await BeforeUpdate(entity, update);
+            try
+            {
+                await BeforeUpdate(entity, update);
+            }
+            catch
+            {
+                throw new UserException("Entity with that ID doesn't exist.");
+            }
             await _db.SaveChangesAsync();
             return _mapper.Map<T>(entity);
         }
