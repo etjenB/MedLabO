@@ -17,6 +17,8 @@ namespace MedLabO.Services.Database
         [Required]
         public DateTime DTKreiranja { get; set; } = DateTime.Now;
 
+        public DateTime? DTZadnjeModifikacije { get; set; }
+
         [Required]
         public byte[] Slika { get; set; } = new byte[0];
 

@@ -20,6 +20,11 @@ namespace MedLabO.Services
 
         }
 
+        public virtual async Task BeforeUpdate(TDb entity, TUpdate update)
+        {
+
+        }
+
         public virtual async Task<T> Insert(TInsert insert)
         {
             var set = _db.Set<TDb>();
@@ -36,6 +41,7 @@ namespace MedLabO.Services
             var set = _db.Set<TDb>();
             var entity = await set.FindAsync(id);
             _mapper.Map(update, entity);
+            await BeforeUpdate(entity, update);
             await _db.SaveChangesAsync();
             return _mapper.Map<T>(entity);
         }
