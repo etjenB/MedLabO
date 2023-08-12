@@ -17,6 +17,12 @@ namespace MedLabO.Services
             CreateMap<Database.Rezultat, Models.Rezultat>();
             CreateMap<Database.Termin, Models.Termin>();
             CreateMap<Database.TerminTest, Models.TerminTest>();
+            CreateMap<NovostInsertRequest, Database.Novost>();
+            CreateMap<NovostUpdateRequest, Database.Novost>();
+            CreateMap<Database.Novost, Models.Novost>();
+            CreateMap<ObavijestInsertRequest, Database.Obavijest>();
+            CreateMap<ObavijestUpdateRequest, Database.Obavijest>();
+            CreateMap<Database.Obavijest, Models.Obavijest>();
         }
     }
 }

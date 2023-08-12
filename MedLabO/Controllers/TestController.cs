@@ -3,7 +3,6 @@ using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace MedLabO.Controllers
 {
@@ -15,7 +14,7 @@ namespace MedLabO.Controllers
         }
 
         [HttpPut("{Id}/ChangeName")]
-        public virtual async Task<Test> ChangeName(Guid Id, [FromBody]string newName)
+        public virtual async Task<Test> ChangeName(Guid Id, [FromBody] string newName)
         {
             return await (_service as ITestService).ChangeName(Id, newName);
         }

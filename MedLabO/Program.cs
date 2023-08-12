@@ -23,6 +23,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IUslugaService, UslugaService>();
 builder.Services.AddTransient<IAdministratorService, AdministratorService>();
 builder.Services.AddTransient<ITestService, TestService>();
+builder.Services.AddTransient<INovostService, NovostService>();
+builder.Services.AddTransient<IObavijestService, ObavijestService>();
 
 //builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<IService<MedLabO.Models.Test, TestSearchObject>, TestService>();
@@ -32,6 +34,10 @@ builder.Services.AddTransient<IService<MedLabO.Models.TestParametar, SearchObjec
 builder.Services.AddTransient<IService<MedLabO.Models.Administrator, AdministratorSearchObject>, AdministratorService>();
 
 builder.Services.AddTransient<IService<MedLabO.Models.Termin, TerminSearchObject>, TerminService>();
+
+builder.Services.AddTransient<IService<MedLabO.Models.Novost, NovostSearchObject>, NovostService>();
+
+builder.Services.AddTransient<IService<MedLabO.Models.Obavijest, ObavijestSearchObject>, ObavijestService>();
 
 //Inject DbContext
 //NuGet Potrebno Microsoft.EntityFrameworkCore.SqlServer
