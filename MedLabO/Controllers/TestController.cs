@@ -16,7 +16,7 @@ namespace MedLabO.Controllers
         }
 
         [HttpPut("{Id}/ChangeName")]
-        [Authorize(Roles = RoleNames.Pacijent + "," + RoleNames.Administrator)]
+        [Authorize(Roles = RoleNames.Administrator + "," + RoleNames.MedicinskoOsoblje)]
         public virtual async Task<Test> ChangeName(Guid Id, [FromBody] string newName)
         {
             return await (_service as ITestService).ChangeName(Id, newName);
