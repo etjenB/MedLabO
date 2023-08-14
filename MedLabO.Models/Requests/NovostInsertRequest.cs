@@ -14,8 +14,5 @@ namespace MedLabO.Models.Requests
         public string Sadrzaj { get; set; }
 
         public byte[] Slika { get; set; }
-
-        [Required(AllowEmptyStrings = false)]
-        public string AdministratorID { get; set; }
     }
 }

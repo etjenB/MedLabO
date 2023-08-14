@@ -17,10 +17,6 @@ namespace MedLabO.Models.Requests
 
         public string? NapomenaZaPripremu { get; set; }
         public string? TipUzorka { get; set; }
-        public DateTime DTKreiranja { get; set; } = DateTime.Now;
-
-        [Required]
-        public string AdministratorID { get; set; }
 
         [Required]
         public string TestParametarID { get; set; }

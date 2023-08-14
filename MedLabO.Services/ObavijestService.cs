@@ -3,23 +3,32 @@ using MedLabO.Models;
 using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace MedLabO.Services
 {
     public class ObavijestService : CRUDService<Models.Obavijest, Database.Obavijest, ObavijestSearchObject, ObavijestInsertRequest, ObavijestUpdateRequest>, IObavijestService
     {
-        public ObavijestService(MedLabOContext db, IMapper mapper) : base(db, mapper)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public ObavijestService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(db, mapper)
         {
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public override async Task BeforeInsert(Database.Obavijest entity, ObavijestInsertRequest insert)
         {
             try
             {
-                //TODO: Implement this to be able to take userID and put it into AdministratorID as in
-                //administrator that created this Obavijest
                 entity.DTKreiranja = DateTime.Now;
+                string? currentUserId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+                if (string.IsNullOrEmpty(currentUserId))
+                {
+                    throw new UserException("User ID not found.");
+                }
+                entity.AdministratorID = Guid.Parse(currentUserId);
             }
             catch
             {
@@ -31,9 +40,13 @@ namespace MedLabO.Services
         {
             try
             {
-                //TODO: Implement this to be able to take userID and put it into AdministratorID as in
-                //administrator that modified this Obavijest
                 entity.DTZadnjeModifikacije = DateTime.Now;
+                string? currentUserId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+                if (string.IsNullOrEmpty(currentUserId))
+                {
+                    throw new UserException("User ID not found.");
+                }
+                entity.AdministratorID = Guid.Parse(currentUserId);
             }
             catch
             {
