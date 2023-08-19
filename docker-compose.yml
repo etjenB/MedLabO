@@ -1,0 +1,36 @@
+version: '3'
+services:
+    # mssql docker
+    medlabo-sql:
+        image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+        restart: unless-stopped
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=medlabo123
+            - MSSQL_PID=Developer
+        ports:
+            - 1401:1433
+        expose:
+            - 1433
+        networks:
+            - medlabonet2023
+    
+    medlabo-api:
+        restart: unless-stopped
+        build:
+            context: .
+        environment:
+            - ConnectionStrings:MedLabOContextConnectionString=Server=medlabo-sql,1433;Database=MedLabO;User Id=sa;Password=medlabo123;TrustServerCertificate=True;MultipleActiveResultSets=True
+            - ASPNETCORE_ENVIRONMENT=Development
+        ports:
+            - 7213:7213
+        networks:
+            - medlabonet2023
+        links:
+            - medlabo-sql
+        depends_on:
+            - medlabo-sql
+             
+networks:
+    medlabonet2023:
+        driver: bridge
