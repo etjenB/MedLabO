@@ -26,7 +26,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "MedLabO API", Version = "v1" });
 
     // Begin - JWT Bearer token authentication setup
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
