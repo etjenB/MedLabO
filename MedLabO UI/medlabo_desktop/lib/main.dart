@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:medlabo_desktop/providers/login_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_provider.dart';
 import 'package:medlabo_desktop/utils/constants/strings.dart';
 import 'package:medlabo_desktop/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
-import '../screens/testovi_screen.dart';
+import 'package:oktoast/oktoast.dart';
 
 void main() {
   runApp(MultiProvider(
-    providers: [ChangeNotifierProvider(create: (_) => TestoviProvider())],
+    providers: [
+      ChangeNotifierProvider(create: (_) => TestoviProvider()),
+      ChangeNotifierProvider(create: (_) => LoginProvider()),
+    ],
     child: const MyApp(),
   ));
 }
@@ -18,12 +22,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyMaterialApp(),
-    );
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const OKToast(child: MyMaterialApp()));
   }
 }
 
@@ -51,6 +54,13 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
+  LoginProvider? _loginProvider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loginProvider = Provider.of<LoginProvider>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,13 +121,15 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             var username = _usernameController.text;
                             var password = _passwordController.text;
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => MasterScreenWidget(
-                                    /* child: const TestoviScreen(), */
-                                    )));
+                            var isLoged =
+                                await _loginProvider!.login(username, password);
+                            if (isLoged) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => MasterScreenWidget()));
+                            }
                           },
                           child: const Text('Login')),
                     ],

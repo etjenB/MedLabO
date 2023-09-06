@@ -2,35 +2,76 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
+import 'package:medlabo_desktop/models/search_result.dart';
+import 'package:medlabo_desktop/models/test.dart';
+import '../utils/general/toast_utils.dart';
 
 class TestoviProvider with ChangeNotifier {
   static String? _baseUrl;
   String _endpoint = "Test";
+  final storage = new FlutterSecureStorage();
 
   TestoviProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "https://localhost:7213/");
   }
 
-  Future<dynamic> get() async {
+  Future<SearchResult<Test>?> get() async {
     var url = '$_baseUrl$_endpoint';
     var uri = Uri.parse(url);
 
-    var headers = createHeaders();
+    var headers = await createHeaders();
 
     var response = await http.get(uri, headers: headers);
 
-    var data = jsonDecode(response.body);
+    if (isValidResponse(response)['isValid']) {
+      var data = jsonDecode(response.body);
 
-    return data;
+      var result = SearchResult<Test>();
+      result.count = data['count'];
+
+      for (var test in data['result']) {
+        result.result.add(Test.fromJson(test));
+      }
+
+      return result;
+    }
+
+    makeErrorToast(isValidResponse(response)['message'] ?? '');
+
+    return null;
   }
 
-  Map<String, String> createHeaders() {
-    String token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZTZiYjNjNDktOWFhNi00ZWYwLTk2MjUtYjE2YmIzNzc1ZTU4Iiwicm9sZSI6IkFkbWluaXN0cmF0b3IiLCJuYmYiOjE2OTM3NjMzOTEsImV4cCI6MTY5Mzc4MTM5MSwiaWF0IjoxNjkzNzYzMzkxfQ.2qKIszfJ3sb1c_y2zXYDEk5hKLbT81IQpldj44xl9iE";
+  Future<Map<String, String>> createHeaders() async {
+    String? token = await storage.read(key: 'jwt_token');
 
+    if (token == null) {
+      throw Exception('Token is null');
+    }
     var headers = {'accept': 'text/plain', 'Authorization': 'Bearer $token'};
 
     return headers;
+  }
+
+  Map<String, dynamic> isValidResponse(Response response) {
+    switch (response.statusCode) {
+      case 401:
+        return {'isValid': false, 'message': "Niste prijavljeni."};
+
+      case 403:
+        return {'isValid': false, 'message': "Nemate pravo pristupa resursu."};
+
+      case 500:
+        return {'isValid': false, 'message': "Greška na serveru."};
+
+      default:
+        if (response.statusCode >= 200 && response.statusCode <= 299) {
+          return {'isValid': true, 'message': ""};
+        } else {
+          return {'isValid': false, 'message': "Greška."};
+        }
+    }
   }
 }

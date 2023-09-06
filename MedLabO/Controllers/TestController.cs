@@ -15,6 +15,13 @@ namespace MedLabO.Controllers
         {
         }
 
+        [HttpGet]
+        [Authorize(Roles = RoleNames.Administrator)]
+        public override async Task<PagedResult<Test>> Get([FromQuery] TestSearchObject? search = null)
+        {
+            return await base.Get(search);
+        }
+
         [HttpPut("{Id}/ChangeName")]
         [Authorize(Roles = RoleNames.Administrator + "," + RoleNames.MedicinskoOsoblje)]
         public virtual async Task<Test> ChangeName(Guid Id, [FromBody] string newName)
