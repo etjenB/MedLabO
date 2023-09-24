@@ -38,7 +38,7 @@ class MyMaterialApp extends StatelessWidget {
     return MaterialApp(
       title: appTitle,
       theme: ThemeData(primarySwatch: Colors.indigo),
-      home: LoginPage(),
+      home: const LoginPage(),
     );
   }
 }

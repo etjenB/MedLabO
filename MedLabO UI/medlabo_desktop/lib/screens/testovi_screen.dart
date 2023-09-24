@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:medlabo_desktop/utils/constants/desing.dart';
+import 'package:medlabo_desktop/models/search_result.dart';
+import 'package:medlabo_desktop/models/test.dart';
+import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:provider/provider.dart';
 import '../providers/testovi_provider.dart';
 
@@ -12,6 +14,7 @@ class TestoviScreen extends StatefulWidget {
 
 class _TestoviScreenState extends State<TestoviScreen> {
   late TestoviProvider _testoviProvider;
+  SearchResult<Test>? testovi;
 
   @override
   void didChangeDependencies() {
@@ -39,181 +42,224 @@ class _TestoviScreenState extends State<TestoviScreen> {
             ),
           ],
         ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                    flex: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                            text: const TextSpan(
-                                text: 'Testovi',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 24,
-                                    color: primaryDarkTextColor))),
-                        RichText(
-                            text: const TextSpan(
-                                text: 'Pojedinačni testovi',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16,
-                                    color: primaryDarkTextColor))),
-                      ],
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      flex: 5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                              text: const TextSpan(
+                                  text: 'Testovi',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 24,
+                                      color: primaryBlackTextColor))),
+                          RichText(
+                              text: const TextSpan(
+                                  text: 'Pojedinačni testovi',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                      color: primaryDarkTextColor))),
+                        ],
+                      ),
                     ),
-                  ),
-                  Flexible(
-                    flex: 5,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                          child: Container(
-                            width: 300,
-                            child: const TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Pronađi test...',
-                                prefixIcon: Icon(Icons.search),
-                              ),
+                    const Flexible(
+                      flex: 3,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                        child: SizedBox(
+                          width: 300,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Pronađi test...',
+                              prefixIcon: Icon(Icons.search),
                             ),
                           ),
                         ),
-                        Container(
-                          width: 150,
-                          height: 35,
-                          child: ElevatedButton(
+                      ),
+                    ),
+                    Flexible(
+                        flex: 2,
+                        child: ElevatedButton(
                             onPressed: () {},
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.add,
-                                    color: primaryLightTextColor),
-                                const SizedBox(width: 8),
-                                RichText(
-                                  text: const TextSpan(
-                                    text: 'Dodaj test',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      color: primaryLightTextColor,
+                                const Flexible(
+                                    flex: 3,
+                                    child: Icon(Icons.add,
+                                        color: primaryLightTextColor)),
+                                const Flexible(child: SizedBox(width: 8)),
+                                Flexible(
+                                  flex: 7,
+                                  child: RichText(
+                                    text: const TextSpan(
+                                      text: 'Dodaj test',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                        color: primaryWhiteTextColor,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                            ))),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 35,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.grey[200],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(children: [
-                          Flexible(
-                              flex: 2,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: RichText(
-                                    text: const TextSpan(
-                                        text: 'Naziv',
-                                        style: TextStyle(
-                                            color: primaryDarkTextColor,
-                                            fontWeight: FontWeight.bold))),
-                              )),
-                          Flexible(
-                              flex: 2,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: RichText(
-                                    text: const TextSpan(
-                                        text: 'Opis',
-                                        style: TextStyle(
-                                            color: primaryDarkTextColor,
-                                            fontWeight: FontWeight.bold))),
-                              )),
-                          Flexible(
-                              flex: 1,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: RichText(
-                                    text: const TextSpan(
-                                        text: 'Cijena',
-                                        style: TextStyle(
-                                            color: primaryDarkTextColor,
-                                            fontWeight: FontWeight.bold))),
-                              )),
-                          Flexible(
-                              flex: 2,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: RichText(
-                                    text: const TextSpan(
-                                        text: 'Napomena za pripremu',
-                                        style: TextStyle(
-                                            color: primaryDarkTextColor,
-                                            fontWeight: FontWeight.bold))),
-                              )),
-                          Flexible(
-                              flex: 2,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: RichText(
-                                    text: const TextSpan(
-                                        text: 'Datum kreiranja',
-                                        style: TextStyle(
-                                            color: primaryDarkTextColor,
-                                            fontWeight: FontWeight.bold))),
-                              )),
-                          Flexible(
-                              flex: 1,
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: RichText(
-                                    text: const TextSpan(
-                                        text: 'Opcije',
-                                        style: TextStyle(
-                                            color: primaryDarkTextColor,
-                                            fontWeight: FontWeight.bold))),
-                              )),
-                        ]),
-                      ),
+              ElevatedButton(
+                  onPressed: () async {
+                    //Navigator.of(context).pop();
+                    var data = await _testoviProvider.get();
+
+                    setState(() {
+                      testovi = data;
+                    });
+
+                    print('data: ${data?.result[0].naziv}');
+                  },
+                  child: const Text('GET TESTOVE')),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: DataTable(
+                          headingRowColor: MaterialStateColor.resolveWith(
+                              (states) => tableHeaderColor),
+                          columns: const [
+                            DataColumn(
+                                label: Tooltip(
+                              message: 'Ime testa',
+                              child: Text(
+                                'Naziv',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )),
+                            DataColumn(
+                                label: Tooltip(
+                              message: 'Kratak opis testa',
+                              child: Text(
+                                'Opis',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )),
+                            DataColumn(
+                                label: Tooltip(
+                              message: 'Cijena jednog testa',
+                              child: Text(
+                                'Cijena',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )),
+                            DataColumn(
+                                label: Tooltip(
+                              message:
+                                  'Upute koje se trebaju slijediti prije dolaska na test',
+                              child: Text(
+                                'Napomena za pripremu',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )),
+                            DataColumn(
+                                label: Tooltip(
+                              message: 'Datum kada je kreiran test',
+                              child: Text(
+                                'Datum kreiranja',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )),
+                            DataColumn(label: Text('Opcije')),
+                          ],
+                          rows: testovi != null
+                              ? testovi!.result
+                                  .map((test) => DataRow(cells: [
+                                        DataCell(Text(
+                                          test.naziv ?? 'Nema naziv',
+                                          overflow: TextOverflow.fade,
+                                        )),
+                                        DataCell(
+                                          GestureDetector(
+                                            onTap: () {
+                                              (test.opis?.length ?? 0) > 50
+                                                  ? showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                          content: Text(
+                                                              test.opis ??
+                                                                  'Nema opis'),
+                                                        );
+                                                      },
+                                                    )
+                                                  : null;
+                                            },
+                                            child: Text(
+                                              test.opis ?? 'Nema opis',
+                                              overflow: TextOverflow.fade,
+                                            ),
+                                          ),
+                                        ),
+                                        DataCell(Text(
+                                          test.cijena.toString(),
+                                          overflow: TextOverflow.fade,
+                                        )),
+                                        DataCell(
+                                          GestureDetector(
+                                            onTap: () {
+                                              (test.napomenaZaPripremu
+                                                              ?.length ??
+                                                          0) >
+                                                      50
+                                                  ? showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                          content: Text(test
+                                                                  .napomenaZaPripremu ??
+                                                              'Nema napomenu'),
+                                                        );
+                                                      },
+                                                    )
+                                                  : null;
+                                            },
+                                            child: Text(
+                                              test.napomenaZaPripremu ??
+                                                  'Nema napomenu',
+                                              overflow: TextOverflow.fade,
+                                            ),
+                                          ),
+                                        ),
+                                        DataCell(Text(
+                                          test.dtKreiranja ?? 'Nepoznat',
+                                          overflow: TextOverflow.fade,
+                                        )),
+                                        DataCell(IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          onPressed: () {},
+                                        )),
+                                      ]))
+                                  .toList()
+                              : []),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            ElevatedButton(
-                onPressed: () async {
-                  //Navigator.of(context).pop();
-                  var data = await _testoviProvider.get();
-                  print('data: ${data?.result[0].naziv}');
-                },
-                child: Text('GET TESTOVE')),
-          ],
+            ],
+          ),
         ),
       ),
     );

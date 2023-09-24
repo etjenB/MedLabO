@@ -29,12 +29,12 @@ class _UslugeScreenState extends State<UslugeScreen> {
         ),
         child: Column(
           children: [
-            Text('USLUGE'),
+            const Text('USLUGE'),
             ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('Nazad')),
+                child: const Text('Nazad')),
           ],
         ),
       ),

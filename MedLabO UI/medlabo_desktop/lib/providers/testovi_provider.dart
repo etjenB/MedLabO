@@ -10,8 +10,8 @@ import '../utils/general/toast_utils.dart';
 
 class TestoviProvider with ChangeNotifier {
   static String? _baseUrl;
-  String _endpoint = "Test";
-  final storage = new FlutterSecureStorage();
+  final String _endpoint = "Test";
+  final storage = const FlutterSecureStorage();
 
   TestoviProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",

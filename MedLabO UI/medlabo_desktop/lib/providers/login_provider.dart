@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginProvider with ChangeNotifier {
   static String? _baseUrl;
-  String _endpoint = "Auth/Login";
+  final String _endpoint = "Auth/Login";
   final storage = const FlutterSecureStorage();
 
   LoginProvider() {
