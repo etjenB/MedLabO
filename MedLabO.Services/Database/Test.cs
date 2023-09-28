@@ -18,6 +18,8 @@ namespace MedLabO.Services.Database
         [Range(0.01, double.MaxValue, ErrorMessage = "Cijena mora biti veca od nula.")]
         public decimal Cijena { get; set; }
 
+        public byte[]? Slika { get; set; } = new byte[0];
+
         //NapomenaZaPripremu moze biti npr. Ne jesti nista minimalno 6h prije nalaza itd.
         public string? NapomenaZaPripremu { get; set; }
 

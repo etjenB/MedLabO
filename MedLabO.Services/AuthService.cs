@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using MedLabO.Services.Database;
 using Microsoft.Extensions.Configuration;
+using MedLabO.Models.Exceptions;
 
 namespace MedLabO.Services
 {

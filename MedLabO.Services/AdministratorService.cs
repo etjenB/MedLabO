@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MedLabO.Models;
 using MedLabO.Models.Constants;
+using MedLabO.Models.Exceptions;
 using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;

@@ -75,7 +75,6 @@ class TestoviProvider with ChangeNotifier {
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           return {'isValid': true, 'message': ""};
         } else {
-          print(response.body);
           return {'isValid': false, 'message': "Greška."};
         }
     }

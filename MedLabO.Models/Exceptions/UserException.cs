@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MedLabO.Models
+namespace MedLabO.Models.Exceptions
 {
     public class UserException : Exception
     {

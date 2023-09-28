@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using MedLabO.Models;
+using MedLabO.Models.Exceptions;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +34,7 @@ namespace MedLabO.Services
             TDb entity = _mapper.Map<TDb>(insert);
             await BeforeInsert(entity, insert);
             set.Add(entity);
-            
+
             await _db.SaveChangesAsync();
             return _mapper.Map<T>(entity);
         }
@@ -41,6 +43,10 @@ namespace MedLabO.Services
         {
             var set = _db.Set<TDb>();
             var entity = await set.FindAsync(id);
+            if (entity is null)
+            {
+                throw new EntityNotFoundException("Entity with that ID doesn't exist.");
+            }
             _mapper.Map(update, entity);
             try
             {
@@ -48,7 +54,7 @@ namespace MedLabO.Services
             }
             catch
             {
-                throw new UserException("Entity with that ID doesn't exist.");
+                throw new UserException("Error while executing BeforeUpdate method.");
             }
             await _db.SaveChangesAsync();
             return _mapper.Map<T>(entity);

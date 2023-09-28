@@ -6,6 +6,7 @@
         public string Naziv { get; set; }
         public string Opis { get; set; }
         public decimal Cijena { get; set; }
+        public byte[]? Slika { get; set; }
         public string? NapomenaZaPripremu { get; set; }
         public string? TipUzorka { get; set; }
         public DateTime DTKreiranja { get; set; }

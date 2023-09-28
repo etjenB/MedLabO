@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/test.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
+import 'package:medlabo_desktop/utils/general/util.dart';
 import 'package:provider/provider.dart';
 import '../providers/testovi_provider.dart';
 
@@ -39,7 +41,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 1,
               blurRadius: 7,
-              offset: const Offset(0, 3), // changes position of shadow
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -53,7 +55,6 @@ class _TestoviScreenState extends State<TestoviScreen> {
               ),
               ElevatedButton(
                   onPressed: () async {
-                    //Navigator.of(context).pop();
                     var data = await _testoviProvider.get();
 
                     setState(() {
@@ -155,7 +156,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                               ),
                             ),
                             DataCell(Text(
-                              test.cijena.toString(),
+                              formatNumberToPrice(test.cijena),
                               overflow: TextOverflow.fade,
                             )),
                             DataCell(
@@ -184,13 +185,182 @@ class _TestoviScreenState extends State<TestoviScreen> {
                               test.dtKreiranja ?? 'Nepoznat',
                               overflow: TextOverflow.fade,
                             )),
-                            DataCell(IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () {},
-                            )),
+                            DataCell(
+                              _buildOptionsForTest(context, test),
+                            ),
                           ]))
                       .toList()
                   : []),
+        ),
+      ],
+    );
+  }
+
+  PopupMenuButton<String> _buildOptionsForTest(
+      BuildContext context, Test test) {
+    final TextEditingController _testNazivController =
+        TextEditingController(text: test.naziv);
+    final TextEditingController _testOpisController =
+        TextEditingController(text: test.opis);
+    final TextEditingController _testNapomentaZaPripremuController =
+        TextEditingController(text: test.napomenaZaPripremu);
+    final TextEditingController _testTipUzorkaController =
+        TextEditingController(text: test.tipUzorka);
+    final TextEditingController _testCijenaController = TextEditingController(
+        text: test.cijena != null ? test.cijena!.toString() : "");
+
+    return PopupMenuButton(
+      icon: const Icon(Icons.more_vert_outlined),
+      constraints: const BoxConstraints(minWidth: 50, maxWidth: 150),
+      tooltip: 'Više opcija',
+      onSelected: (value) {
+        switch (value) {
+          case 'edit':
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Izmjena podataka o testu'),
+                  content: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Container(
+                      width: 800,
+                      child: Column(
+                        children: [
+                          test.slika != ""
+                              ? Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Container(
+                                    width: 200,
+                                    height: 150,
+                                    child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: imageFromBase64String(test.slika!),
+                                    ),
+                                  ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Container(
+                                    width: 150,
+                                    height: 150,
+                                    alignment: Alignment.center,
+                                    color: Colors.red[400],
+                                    child: const Text(
+                                      'Ne postoji slika',
+                                      style: TextStyle(
+                                          color: primaryWhiteTextColor),
+                                    ),
+                                  ),
+                                ),
+                          TextField(
+                            decoration: const InputDecoration(
+                              labelText: 'Naziv',
+                            ),
+                            controller: _testNazivController,
+                          ),
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'Opis',
+                            ),
+                            controller: _testOpisController,
+                            maxLines: 3,
+                            minLines: 1,
+                          ),
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'Napomena za pripremu',
+                            ),
+                            controller: _testNapomentaZaPripremuController,
+                            maxLines: 2,
+                            minLines: 1,
+                          ),
+                          TextField(
+                            decoration: const InputDecoration(
+                              labelText: 'Tip uzorka',
+                            ),
+                            controller: _testTipUzorkaController,
+                          ),
+                          TextField(
+                            decoration: const InputDecoration(
+                              labelText: 'Cijena',
+                            ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d*'))
+                            ],
+                            controller: _testCijenaController,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    Flex(
+                      direction: Axis.horizontal,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              style: const ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStatePropertyAll(Colors.red)),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                'Zatvori',
+                                style: TextStyle(color: primaryWhiteTextColor),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              style: const ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStatePropertyAll(Colors.green)),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text(
+                                'Spasi izmjene',
+                                style: TextStyle(color: primaryWhiteTextColor),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
+            break;
+          case 'delete':
+            break;
+          case 'more_info':
+            break;
+          default:
+            break;
+        }
+      },
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          value: 'edit',
+          child: Icon(Icons.edit),
+        ),
+        const PopupMenuItem(
+          value: 'delete',
+          child: Icon(Icons.delete),
+        ),
+        const PopupMenuItem(
+          value: 'more_info',
+          child: Icon(Icons.info_outline),
         ),
       ],
     );

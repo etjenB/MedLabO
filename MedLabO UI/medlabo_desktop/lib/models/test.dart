@@ -8,6 +8,7 @@ class Test {
   String? naziv;
   String? opis;
   double? cijena;
+  String? slika;
   String? napomenaZaPripremu;
   String? tipUzorka;
   String? dtKreiranja;
@@ -19,6 +20,7 @@ class Test {
       this.naziv,
       this.opis,
       this.cijena,
+      this.slika,
       this.napomenaZaPripremu,
       this.tipUzorka,
       this.dtKreiranja,

@@ -15,6 +15,8 @@ namespace MedLabO.Models.Requests
         [Range(0.01, double.MaxValue, ErrorMessage = "Cijena field must be greater than zero.")]
         public decimal Cijena { get; set; }
 
+        public byte[]? Slika { get; set; }
+
         public string? NapomenaZaPripremu { get; set; }
         public string? TipUzorka { get; set; }
 

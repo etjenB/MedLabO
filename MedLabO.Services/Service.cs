@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MedLabO.Models;
+using MedLabO.Models.Exceptions;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.EntityFrameworkCore;
@@ -54,6 +55,7 @@ namespace MedLabO.Services
         public virtual async Task<T> GetById(Guid id)
         {
             var entity = await _db.Set<TDb>().FindAsync(id);
+            if (entity is null) throw new EntityNotFoundException();
             return _mapper.Map<T>(entity);
         }
     }

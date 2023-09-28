@@ -1,8 +1,8 @@
 ﻿using MedLabO.Models.Requests;
-using MedLabO.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using MedLabO.Services;
+using MedLabO.Models.Exceptions;
 
 namespace MedLabO.Controllers
 {

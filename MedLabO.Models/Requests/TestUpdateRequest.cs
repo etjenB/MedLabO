@@ -15,6 +15,8 @@ namespace MedLabO.Models.Requests
         [Range(0.01, double.MaxValue, ErrorMessage = "Cijena mora biti veca od nula.")]
         public decimal Cijena { get; set; }
 
+        public byte[]? Slika { get; set; }
+
         public string? NapomenaZaPripremu { get; set; }
         public string? TipUzorka { get; set; }
     }
