@@ -59,13 +59,14 @@ builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUslugaService, UslugaService>();
 builder.Services.AddTransient<IAdministratorService, AdministratorService>();
 builder.Services.AddTransient<ITestService, TestService>();
+builder.Services.AddTransient<ITestParametarService, TestParametarService>();
 builder.Services.AddTransient<INovostService, NovostService>();
 builder.Services.AddTransient<IObavijestService, ObavijestService>();
 
 //builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<IService<MedLabO.Models.Test, TestSearchObject>, TestService>();
 
-builder.Services.AddTransient<IService<MedLabO.Models.TestParametar, SearchObject>, Service<MedLabO.Models.TestParametar, MedLabO.Services.Database.TestParametar, SearchObject>>();
+builder.Services.AddTransient<IService<MedLabO.Models.TestParametar, TestParametarSearchObject>, TestParametarService>();
 
 builder.Services.AddTransient<IService<MedLabO.Models.Administrator, AdministratorSearchObject>, AdministratorService>();
 
@@ -80,7 +81,7 @@ builder.Services.AddTransient<IService<MedLabO.Models.Obavijest, ObavijestSearch
 builder.Services.AddDbContext<MedLabOContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("MedLabOContextConnectionString")));
 
-builder.Services.AddAutoMapper(typeof(IAdministratorService));
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 //Dodavanje DefaultIdentity
 //NuGet Potrebno Microsoft.AspNetCore.Identity.UI

@@ -41,6 +41,7 @@ dependencies:
   oktoast: ^3.3.1
   json_annotation: ^4.8.1
   intl: ^0.18.1
+  flutter_form_builder: ^9.1.1
 
 dev_dependencies:
   flutter_test:

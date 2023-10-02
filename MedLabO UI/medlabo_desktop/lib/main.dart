@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medlabo_desktop/providers/login_provider.dart';
+import 'package:medlabo_desktop/providers/test_parametri_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_provider.dart';
 import 'package:medlabo_desktop/utils/constants/strings.dart';
 import 'package:medlabo_desktop/widgets/master_screen.dart';
@@ -9,8 +10,9 @@ import 'package:oktoast/oktoast.dart';
 void main() {
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(create: (_) => TestoviProvider()),
       ChangeNotifierProvider(create: (_) => LoginProvider()),
+      ChangeNotifierProvider(create: (_) => TestoviProvider()),
+      ChangeNotifierProvider(create: (_) => TestParametriProvider()),
     ],
     child: const MyApp(),
   ));

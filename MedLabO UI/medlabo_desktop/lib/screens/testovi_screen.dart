@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/test.dart';
+import 'package:medlabo_desktop/models/test_parametar.dart';
+import 'package:medlabo_desktop/providers/test_parametri_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/general/util.dart';
 import 'package:provider/provider.dart';
@@ -16,14 +19,29 @@ class TestoviScreen extends StatefulWidget {
 
 class _TestoviScreenState extends State<TestoviScreen> {
   late TestoviProvider _testoviProvider;
+  late TestParametriProvider _testParametriProvider;
   SearchResult<Test>? testovi;
   TextEditingController _testSearchController = new TextEditingController();
+  final _formKey = GlobalKey<FormBuilderState>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _testoviProvider = context.read<TestoviProvider>();
+    initForm();
+  }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    _testoviProvider = context.read<TestoviProvider>();
+  }
+
+  Future initForm() async {
+    var data = await _testoviProvider.get();
+    setState(() {
+      testovi = data;
+    });
   }
 
   @override
@@ -53,17 +71,6 @@ class _TestoviScreenState extends State<TestoviScreen> {
                 padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
                 child: _buildTestoviHeader(),
               ),
-              ElevatedButton(
-                  onPressed: () async {
-                    var data = await _testoviProvider.get();
-
-                    setState(() {
-                      testovi = data;
-                    });
-
-                    print('data: ${data?.result[0].naziv}');
-                  },
-                  child: const Text('GET TESTOVE')),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: _buildTestoviDataTable(context),
@@ -198,146 +205,22 @@ class _TestoviScreenState extends State<TestoviScreen> {
 
   PopupMenuButton<String> _buildOptionsForTest(
       BuildContext context, Test test) {
-    final TextEditingController _testNazivController =
-        TextEditingController(text: test.naziv);
-    final TextEditingController _testOpisController =
-        TextEditingController(text: test.opis);
-    final TextEditingController _testNapomentaZaPripremuController =
-        TextEditingController(text: test.napomenaZaPripremu);
-    final TextEditingController _testTipUzorkaController =
-        TextEditingController(text: test.tipUzorka);
-    final TextEditingController _testCijenaController = TextEditingController(
-        text: test.cijena != null ? test.cijena!.toString() : "");
-
     return PopupMenuButton(
       icon: const Icon(Icons.more_vert_outlined),
       constraints: const BoxConstraints(minWidth: 50, maxWidth: 150),
       tooltip: 'Više opcija',
-      onSelected: (value) {
+      onSelected: (value) async {
+        _testParametriProvider = context.read<TestParametriProvider>();
+        var testParametar =
+            await _testParametriProvider.getById(test.testParametarID!);
         switch (value) {
           case 'edit':
+            // ignore: use_build_context_synchronously
             showDialog(
               context: context,
               barrierDismissible: false,
               builder: (context) {
-                return AlertDialog(
-                  title: const Text('Izmjena podataka o testu'),
-                  content: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Container(
-                      width: 800,
-                      child: Column(
-                        children: [
-                          test.slika != ""
-                              ? Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Container(
-                                    width: 200,
-                                    height: 150,
-                                    child: FittedBox(
-                                      fit: BoxFit.fill,
-                                      child: imageFromBase64String(test.slika!),
-                                    ),
-                                  ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Container(
-                                    width: 150,
-                                    height: 150,
-                                    alignment: Alignment.center,
-                                    color: Colors.red[400],
-                                    child: const Text(
-                                      'Ne postoji slika',
-                                      style: TextStyle(
-                                          color: primaryWhiteTextColor),
-                                    ),
-                                  ),
-                                ),
-                          TextField(
-                            decoration: const InputDecoration(
-                              labelText: 'Naziv',
-                            ),
-                            controller: _testNazivController,
-                          ),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Opis',
-                            ),
-                            controller: _testOpisController,
-                            maxLines: 3,
-                            minLines: 1,
-                          ),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Napomena za pripremu',
-                            ),
-                            controller: _testNapomentaZaPripremuController,
-                            maxLines: 2,
-                            minLines: 1,
-                          ),
-                          TextField(
-                            decoration: const InputDecoration(
-                              labelText: 'Tip uzorka',
-                            ),
-                            controller: _testTipUzorkaController,
-                          ),
-                          TextField(
-                            decoration: const InputDecoration(
-                              labelText: 'Cijena',
-                            ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d+\.?\d*'))
-                            ],
-                            controller: _testCijenaController,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  actions: [
-                    Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextButton(
-                              style: const ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStatePropertyAll(Colors.red)),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text(
-                                'Zatvori',
-                                style: TextStyle(color: primaryWhiteTextColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextButton(
-                              style: const ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStatePropertyAll(Colors.green)),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text(
-                                'Spasi izmjene',
-                                style: TextStyle(color: primaryWhiteTextColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
+                return _buildDialogForTestEdit(test, testParametar, context);
               },
             );
             break;
@@ -361,6 +244,138 @@ class _TestoviScreenState extends State<TestoviScreen> {
         const PopupMenuItem(
           value: 'more_info',
           child: Icon(Icons.info_outline),
+        ),
+      ],
+    );
+  }
+
+  AlertDialog _buildDialogForTestEdit(
+      Test test, TestParametar? testParametar, BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        'Izmjena podataka o testu',
+        style: heading1,
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          width: 800,
+          child: FormBuilder(
+              key: _formKey,
+              child: Column(
+                children: [
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Naziv'),
+                    name: 'Naziv',
+                    initialValue: test.naziv,
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Opis'),
+                    name: 'Opis',
+                    initialValue: test.opis,
+                    maxLines: 3,
+                    minLines: 1,
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(
+                        labelText: 'Napomena za pripremu'),
+                    name: 'Napomena za pripremu',
+                    initialValue: test.napomenaZaPripremu,
+                    maxLines: 2,
+                    minLines: 1,
+                  ),
+                  FormBuilderTextField(
+                      decoration:
+                          const InputDecoration(labelText: 'Tip uzorka'),
+                      name: 'Tip uzorka',
+                      initialValue: test.tipUzorka),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Cijena'),
+                    name: 'Cijena',
+                    initialValue: test.cijena.toString(),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    height: 30,
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      'Parametri',
+                      style: heading2,
+                    ),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(
+                        labelText: 'Minimalna vrijednost'),
+                    name: 'minVrijednost',
+                    initialValue: testParametar?.minVrijednost.toString(),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+                    ],
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(
+                        labelText: 'Maksimalna vrijednost'),
+                    name: 'maxVrijednost',
+                    initialValue: testParametar?.maxVrijednost.toString(),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+                    ],
+                  ),
+                  FormBuilderTextField(
+                    decoration:
+                        const InputDecoration(labelText: 'Normalna vrijednost'),
+                    name: 'normalnaVrijednost',
+                    initialValue: testParametar?.normalnaVrijednost,
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Jedinica'),
+                    name: 'jedinica',
+                    initialValue: testParametar?.jedinica,
+                  ),
+                ],
+              )),
+        ),
+      ),
+      actions: [
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Zatvori',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Spasi izmjene',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

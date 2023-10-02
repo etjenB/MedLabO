@@ -7,22 +7,24 @@ namespace MedLabO.Services
     {
         public MappingProfile()
         {
-            CreateMap<Database.Administrator, Models.Administrator>();
-            CreateMap<AdministratorInsertRequest, Database.Administrator>();
-            CreateMap<AdministratorUpdateRequest, Database.Administrator>();
-            CreateMap<TestInsertRequest, Database.Test>();
-            CreateMap<TestUpdateRequest, Database.Test>();
-            CreateMap<Database.Test, Models.Test>();
-            CreateMap<Database.TestParametar, Models.TestParametar>();
-            CreateMap<Database.Rezultat, Models.Rezultat>();
-            CreateMap<Database.Termin, Models.Termin>();
-            CreateMap<Database.TerminTest, Models.TerminTest>();
-            CreateMap<NovostInsertRequest, Database.Novost>();
-            CreateMap<NovostUpdateRequest, Database.Novost>();
-            CreateMap<Database.Novost, Models.Novost>();
-            CreateMap<ObavijestInsertRequest, Database.Obavijest>();
-            CreateMap<ObavijestUpdateRequest, Database.Obavijest>();
-            CreateMap<Database.Obavijest, Models.Obavijest>();
+            CreateMap<Database.Administrator, Models.Administrator>().ReverseMap();
+            CreateMap<AdministratorInsertRequest, Database.Administrator>().ReverseMap();
+            CreateMap<AdministratorUpdateRequest, Database.Administrator>().ReverseMap();
+            CreateMap<TestInsertRequest, Database.Test>().ReverseMap();
+            CreateMap<TestUpdateRequest, Database.Test>().ReverseMap();
+            CreateMap<Database.Test, Models.Test>().ReverseMap();
+            CreateMap<TestParametarInsertRequest, Database.TestParametar>().ReverseMap();
+            CreateMap<TestParametarUpdateRequest, Database.TestParametar>().ReverseMap();
+            CreateMap<Database.TestParametar, Models.TestParametar>().ReverseMap();
+            CreateMap<Database.Rezultat, Models.Rezultat>().ReverseMap();
+            CreateMap<Database.Termin, Models.Termin>().ReverseMap();
+            CreateMap<Database.TerminTest, Models.TerminTest>().ReverseMap();
+            CreateMap<NovostInsertRequest, Database.Novost>().ReverseMap();
+            CreateMap<NovostUpdateRequest, Database.Novost>().ReverseMap();
+            CreateMap<Database.Novost, Models.Novost>().ReverseMap();
+            CreateMap<ObavijestInsertRequest, Database.Obavijest>().ReverseMap();
+            CreateMap<ObavijestUpdateRequest, Database.Obavijest>().ReverseMap();
+            CreateMap<Database.Obavijest, Models.Obavijest>().ReverseMap();
         }
     }
 }
