@@ -18,7 +18,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
         defaultValue: "https://localhost:7213/");
   }
 
-  Future<SearchResult<T>?> get({dynamic filter}) async {
+  Future<SearchResult<T>> get({dynamic filter}) async {
     var url = '$_baseUrl$_endpoint';
 
     if (filter != null) {
@@ -46,10 +46,10 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     makeErrorToast(isValidResponse(response)['message'] ?? '');
 
-    return null;
+    throw Exception("Failed get request");
   }
 
-  Future<T?> getById(String id) async {
+  Future<T> getById(String id) async {
     var url = '$_baseUrl$_endpoint/$id';
 
     var uri = Uri.parse(url);
@@ -65,7 +65,43 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     makeErrorToast(isValidResponse(response)['message'] ?? '');
 
-    return null;
+    throw Exception("Failed get request");
+  }
+
+  Future<T> update(String id, [dynamic request]) async {
+    var url = '$_baseUrl$_endpoint/$id';
+
+    var uri = Uri.parse(url);
+
+    var headers = await createHeaders();
+    var jsonRequest = jsonEncode(request);
+    var response = await http.put(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)['isValid']) {
+      var data = jsonDecode(response.body);
+      return fromJson(data);
+    }
+
+    makeErrorToast(isValidResponse(response)['message'] ?? '');
+
+    throw Exception("Failed update request");
+  }
+
+  Future<T> insert(dynamic request) async {
+    var url = '$_baseUrl$_endpoint';
+    var uri = Uri.parse(url);
+    var headers = await createHeaders();
+    var jsonRequest = jsonEncode(request);
+    var response = await http.post(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)['isValid']) {
+      var data = jsonDecode(response.body);
+      return fromJson(data);
+    }
+
+    makeErrorToast(isValidResponse(response)['message'] ?? '');
+
+    throw Exception("Failed insert request");
   }
 
   T fromJson(data) {
@@ -78,7 +114,11 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (token == null) {
       throw Exception('Token is null');
     }
-    var headers = {'accept': 'text/plain', 'Authorization': 'Bearer $token'};
+    var headers = {
+      'Content-Type': 'application/json',
+      'accept': 'text/plain',
+      'Authorization': 'Bearer $token'
+    };
 
     return headers;
   }

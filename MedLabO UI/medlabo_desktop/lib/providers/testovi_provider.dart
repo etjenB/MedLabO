@@ -1,4 +1,4 @@
-import 'package:medlabo_desktop/models/test.dart';
+import 'package:medlabo_desktop/models/test/test.dart';
 import 'package:medlabo_desktop/providers/base_provider.dart';
 
 class TestoviProvider extends BaseProvider<Test> {

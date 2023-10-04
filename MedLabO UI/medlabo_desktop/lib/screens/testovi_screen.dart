@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
-import 'package:medlabo_desktop/models/test.dart';
+import 'package:medlabo_desktop/models/test/test.dart';
+import 'package:medlabo_desktop/models/test/test_update_request.dart';
 import 'package:medlabo_desktop/models/test_parametar.dart';
 import 'package:medlabo_desktop/providers/test_parametri_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
@@ -266,12 +267,12 @@ class _TestoviScreenState extends State<TestoviScreen> {
                 children: [
                   FormBuilderTextField(
                     decoration: const InputDecoration(labelText: 'Naziv'),
-                    name: 'Naziv',
+                    name: 'naziv',
                     initialValue: test.naziv,
                   ),
                   FormBuilderTextField(
                     decoration: const InputDecoration(labelText: 'Opis'),
-                    name: 'Opis',
+                    name: 'opis',
                     initialValue: test.opis,
                     maxLines: 3,
                     minLines: 1,
@@ -279,7 +280,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                   FormBuilderTextField(
                     decoration: const InputDecoration(
                         labelText: 'Napomena za pripremu'),
-                    name: 'Napomena za pripremu',
+                    name: 'napomenaZaPripremu',
                     initialValue: test.napomenaZaPripremu,
                     maxLines: 2,
                     minLines: 1,
@@ -287,11 +288,11 @@ class _TestoviScreenState extends State<TestoviScreen> {
                   FormBuilderTextField(
                       decoration:
                           const InputDecoration(labelText: 'Tip uzorka'),
-                      name: 'Tip uzorka',
+                      name: 'tipUzorka',
                       initialValue: test.tipUzorka),
                   FormBuilderTextField(
                     decoration: const InputDecoration(labelText: 'Cijena'),
-                    name: 'Cijena',
+                    name: 'cijena',
                     initialValue: test.cijena.toString(),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
@@ -365,7 +366,37 @@ class _TestoviScreenState extends State<TestoviScreen> {
                 child: TextButton(
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(Colors.green)),
-                  onPressed: () {
+                  onPressed: () async {
+                    _formKey.currentState?.saveAndValidate();
+
+                    double? cijenaDouble;
+                    try {
+                      cijenaDouble = _formKey.currentState?.value['cijena'] !=
+                              null
+                          ? double.parse(_formKey.currentState?.value['cijena'])
+                          : null;
+                    } catch (e) {
+                      throw Exception(e);
+                    }
+
+                    Test testRequest = Test(
+                        naziv: _formKey.currentState?.value['naziv'],
+                        opis: _formKey.currentState?.value['opis'],
+                        cijena: cijenaDouble,
+                        slika: "",
+                        napomenaZaPripremu:
+                            _formKey.currentState?.value['napomenaZaPripremu'],
+                        tipUzorka: _formKey.currentState?.value['tipUzorka'],
+                        testParametarID: test.testParametarID);
+
+                    await _testoviProvider.update(test.testID!, testRequest);
+
+                    var data = await _testoviProvider.get();
+
+                    setState(() {
+                      testovi = data;
+                    });
+
                     Navigator.of(context).pop();
                   },
                   child: const Text(
