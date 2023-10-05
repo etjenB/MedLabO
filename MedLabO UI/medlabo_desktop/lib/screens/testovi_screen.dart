@@ -4,9 +4,12 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/test/test.dart';
 import 'package:medlabo_desktop/models/test/test_update_request.dart';
-import 'package:medlabo_desktop/models/test_parametar.dart';
+import 'package:medlabo_desktop/models/test_parametar/test_parametar.dart';
+import 'package:medlabo_desktop/models/test_parametar/test_parametar_update_request.dart';
 import 'package:medlabo_desktop/providers/test_parametri_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
+import 'package:medlabo_desktop/utils/general/dialog_utils.dart';
+import 'package:medlabo_desktop/utils/general/toast_utils.dart';
 import 'package:medlabo_desktop/utils/general/util.dart';
 import 'package:provider/provider.dart';
 import '../providers/testovi_provider.dart';
@@ -138,28 +141,51 @@ class _TestoviScreenState extends State<TestoviScreen> {
               rows: testovi != null
                   ? testovi!.result
                       .map((test) => DataRow(cells: [
-                            DataCell(Text(
-                              test.naziv ?? 'Nema naziv',
-                              overflow: TextOverflow.fade,
-                            )),
                             DataCell(
-                              GestureDetector(
-                                onTap: () {
-                                  (test.opis?.length ?? 0) > 50
-                                      ? showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              content: Text(
-                                                  test.opis ?? 'Nema opis'),
-                                            );
-                                          },
-                                        )
-                                      : null;
-                                },
-                                child: Text(
-                                  test.opis ?? 'Nema opis',
-                                  overflow: TextOverflow.fade,
+                              Container(
+                                width: 150.0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    (test.naziv?.length ?? 0) > 20
+                                        ? showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Text(
+                                                    test.naziv ?? 'Nema naziv'),
+                                              );
+                                            },
+                                          )
+                                        : null;
+                                  },
+                                  child: Text(
+                                    test.naziv ?? 'Nema naziv',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Container(
+                                width: 150.0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    (test.opis?.length ?? 0) > 20
+                                        ? showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Text(
+                                                    test.opis ?? 'Nema opis'),
+                                              );
+                                            },
+                                          )
+                                        : null;
+                                  },
+                                  child: Text(
+                                    test.opis ?? 'Nema opis',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ),
                             ),
@@ -168,24 +194,27 @@ class _TestoviScreenState extends State<TestoviScreen> {
                               overflow: TextOverflow.fade,
                             )),
                             DataCell(
-                              GestureDetector(
-                                onTap: () {
-                                  (test.napomenaZaPripremu?.length ?? 0) > 50
-                                      ? showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              content: Text(
-                                                  test.napomenaZaPripremu ??
-                                                      'Nema napomenu'),
-                                            );
-                                          },
-                                        )
-                                      : null;
-                                },
-                                child: Text(
-                                  test.napomenaZaPripremu ?? 'Nema napomenu',
-                                  overflow: TextOverflow.fade,
+                              Container(
+                                width: 150.0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    (test.napomenaZaPripremu?.length ?? 0) > 20
+                                        ? showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Text(
+                                                    test.napomenaZaPripremu ??
+                                                        'Nema napomenu'),
+                                              );
+                                            },
+                                          )
+                                        : null;
+                                  },
+                                  child: Text(
+                                    test.napomenaZaPripremu ?? 'Nema napomenu',
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ),
                             ),
@@ -269,6 +298,10 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     decoration: const InputDecoration(labelText: 'Naziv'),
                     name: 'naziv',
                     initialValue: test.naziv,
+                    maxLength: 40,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(40),
+                    ],
                   ),
                   FormBuilderTextField(
                     decoration: const InputDecoration(labelText: 'Opis'),
@@ -276,6 +309,10 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     initialValue: test.opis,
                     maxLines: 3,
                     minLines: 1,
+                    maxLength: 1000,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(1000),
+                    ],
                   ),
                   FormBuilderTextField(
                     decoration: const InputDecoration(
@@ -284,18 +321,27 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     initialValue: test.napomenaZaPripremu,
                     maxLines: 2,
                     minLines: 1,
+                    maxLength: 200,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(200),
+                    ],
                   ),
                   FormBuilderTextField(
-                      decoration:
-                          const InputDecoration(labelText: 'Tip uzorka'),
-                      name: 'tipUzorka',
-                      initialValue: test.tipUzorka),
+                    decoration: const InputDecoration(labelText: 'Tip uzorka'),
+                    name: 'tipUzorka',
+                    initialValue: test.tipUzorka,
+                    maxLength: 60,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(60),
+                    ],
+                  ),
                   FormBuilderTextField(
                     decoration: const InputDecoration(labelText: 'Cijena'),
                     name: 'cijena',
                     initialValue: test.cijena.toString(),
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                      LengthLimitingTextInputFormatter(30)
                     ],
                   ),
                   Container(
@@ -313,7 +359,8 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     name: 'minVrijednost',
                     initialValue: testParametar?.minVrijednost.toString(),
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                      LengthLimitingTextInputFormatter(30)
                     ],
                   ),
                   FormBuilderTextField(
@@ -322,7 +369,8 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     name: 'maxVrijednost',
                     initialValue: testParametar?.maxVrijednost.toString(),
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                      LengthLimitingTextInputFormatter(30)
                     ],
                   ),
                   FormBuilderTextField(
@@ -330,11 +378,13 @@ class _TestoviScreenState extends State<TestoviScreen> {
                         const InputDecoration(labelText: 'Normalna vrijednost'),
                     name: 'normalnaVrijednost',
                     initialValue: testParametar?.normalnaVrijednost,
+                    inputFormatters: [LengthLimitingTextInputFormatter(60)],
                   ),
                   FormBuilderTextField(
                     decoration: const InputDecoration(labelText: 'Jedinica'),
                     name: 'jedinica',
                     initialValue: testParametar?.jedinica,
+                    inputFormatters: [LengthLimitingTextInputFormatter(60)],
                   ),
                 ],
               )),
@@ -367,19 +417,23 @@ class _TestoviScreenState extends State<TestoviScreen> {
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(Colors.green)),
                   onPressed: () async {
+                    bool shouldProceed = await showConfirmationDialog(
+                        context,
+                        'Potvrda',
+                        'Da li ste sigurni da želite izmijeniti podatke?');
+                    if (!shouldProceed) return;
+
                     _formKey.currentState?.saveAndValidate();
 
-                    double? cijenaDouble;
-                    try {
-                      cijenaDouble = _formKey.currentState?.value['cijena'] !=
-                              null
-                          ? double.parse(_formKey.currentState?.value['cijena'])
-                          : null;
-                    } catch (e) {
-                      throw Exception(e);
+                    double? cijenaDouble = parseStringToDouble(
+                        _formKey.currentState?.value['cijena']);
+                    if (cijenaDouble == null) {
+                      Navigator.of(context).pop();
+                      makeErrorToast("Greška pri provjeri cijene.");
+                      return;
                     }
 
-                    Test testRequest = Test(
+                    TestUpdateRequest testUpdateRequest = TestUpdateRequest(
                         naziv: _formKey.currentState?.value['naziv'],
                         opis: _formKey.currentState?.value['opis'],
                         cijena: cijenaDouble,
@@ -389,7 +443,26 @@ class _TestoviScreenState extends State<TestoviScreen> {
                         tipUzorka: _formKey.currentState?.value['tipUzorka'],
                         testParametarID: test.testParametarID);
 
-                    await _testoviProvider.update(test.testID!, testRequest);
+                    double? minVrijednostDouble = parseStringToDouble(
+                        _formKey.currentState?.value['minVrijednost']);
+
+                    double? maxVrijednostDouble = parseStringToDouble(
+                        _formKey.currentState?.value['maxVrijednost']);
+
+                    TestParametarUpdateRequest testParametarUpdateRequest =
+                        TestParametarUpdateRequest(
+                            minVrijednost: minVrijednostDouble,
+                            maxVrijednost: maxVrijednostDouble,
+                            normalnaVrijednost: _formKey
+                                .currentState?.value['normalnaVrijednost'],
+                            jedinica: _formKey.currentState?.value['jedinica']);
+
+                    await updateTestAndTestParameter(
+                        test.testID!,
+                        testUpdateRequest,
+                        testParametar!.testParametarID!,
+                        testParametarUpdateRequest);
+                    makeSuccessToast("Uspješno izmijenjeni podaci.");
 
                     var data = await _testoviProvider.get();
 
@@ -504,5 +577,14 @@ class _TestoviScreenState extends State<TestoviScreen> {
         },
       ),
     );
+  }
+
+  updateTestAndTestParameter(
+      String testId,
+      TestUpdateRequest testUpdateRequest,
+      String testParametarId,
+      TestParametarUpdateRequest testParametarUpdateRequest) {
+    _testoviProvider.update(testId, testUpdateRequest);
+    _testParametriProvider.update(testParametarId, testParametarUpdateRequest);
   }
 }

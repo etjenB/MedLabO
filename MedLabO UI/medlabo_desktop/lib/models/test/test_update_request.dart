@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'test_update_request.g.dart';
+
+@JsonSerializable()
 class TestUpdateRequest {
   String? naziv;
   String? opis;
@@ -16,13 +21,8 @@ class TestUpdateRequest {
       this.tipUzorka,
       this.testParametarID});
 
-  Map<String, dynamic> toJson() => {
-        'naziv': naziv,
-        'opis': opis,
-        'cijena': cijena,
-        'slika': slika,
-        'napomenaZaPripremu': napomenaZaPripremu,
-        'tipUzorka': tipUzorka,
-        'testParametarID': testParametarID,
-      };
+  factory TestUpdateRequest.fromJson(Map<String, dynamic> json) =>
+      _$TestUpdateRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TestUpdateRequestToJson(this);
 }

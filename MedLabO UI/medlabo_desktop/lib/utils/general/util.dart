@@ -14,3 +14,13 @@ String formatNumberToPrice(dynamic) {
   }
   return f.format(dynamic);
 }
+
+double? parseStringToDouble(String value) {
+  double? newDouble;
+  try {
+    newDouble = double.parse(value);
+  } catch (e) {
+    return null;
+  }
+  return newDouble;
+}
