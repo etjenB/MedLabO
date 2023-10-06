@@ -7,6 +7,7 @@ import 'package:medlabo_desktop/models/test/test_update_request.dart';
 import 'package:medlabo_desktop/models/test_parametar/test_parametar.dart';
 import 'package:medlabo_desktop/models/test_parametar/test_parametar_update_request.dart';
 import 'package:medlabo_desktop/providers/test_parametri_provider.dart';
+import 'package:medlabo_desktop/providers/testovi_and_test_parametri_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/general/dialog_utils.dart';
 import 'package:medlabo_desktop/utils/general/toast_utils.dart';
@@ -24,6 +25,7 @@ class TestoviScreen extends StatefulWidget {
 class _TestoviScreenState extends State<TestoviScreen> {
   late TestoviProvider _testoviProvider;
   late TestParametriProvider _testParametriProvider;
+  late TestoviAndTestParametriProvider _testoviAndTestParametriProvider;
   SearchResult<Test>? testovi;
   TextEditingController _testSearchController = new TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
@@ -31,7 +33,6 @@ class _TestoviScreenState extends State<TestoviScreen> {
   @override
   void initState() {
     super.initState();
-
     _testoviProvider = context.read<TestoviProvider>();
     initForm();
   }
@@ -39,6 +40,8 @@ class _TestoviScreenState extends State<TestoviScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _testoviAndTestParametriProvider =
+        context.read<TestoviAndTestParametriProvider>();
   }
 
   Future initForm() async {
@@ -457,11 +460,13 @@ class _TestoviScreenState extends State<TestoviScreen> {
                                 .currentState?.value['normalnaVrijednost'],
                             jedinica: _formKey.currentState?.value['jedinica']);
 
-                    await updateTestAndTestParameter(
-                        test.testID!,
-                        testUpdateRequest,
-                        testParametar!.testParametarID!,
-                        testParametarUpdateRequest);
+                    await _testoviAndTestParametriProvider
+                        .updateTestAndTestParameter(
+                            test.testID!,
+                            testUpdateRequest,
+                            testParametar!.testParametarID!,
+                            testParametarUpdateRequest);
+
                     makeSuccessToast("Uspješno izmijenjeni podaci.");
 
                     var data = await _testoviProvider.get();
@@ -577,14 +582,5 @@ class _TestoviScreenState extends State<TestoviScreen> {
         },
       ),
     );
-  }
-
-  updateTestAndTestParameter(
-      String testId,
-      TestUpdateRequest testUpdateRequest,
-      String testParametarId,
-      TestParametarUpdateRequest testParametarUpdateRequest) {
-    _testoviProvider.update(testId, testUpdateRequest);
-    _testParametriProvider.update(testParametarId, testParametarUpdateRequest);
   }
 }
