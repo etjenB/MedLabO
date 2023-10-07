@@ -20,4 +20,16 @@ class TestoviAndTestParametriProvider with ChangeNotifier {
     await _testParametriProvider.update(
         testParametarId, testParametarUpdateRequest);
   }
+
+  Future insertTestAndTestParameter(TestUpdateRequest testUpdateRequest,
+      TestParametarUpdateRequest testParametarUpdateRequest) async {
+    var testParametar =
+        await _testParametriProvider.insert(testParametarUpdateRequest);
+    testUpdateRequest.testParametarID = testParametar.testParametarID;
+    try {
+      await _testoviProvider.insert(testUpdateRequest);
+    } catch (e) {
+      await _testParametriProvider.delete(testParametar.testParametarID!);
+    }
+  }
 }

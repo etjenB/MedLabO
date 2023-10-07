@@ -58,5 +58,13 @@ namespace MedLabO.Services
             if (entity is null) throw new EntityNotFoundException();
             return _mapper.Map<T>(entity);
         }
+
+        public virtual async Task Delete(Guid id)
+        {
+            var entity = await _db.Set<TDb>().FindAsync(id);
+            if (entity is null) throw new EntityNotFoundException();
+            _db.Set<TDb>().Remove(entity);
+            await _db.SaveChangesAsync();
+        }
     }
 }

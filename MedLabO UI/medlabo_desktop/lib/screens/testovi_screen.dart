@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/test/test.dart';
 import 'package:medlabo_desktop/models/test/test_update_request.dart';
@@ -40,6 +41,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _testParametriProvider = context.read<TestParametriProvider>();
     _testoviAndTestParametriProvider =
         context.read<TestoviAndTestParametriProvider>();
   }
@@ -243,7 +245,6 @@ class _TestoviScreenState extends State<TestoviScreen> {
       constraints: const BoxConstraints(minWidth: 50, maxWidth: 150),
       tooltip: 'Više opcija',
       onSelected: (value) async {
-        _testParametriProvider = context.read<TestParametriProvider>();
         var testParametar =
             await _testParametriProvider.getById(test.testParametarID!);
         switch (value) {
@@ -305,6 +306,11 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(40),
                     ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Naziv je obavezan."),
+                      FormBuilderValidators.maxLength(40)
+                    ]),
                   ),
                   FormBuilderTextField(
                     decoration: const InputDecoration(labelText: 'Opis'),
@@ -316,6 +322,11 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(1000),
                     ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Opis je obavezan."),
+                      FormBuilderValidators.maxLength(1000)
+                    ]),
                   ),
                   FormBuilderTextField(
                     decoration: const InputDecoration(
@@ -346,6 +357,14 @@ class _TestoviScreenState extends State<TestoviScreen> {
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                       LengthLimitingTextInputFormatter(30)
                     ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Cijena je obavezna."),
+                      FormBuilderValidators.numeric(
+                          errorText: "Unesite ispravnu cijenu."),
+                      FormBuilderValidators.min(0.1,
+                          errorText: "Cijena mora biti veća od 0."),
+                    ]),
                   ),
                   Container(
                     margin: const EdgeInsets.only(top: 10),
@@ -360,7 +379,8 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     decoration: const InputDecoration(
                         labelText: 'Minimalna vrijednost'),
                     name: 'minVrijednost',
-                    initialValue: testParametar?.minVrijednost.toString(),
+                    initialValue:
+                        testParametar?.minVrijednost?.toString() ?? '',
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                       LengthLimitingTextInputFormatter(30)
@@ -370,7 +390,8 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     decoration: const InputDecoration(
                         labelText: 'Maksimalna vrijednost'),
                     name: 'maxVrijednost',
-                    initialValue: testParametar?.maxVrijednost.toString(),
+                    initialValue:
+                        testParametar?.maxVrijednost?.toString() ?? '',
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
                       LengthLimitingTextInputFormatter(30)
@@ -426,7 +447,10 @@ class _TestoviScreenState extends State<TestoviScreen> {
                         'Da li ste sigurni da želite izmijeniti podatke?');
                     if (!shouldProceed) return;
 
-                    _formKey.currentState?.saveAndValidate();
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
 
                     double? cijenaDouble = parseStringToDouble(
                         _formKey.currentState?.value['cijena']);
@@ -446,11 +470,17 @@ class _TestoviScreenState extends State<TestoviScreen> {
                         tipUzorka: _formKey.currentState?.value['tipUzorka'],
                         testParametarID: test.testParametarID);
 
-                    double? minVrijednostDouble = parseStringToDouble(
-                        _formKey.currentState?.value['minVrijednost']);
+                    double? minVrijednostDouble =
+                        _formKey.currentState?.value['minVrijednost'] != null
+                            ? parseStringToDouble(
+                                _formKey.currentState?.value['minVrijednost'])
+                            : null;
 
-                    double? maxVrijednostDouble = parseStringToDouble(
-                        _formKey.currentState?.value['maxVrijednost']);
+                    double? maxVrijednostDouble =
+                        _formKey.currentState?.value['maxVrijednost'] != null
+                            ? parseStringToDouble(
+                                _formKey.currentState?.value['maxVrijednost'])
+                            : null;
 
                     TestParametarUpdateRequest testParametarUpdateRequest =
                         TestParametarUpdateRequest(
@@ -479,6 +509,228 @@ class _TestoviScreenState extends State<TestoviScreen> {
                   },
                   child: const Text(
                     'Spasi izmjene',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  AlertDialog _buildDialogForTestAdd(BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        'Dodavanje novog testa',
+        style: heading1,
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          width: 800,
+          child: FormBuilder(
+              key: _formKey,
+              child: Column(
+                children: [
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Naziv'),
+                    name: 'naziv',
+                    maxLength: 40,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(40),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Naziv je obavezan."),
+                      FormBuilderValidators.maxLength(40)
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Opis'),
+                    name: 'opis',
+                    maxLines: 3,
+                    minLines: 1,
+                    maxLength: 1000,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(1000),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Opis je obavezan."),
+                      FormBuilderValidators.maxLength(1000)
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(
+                        labelText: 'Napomena za pripremu'),
+                    name: 'napomenaZaPripremu',
+                    maxLines: 2,
+                    minLines: 1,
+                    maxLength: 200,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(200),
+                    ],
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Tip uzorka'),
+                    name: 'tipUzorka',
+                    maxLength: 60,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(60),
+                    ],
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Cijena'),
+                    name: 'cijena',
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                      LengthLimitingTextInputFormatter(30)
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Cijena je obavezna."),
+                      FormBuilderValidators.numeric(
+                          errorText: "Unesite ispravnu cijenu."),
+                      FormBuilderValidators.min(0.1,
+                          errorText: "Cijena mora biti veća od 0."),
+                    ]),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    height: 30,
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      'Parametri',
+                      style: heading2,
+                    ),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(
+                        labelText: 'Minimalna vrijednost'),
+                    name: 'minVrijednost',
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                      LengthLimitingTextInputFormatter(30)
+                    ],
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(
+                        labelText: 'Maksimalna vrijednost'),
+                    name: 'maxVrijednost',
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                      LengthLimitingTextInputFormatter(30)
+                    ],
+                  ),
+                  FormBuilderTextField(
+                    decoration:
+                        const InputDecoration(labelText: 'Normalna vrijednost'),
+                    name: 'normalnaVrijednost',
+                    inputFormatters: [LengthLimitingTextInputFormatter(60)],
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Jedinica'),
+                    name: 'jedinica',
+                    inputFormatters: [LengthLimitingTextInputFormatter(60)],
+                  ),
+                ],
+              )),
+        ),
+      ),
+      actions: [
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Zatvori',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
+                  onPressed: () async {
+                    bool shouldProceed = await showConfirmationDialog(
+                        context,
+                        'Potvrda',
+                        'Da li ste sigurni da želite kreirati novi test?');
+                    if (!shouldProceed) return;
+
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
+                    double? cijenaDouble = parseStringToDouble(
+                        _formKey.currentState?.value['cijena']);
+                    if (cijenaDouble == null) {
+                      Navigator.of(context).pop();
+                      makeErrorToast("Greška pri provjeri cijene.");
+                      return;
+                    }
+
+                    TestUpdateRequest testUpdateRequest = TestUpdateRequest(
+                      naziv: _formKey.currentState?.value['naziv'],
+                      opis: _formKey.currentState?.value['opis'],
+                      cijena: cijenaDouble,
+                      slika: "",
+                      napomenaZaPripremu:
+                          _formKey.currentState?.value['napomenaZaPripremu'],
+                      tipUzorka: _formKey.currentState?.value['tipUzorka'],
+                    );
+
+                    double? minVrijednostDouble =
+                        _formKey.currentState?.value['minVrijednost'] != null
+                            ? parseStringToDouble(
+                                _formKey.currentState?.value['minVrijednost'])
+                            : null;
+
+                    double? maxVrijednostDouble =
+                        _formKey.currentState?.value['maxVrijednost'] != null
+                            ? parseStringToDouble(
+                                _formKey.currentState?.value['maxVrijednost'])
+                            : null;
+
+                    TestParametarUpdateRequest testParametarUpdateRequest =
+                        TestParametarUpdateRequest(
+                            minVrijednost: minVrijednostDouble,
+                            maxVrijednost: maxVrijednostDouble,
+                            normalnaVrijednost: _formKey
+                                .currentState?.value['normalnaVrijednost'],
+                            jedinica: _formKey.currentState?.value['jedinica']);
+
+                    await _testoviAndTestParametriProvider
+                        .insertTestAndTestParameter(
+                            testUpdateRequest, testParametarUpdateRequest);
+
+                    makeSuccessToast("Uspješno dodan test.");
+
+                    var data = await _testoviProvider.get();
+
+                    setState(() {
+                      testovi = data;
+                    });
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Kreiraj test',
                     style: TextStyle(color: primaryWhiteTextColor),
                   ),
                 ),
@@ -527,7 +779,15 @@ class _TestoviScreenState extends State<TestoviScreen> {
         Flexible(
             flex: 2,
             child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return _buildDialogForTestAdd(context);
+                    },
+                  );
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

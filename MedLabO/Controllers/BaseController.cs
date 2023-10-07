@@ -1,4 +1,5 @@
 ﻿using MedLabO.Models;
+using MedLabO.Models.Exceptions;
 using MedLabO.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,15 +22,44 @@ namespace MedLabO.Controllers
         }
 
         [HttpGet]
-        public virtual async Task<PagedResult<T>> Get([FromQuery] TSearch? search = null)
+        public async Task<IActionResult> Get([FromQuery] TSearch? search = null)
         {
-            return await _service.Get(search);
+            var pagedResult = await _service.Get(search);
+            if (pagedResult == null || (pagedResult.Result != null && !pagedResult.Result.Any()))
+            {
+                return Ok(new PagedResult<T> { Result = new List<T>(), Count = 0 });
+            }
+            return Ok(pagedResult);
         }
 
         [HttpGet("{id}")]
-        public virtual async Task<T> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            return await _service.GetById(id);
+            var entity = await _service.GetById(id);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            return Ok(entity);
+        }
+
+        [HttpDelete("{id}")]
+        public virtual async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                await _service.Delete(id);
+                return NoContent();
+            }
+            catch (EntityNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting entity with ID {Id}", id);
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }
