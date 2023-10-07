@@ -38,3 +38,29 @@ Future<bool> showConfirmationDialog(
       ) ??
       false;
 }
+
+Future showErrorDialog(
+    BuildContext context, String title, String content) async {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: <Widget>[
+          TextButton(
+            style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.red)),
+            child: const Text(
+              'Zatvori',
+              style: TextStyle(color: primaryWhiteTextColor),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+          ),
+        ],
+      );
+    },
+  );
+}

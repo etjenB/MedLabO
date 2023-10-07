@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -10,6 +14,7 @@ import 'package:medlabo_desktop/models/test_parametar/test_parametar_request.dar
 import 'package:medlabo_desktop/providers/test_parametri_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_and_test_parametri_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
+import 'package:medlabo_desktop/utils/constants/nums.dart';
 import 'package:medlabo_desktop/utils/general/dialog_utils.dart';
 import 'package:medlabo_desktop/utils/general/toast_utils.dart';
 import 'package:medlabo_desktop/utils/general/util.dart';
@@ -298,6 +303,10 @@ class _TestoviScreenState extends State<TestoviScreen> {
 
   AlertDialog _buildDialogForTestEdit(
       Test test, TestParametar? testParametar, BuildContext context) {
+    String? _selectedImageBase64 = test.slika;
+    Image? _selectedImage = test.slika != null && test.slika != ""
+        ? imageFromBase64String(test.slika!)
+        : null;
     return AlertDialog(
       title: const Text(
         'Izmjena podataka o testu',
@@ -311,6 +320,71 @@ class _TestoviScreenState extends State<TestoviScreen> {
               key: _formKey,
               child: Column(
                 children: [
+                  FormBuilderField(
+                      builder: (field) {
+                        return Container(
+                          width: 300,
+                          child: InputDecorator(
+                            decoration: const InputDecoration(
+                              labelText: 'Slika',
+                              border: InputBorder.none,
+                            ),
+                            child: Column(
+                              children: [
+                                if (_selectedImage != null)
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Container(
+                                      width: 200,
+                                      height: 150,
+                                      child: FittedBox(
+                                        fit: BoxFit.fill,
+                                        child: _selectedImage,
+                                      ),
+                                    ),
+                                  ),
+                                ListTile(
+                                  hoverColor: Colors.blue[700],
+                                  tileColor: Colors.blue,
+                                  iconColor: primaryWhiteTextColor,
+                                  textColor: primaryWhiteTextColor,
+                                  leading: const Icon(Icons.image),
+                                  title: const Text('Odaberi sliku'),
+                                  trailing:
+                                      const Icon(Icons.file_upload_outlined),
+                                  onTap: () async {
+                                    var fileResult = await FilePicker.platform
+                                        .pickFiles(type: FileType.image);
+                                    if (fileResult == null ||
+                                        fileResult.files.single.path == null) {
+                                      return;
+                                    }
+                                    var image =
+                                        File(fileResult.files.single.path!);
+
+                                    if (await image.length() > maxSizeInBytes) {
+                                      // ignore: use_build_context_synchronously
+                                      showErrorDialog(context, 'Greška',
+                                          'Veličina datoteke prelazi 2MB. Molimo odaberite manju datoteku.');
+                                      return;
+                                    }
+
+                                    var base64Image =
+                                        base64Encode(image.readAsBytesSync());
+                                    setState(() {
+                                      _selectedImage =
+                                          imageFromBase64String(base64Image);
+                                      _selectedImageBase64 = base64Image;
+                                    });
+                                    field.didChange(base64Image);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      name: 'slika'),
                   FormBuilderTextField(
                     decoration: const InputDecoration(labelText: 'Naziv'),
                     name: 'naziv',
@@ -477,7 +551,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                         naziv: _formKey.currentState?.value['naziv'],
                         opis: _formKey.currentState?.value['opis'],
                         cijena: cijenaDouble,
-                        slika: "",
+                        slika: _selectedImageBase64,
                         napomenaZaPripremu:
                             _formKey.currentState?.value['napomenaZaPripremu'],
                         tipUzorka: _formKey.currentState?.value['tipUzorka'],
@@ -534,6 +608,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
   }
 
   AlertDialog _buildDialogForTestAdd(BuildContext context) {
+    String? _selectedImageBase64;
     return AlertDialog(
       title: const Text(
         'Dodavanje novog testa',
@@ -547,6 +622,69 @@ class _TestoviScreenState extends State<TestoviScreen> {
               key: _formKey,
               child: Column(
                 children: [
+                  FormBuilderField(
+                      builder: (field) {
+                        return Container(
+                          width: 300,
+                          child: InputDecorator(
+                            decoration: const InputDecoration(
+                              labelText: 'Slika',
+                              border: InputBorder.none,
+                            ),
+                            child: Column(
+                              children: [
+                                if (_selectedImageBase64 != null)
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Container(
+                                      width: 200,
+                                      height: 150,
+                                      child: FittedBox(
+                                        fit: BoxFit.fill,
+                                        child: imageFromBase64String(
+                                            _selectedImageBase64!),
+                                      ),
+                                    ),
+                                  ),
+                                ListTile(
+                                  hoverColor: Colors.blue[700],
+                                  tileColor: Colors.blue,
+                                  iconColor: primaryWhiteTextColor,
+                                  textColor: primaryWhiteTextColor,
+                                  leading: const Icon(Icons.image),
+                                  title: const Text('Odaberi sliku'),
+                                  trailing:
+                                      const Icon(Icons.file_upload_outlined),
+                                  onTap: () async {
+                                    var fileResult = await FilePicker.platform
+                                        .pickFiles(type: FileType.image);
+                                    if (fileResult == null ||
+                                        fileResult.files.single.path == null) {
+                                      return;
+                                    }
+                                    var image =
+                                        File(fileResult.files.single.path!);
+
+                                    if (await image.length() > maxSizeInBytes) {
+                                      // ignore: use_build_context_synchronously
+                                      showErrorDialog(context, 'Greška',
+                                          'Veličina datoteke prelazi 2MB. Molimo odaberite manju datoteku.');
+                                      return;
+                                    }
+                                    var base64Image =
+                                        base64Encode(image.readAsBytesSync());
+                                    setState(() {
+                                      _selectedImageBase64 = base64Image;
+                                    });
+                                    field.didChange(base64Image);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      name: 'slika'),
                   FormBuilderTextField(
                     decoration: const InputDecoration(labelText: 'Naziv'),
                     name: 'naziv',
@@ -702,7 +840,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                       naziv: _formKey.currentState?.value['naziv'],
                       opis: _formKey.currentState?.value['opis'],
                       cijena: cijenaDouble,
-                      slika: "",
+                      slika: _formKey.currentState?.value['slika'],
                       napomenaZaPripremu:
                           _formKey.currentState?.value['napomenaZaPripremu'],
                       tipUzorka: _formKey.currentState?.value['tipUzorka'],
