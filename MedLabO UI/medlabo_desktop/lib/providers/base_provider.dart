@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
-import 'package:medlabo_desktop/models/test/test_update_request.dart';
 import '../utils/general/toast_utils.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
@@ -105,18 +104,18 @@ abstract class BaseProvider<T> with ChangeNotifier {
     throw Exception("Failed insert request");
   }
 
-  Future<bool> delete(String id) async {
+  Future delete(String id) async {
     var url = '$_baseUrl$_endpoint/$id';
     var uri = Uri.parse(url);
     var headers = await createHeaders();
     var response = await http.delete(uri, headers: headers);
 
     if (isValidResponse(response)['isValid']) {
-      return true;
+      return;
     }
 
     makeErrorToast(isValidResponse(response)['message'] ?? '');
-    return false;
+    throw Exception("Failed delete request");
   }
 
   T fromJson(data) {

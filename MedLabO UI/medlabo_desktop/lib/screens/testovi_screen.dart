@@ -4,9 +4,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/test/test.dart';
-import 'package:medlabo_desktop/models/test/test_update_request.dart';
+import 'package:medlabo_desktop/models/test/test_request.dart';
 import 'package:medlabo_desktop/models/test_parametar/test_parametar.dart';
-import 'package:medlabo_desktop/models/test_parametar/test_parametar_update_request.dart';
+import 'package:medlabo_desktop/models/test_parametar/test_parametar_request.dart';
 import 'package:medlabo_desktop/providers/test_parametri_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_and_test_parametri_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
@@ -148,10 +148,10 @@ class _TestoviScreenState extends State<TestoviScreen> {
                       .map((test) => DataRow(cells: [
                             DataCell(
                               Container(
-                                width: 150.0,
+                                width: 100.0,
                                 child: GestureDetector(
                                   onTap: () {
-                                    (test.naziv?.length ?? 0) > 20
+                                    (test.naziv?.length ?? 0) > 12
                                         ? showDialog(
                                             context: context,
                                             builder: (context) {
@@ -224,7 +224,10 @@ class _TestoviScreenState extends State<TestoviScreen> {
                               ),
                             ),
                             DataCell(Text(
-                              test.dtKreiranja ?? 'Nepoznat',
+                              test.dtKreiranja == null
+                                  ? 'Nepoznat'
+                                  : formatDateTime(test.dtKreiranja!) ??
+                                      'Nepoznat',
                               overflow: TextOverflow.fade,
                             )),
                             DataCell(
@@ -248,6 +251,8 @@ class _TestoviScreenState extends State<TestoviScreen> {
         var testParametar =
             await _testParametriProvider.getById(test.testParametarID!);
         switch (value) {
+          case 'more_info':
+            break;
           case 'edit':
             // ignore: use_build_context_synchronously
             showDialog(
@@ -259,8 +264,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
             );
             break;
           case 'delete':
-            break;
-          case 'more_info':
+            await _buildLogicForTestDelete(context, test);
             break;
           default:
             break;
@@ -268,16 +272,25 @@ class _TestoviScreenState extends State<TestoviScreen> {
       },
       itemBuilder: (context) => [
         const PopupMenuItem(
+          value: 'more_info',
+          child: Tooltip(
+            message: 'Pregled testa',
+            child: Icon(Icons.remove_red_eye_outlined),
+          ),
+        ),
+        const PopupMenuItem(
           value: 'edit',
-          child: Icon(Icons.edit),
+          child: Tooltip(
+            message: 'Izmjena podataka',
+            child: Icon(Icons.edit),
+          ),
         ),
         const PopupMenuItem(
           value: 'delete',
-          child: Icon(Icons.delete),
-        ),
-        const PopupMenuItem(
-          value: 'more_info',
-          child: Icon(Icons.info_outline),
+          child: Tooltip(
+            message: 'Obriši test',
+            child: Icon(Icons.delete),
+          ),
         ),
       ],
     );
@@ -355,7 +368,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     initialValue: test.cijena.toString(),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                      LengthLimitingTextInputFormatter(30)
+                      LengthLimitingTextInputFormatter(10)
                     ],
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(
@@ -383,7 +396,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                         testParametar?.minVrijednost?.toString() ?? '',
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                      LengthLimitingTextInputFormatter(30)
+                      LengthLimitingTextInputFormatter(10)
                     ],
                   ),
                   FormBuilderTextField(
@@ -394,7 +407,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                         testParametar?.maxVrijednost?.toString() ?? '',
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                      LengthLimitingTextInputFormatter(30)
+                      LengthLimitingTextInputFormatter(10)
                     ],
                   ),
                   FormBuilderTextField(
@@ -441,16 +454,16 @@ class _TestoviScreenState extends State<TestoviScreen> {
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(Colors.green)),
                   onPressed: () async {
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
                     bool shouldProceed = await showConfirmationDialog(
                         context,
                         'Potvrda',
                         'Da li ste sigurni da želite izmijeniti podatke?');
                     if (!shouldProceed) return;
-
-                    if (_formKey.currentState == null ||
-                        !_formKey.currentState!.saveAndValidate()) {
-                      return;
-                    }
 
                     double? cijenaDouble = parseStringToDouble(
                         _formKey.currentState?.value['cijena']);
@@ -460,7 +473,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                       return;
                     }
 
-                    TestUpdateRequest testUpdateRequest = TestUpdateRequest(
+                    TestRequest testUpdateRequest = TestRequest(
                         naziv: _formKey.currentState?.value['naziv'],
                         opis: _formKey.currentState?.value['opis'],
                         cijena: cijenaDouble,
@@ -482,8 +495,8 @@ class _TestoviScreenState extends State<TestoviScreen> {
                                 _formKey.currentState?.value['maxVrijednost'])
                             : null;
 
-                    TestParametarUpdateRequest testParametarUpdateRequest =
-                        TestParametarUpdateRequest(
+                    TestParametarRequest testParametarUpdateRequest =
+                        TestParametarRequest(
                             minVrijednost: minVrijednostDouble,
                             maxVrijednost: maxVrijednostDouble,
                             normalnaVrijednost: _formKey
@@ -586,7 +599,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     name: 'cijena',
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                      LengthLimitingTextInputFormatter(30)
+                      LengthLimitingTextInputFormatter(10)
                     ],
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(
@@ -612,7 +625,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     name: 'minVrijednost',
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                      LengthLimitingTextInputFormatter(30)
+                      LengthLimitingTextInputFormatter(10)
                     ],
                   ),
                   FormBuilderTextField(
@@ -621,7 +634,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     name: 'maxVrijednost',
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
-                      LengthLimitingTextInputFormatter(30)
+                      LengthLimitingTextInputFormatter(10)
                     ],
                   ),
                   FormBuilderTextField(
@@ -666,16 +679,16 @@ class _TestoviScreenState extends State<TestoviScreen> {
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(Colors.green)),
                   onPressed: () async {
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
                     bool shouldProceed = await showConfirmationDialog(
                         context,
                         'Potvrda',
                         'Da li ste sigurni da želite kreirati novi test?');
                     if (!shouldProceed) return;
-
-                    if (_formKey.currentState == null ||
-                        !_formKey.currentState!.saveAndValidate()) {
-                      return;
-                    }
 
                     double? cijenaDouble = parseStringToDouble(
                         _formKey.currentState?.value['cijena']);
@@ -685,7 +698,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                       return;
                     }
 
-                    TestUpdateRequest testUpdateRequest = TestUpdateRequest(
+                    TestRequest testUpdateRequest = TestRequest(
                       naziv: _formKey.currentState?.value['naziv'],
                       opis: _formKey.currentState?.value['opis'],
                       cijena: cijenaDouble,
@@ -707,8 +720,8 @@ class _TestoviScreenState extends State<TestoviScreen> {
                                 _formKey.currentState?.value['maxVrijednost'])
                             : null;
 
-                    TestParametarUpdateRequest testParametarUpdateRequest =
-                        TestParametarUpdateRequest(
+                    TestParametarRequest testParametarUpdateRequest =
+                        TestParametarRequest(
                             minVrijednost: minVrijednostDouble,
                             maxVrijednost: maxVrijednostDouble,
                             normalnaVrijednost: _formKey
@@ -842,5 +855,19 @@ class _TestoviScreenState extends State<TestoviScreen> {
         },
       ),
     );
+  }
+
+  Future _buildLogicForTestDelete(BuildContext context, Test test) async {
+    if (!await showConfirmationDialog(
+        context, 'Potvrda', 'Da li sigurni da želite obrisati ovaj test?')) {
+      return;
+    }
+    await _testoviAndTestParametriProvider.deleteTestAndTestParameter(
+        test.testID!, test.testParametarID!);
+    makeSuccessToast('Uspješno obrisan test.');
+    var data = await _testoviProvider.get();
+    setState(() {
+      testovi = data;
+    });
   }
 }

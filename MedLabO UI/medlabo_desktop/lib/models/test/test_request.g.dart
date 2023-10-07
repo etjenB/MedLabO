@@ -1,13 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'test_update_request.dart';
+part of 'test_request.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-TestUpdateRequest _$TestUpdateRequestFromJson(Map<String, dynamic> json) =>
-    TestUpdateRequest(
+TestRequest _$TestRequestFromJson(Map<String, dynamic> json) => TestRequest(
       naziv: json['naziv'] as String?,
       opis: json['opis'] as String?,
       cijena: (json['cijena'] as num?)?.toDouble(),
@@ -17,7 +16,7 @@ TestUpdateRequest _$TestUpdateRequestFromJson(Map<String, dynamic> json) =>
       testParametarID: json['testParametarID'] as String?,
     );
 
-Map<String, dynamic> _$TestUpdateRequestToJson(TestUpdateRequest instance) =>
+Map<String, dynamic> _$TestRequestToJson(TestRequest instance) =>
     <String, dynamic>{
       'naziv': instance.naziv,
       'opis': instance.opis,

@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'test_parametar_update_request.dart';
+part of 'test_parametar_request.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-TestParametarUpdateRequest _$TestParametarUpdateRequestFromJson(
+TestParametarRequest _$TestParametarRequestFromJson(
         Map<String, dynamic> json) =>
-    TestParametarUpdateRequest(
+    TestParametarRequest(
       minVrijednost: (json['minVrijednost'] as num?)?.toDouble(),
       maxVrijednost: (json['maxVrijednost'] as num?)?.toDouble(),
       normalnaVrijednost: json['normalnaVrijednost'] as String?,
       jedinica: json['jedinica'] as String?,
     );
 
-Map<String, dynamic> _$TestParametarUpdateRequestToJson(
-        TestParametarUpdateRequest instance) =>
+Map<String, dynamic> _$TestParametarRequestToJson(
+        TestParametarRequest instance) =>
     <String, dynamic>{
       'minVrijednost': instance.minVrijednost,
       'maxVrijednost': instance.maxVrijednost,
