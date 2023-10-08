@@ -13,13 +13,13 @@ import 'package:medlabo_desktop/models/test_parametar/test_parametar.dart';
 import 'package:medlabo_desktop/models/test_parametar/test_parametar_request.dart';
 import 'package:medlabo_desktop/providers/test_parametri_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_and_test_parametri_provider.dart';
+import 'package:medlabo_desktop/providers/testovi_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/constants/nums.dart';
 import 'package:medlabo_desktop/utils/general/dialog_utils.dart';
 import 'package:medlabo_desktop/utils/general/toast_utils.dart';
 import 'package:medlabo_desktop/utils/general/util.dart';
 import 'package:provider/provider.dart';
-import '../providers/testovi_provider.dart';
 
 class TestoviScreen extends StatefulWidget {
   const TestoviScreen({super.key});
@@ -53,9 +53,11 @@ class _TestoviScreenState extends State<TestoviScreen> {
 
   Future initForm() async {
     var data = await _testoviProvider.get();
-    setState(() {
-      testovi = data;
-    });
+    if (mounted) {
+      setState(() {
+        testovi = data;
+      });
+    }
   }
 
   @override
