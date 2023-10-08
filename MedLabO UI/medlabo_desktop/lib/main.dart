@@ -4,6 +4,7 @@ import 'package:medlabo_desktop/providers/test_parametri_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_and_test_parametri_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_provider.dart';
 import 'package:medlabo_desktop/utils/constants/strings.dart';
+import 'package:medlabo_desktop/utils/general/auth_util.dart';
 import 'package:medlabo_desktop/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:oktoast/oktoast.dart';
@@ -55,6 +56,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -63,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
   LoginProvider? _loginProvider;
+  bool loginFailed = false;
 
   @override
   void didChangeDependencies() {
@@ -96,21 +99,21 @@ class _LoginPageState extends State<LoginPage> {
                         width: 100,
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20.0),
+                        padding: const EdgeInsets.only(bottom: 20),
                         child: TextField(
                           decoration: const InputDecoration(
-                            labelText: 'Username',
+                            labelText: 'Korisničko ime',
                             prefixIcon: Icon(Icons.account_circle_outlined),
                           ),
                           controller: _usernameController,
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 40.0),
+                        padding: const EdgeInsets.only(bottom: 20),
                         child: TextField(
                           obscureText: _obscureText,
                           decoration: InputDecoration(
-                            labelText: 'Password',
+                            labelText: 'Lozinka',
                             prefixIcon: const Icon(Icons.password_outlined),
                             suffixIcon: IconButton(
                               icon: Icon(
@@ -128,6 +131,20 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _passwordController,
                         ),
                       ),
+                      loginFailed == true
+                          ? const Padding(
+                              padding: EdgeInsets.only(bottom: 20),
+                              child: Text(
+                                'Neispravni kredencijali.',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            )
+                          : const Padding(
+                              padding: EdgeInsets.only(bottom: 20),
+                              child: SizedBox(
+                                height: 20,
+                              ),
+                            ),
                       ElevatedButton(
                           onPressed: () async {
                             var username = _usernameController.text;
@@ -135,11 +152,21 @@ class _LoginPageState extends State<LoginPage> {
                             var isLoged =
                                 await _loginProvider!.login(username, password);
                             if (isLoged) {
+                              final user = await AuthUtil.create();
+                              setState(() {
+                                loginFailed = false;
+                              });
+                              // ignore: use_build_context_synchronously
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => MasterScreenWidget()));
+                                  builder: (context) =>
+                                      MasterScreenWidget(user: user)));
+                            } else {
+                              setState(() {
+                                loginFailed = true;
+                              });
                             }
                           },
-                          child: const Text('Login')),
+                          child: const Text('Prijavi se')),
                     ],
                   ),
                 ),

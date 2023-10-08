@@ -8,6 +8,7 @@ using System.Text;
 using MedLabO.Services.Database;
 using Microsoft.Extensions.Configuration;
 using MedLabO.Models.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace MedLabO.Services
 {
@@ -15,15 +16,18 @@ namespace MedLabO.Services
     {
         private UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly MedLabOContext _db;
 
-        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration configuration, MedLabOContext db)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _db = db;
         }
 
         public async Task<string> Login(string username, string password)
         {
+            //Microsoft Identity kada traži usera u bazi po username-u je case insensitive
             var user = await _userManager.FindByNameAsync(username);
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, password))
