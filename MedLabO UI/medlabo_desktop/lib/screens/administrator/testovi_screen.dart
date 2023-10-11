@@ -17,8 +17,10 @@ import 'package:medlabo_desktop/providers/testovi_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/constants/nums.dart';
 import 'package:medlabo_desktop/utils/general/dialog_utils.dart';
+import 'package:medlabo_desktop/utils/general/pagination_mixin.dart';
 import 'package:medlabo_desktop/utils/general/toast_utils.dart';
 import 'package:medlabo_desktop/utils/general/util.dart';
+import 'package:medlabo_desktop/widgets/pagination_widget.dart';
 import 'package:provider/provider.dart';
 
 class TestoviScreen extends StatefulWidget {
@@ -28,28 +30,25 @@ class TestoviScreen extends StatefulWidget {
   State<TestoviScreen> createState() => _TestoviScreenState();
 }
 
-class _TestoviScreenState extends State<TestoviScreen> {
+class _TestoviScreenState extends State<TestoviScreen>
+    with PaginationMixin<Test> {
   late TestoviProvider _testoviProvider;
   late TestParametriProvider _testParametriProvider;
   late TestoviAndTestParametriProvider _testoviAndTestParametriProvider;
   SearchResult<Test>? testovi;
   TextEditingController _testSearchController = new TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
-  int _currentPage = 1;
-  final int _itemsPerPage = 10;
-  final _pageController = TextEditingController();
-  int _totalItems = 0;
-  int get _totalPages => (_totalItems / _itemsPerPage).ceil();
-  String _currentSearchTerm = '';
-  Map<String, dynamic>? initFilterPagination;
+
+  _TestoviScreenState() {
+    itemsPerPage = 10;
+  }
 
   @override
   void initState() {
     super.initState();
     _testoviProvider = context.read<TestoviProvider>();
-    initFilterPagination = {'Page': 0, 'PageSize': _itemsPerPage};
     initForm();
-    _fetchData(_currentPage);
+    fetchPage(currentPage);
   }
 
   @override
@@ -61,35 +60,21 @@ class _TestoviScreenState extends State<TestoviScreen> {
   }
 
   Future initForm() async {
-    var data = await _testoviProvider.get(filter: initFilterPagination);
+    var data = await _testoviProvider
+        .get(filter: {'Page': 0, 'PageSize': itemsPerPage});
     if (mounted) {
       setState(() {
         testovi = data;
-        _totalItems = testovi!.count;
+        totalItems = testovi!.count;
       });
     }
   }
 
-  Future<void> _fetchData(int page) async {
-    var filter = {
-      if (_currentSearchTerm.isNotEmpty) 'Naziv': _currentSearchTerm,
-      'Page': page - 1,
-      'PageSize': _itemsPerPage
-    };
-    var result = await _testoviProvider.get(filter: filter);
-
-    if (result.count == 0 && page > 1) {
-      _currentPage--;
-      _fetchData(_currentPage);
-      return;
-    }
-
+  void fetchPage(int page) async {
+    var result = await fetchData(
+        page, (filter) => _testoviProvider.get(filter: filter), 'Naziv');
     setState(() {
       testovi = result;
-      if (testovi != null) {
-        _totalItems = testovi!.count;
-      }
-      _currentPage = page;
     });
   }
 
@@ -285,61 +270,13 @@ class _TestoviScreenState extends State<TestoviScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: _currentPage == 1
-                        ? null
-                        : () {
-                            setState(() {
-                              _currentPage--;
-                            });
-                            _fetchData(_currentPage);
-                          },
-                    child: const Text('Prethodna'),
-                  ),
-                  const SizedBox(width: 20),
-                  Text('Stranica $_currentPage/$_totalPages'),
-                  const SizedBox(width: 20),
-                  SizedBox(
-                    width: 70,
-                    child: TextField(
-                      controller: _pageController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: 'Otiđi na',
-                        contentPadding: EdgeInsets.symmetric(vertical: 10),
-                      ),
-                      onSubmitted: (value) {
-                        int? page = int.tryParse(value);
-                        if (page != null && page > 0 && page <= _totalPages) {
-                          setState(() {
-                            _currentPage = page;
-                          });
-                          _fetchData(_currentPage);
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Neispravan broj stranice')),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  ElevatedButton(
-                    onPressed: _currentPage >= _totalPages
-                        ? null
-                        : () {
-                            setState(() {
-                              _currentPage++;
-                            });
-                            _fetchData(_currentPage);
-                          },
-                    child: const Text('Sljedeća'),
-                  ),
-                ],
+              PaginationWidget(
+                key: ValueKey(currentPage),
+                currentPage: currentPage,
+                totalPages: totalPages,
+                onPageChanged: (page) {
+                  fetchPage(page);
+                },
               ),
             ],
           ),
@@ -692,7 +629,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
 
                     makeSuccessToast("Uspješno izmijenjeni podaci.");
 
-                    _fetchData(_currentPage);
+                    fetchPage(currentPage);
 
                     Navigator.of(context).pop();
                   },
@@ -978,7 +915,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
 
                     makeSuccessToast("Uspješno dodan test.");
 
-                    _fetchData(_currentPage);
+                    fetchPage(currentPage);
 
                     Navigator.of(context).pop();
                   },
@@ -1077,13 +1014,13 @@ class _TestoviScreenState extends State<TestoviScreen> {
         ),
         controller: _testSearchController,
         onSubmitted: (value) async {
-          _currentSearchTerm = value;
-          await _fetchData(1);
+          currentSearchTerm = value;
+          fetchPage(1);
         },
         onChanged: (value) async {
           if (value.isEmpty) {
-            _currentSearchTerm = '';
-            await _fetchData(1);
+            currentSearchTerm = '';
+            fetchPage(1);
           }
         },
       ),
@@ -1098,6 +1035,6 @@ class _TestoviScreenState extends State<TestoviScreen> {
     await _testoviAndTestParametriProvider.deleteTestAndTestParameter(
         test.testID!, test.testParametarID!);
     makeSuccessToast('Uspješno obrisan test.');
-    _fetchData(_currentPage);
+    fetchPage(currentPage);
   }
 }
