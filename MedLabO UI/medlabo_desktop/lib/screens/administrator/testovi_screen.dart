@@ -35,12 +35,21 @@ class _TestoviScreenState extends State<TestoviScreen> {
   SearchResult<Test>? testovi;
   TextEditingController _testSearchController = new TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
+  int _currentPage = 1;
+  final int _itemsPerPage = 10;
+  final _pageController = TextEditingController();
+  int _totalItems = 0;
+  int get _totalPages => (_totalItems / _itemsPerPage).ceil();
+  String _currentSearchTerm = '';
+  Map<String, dynamic>? initFilterPagination;
 
   @override
   void initState() {
     super.initState();
     _testoviProvider = context.read<TestoviProvider>();
+    initFilterPagination = {'Page': 0, 'PageSize': _itemsPerPage};
     initForm();
+    _fetchData(_currentPage);
   }
 
   @override
@@ -52,12 +61,36 @@ class _TestoviScreenState extends State<TestoviScreen> {
   }
 
   Future initForm() async {
-    var data = await _testoviProvider.get();
+    var data = await _testoviProvider.get(filter: initFilterPagination);
     if (mounted) {
       setState(() {
         testovi = data;
+        _totalItems = testovi!.count;
       });
     }
+  }
+
+  Future<void> _fetchData(int page) async {
+    var filter = {
+      if (_currentSearchTerm.isNotEmpty) 'Naziv': _currentSearchTerm,
+      'Page': page - 1,
+      'PageSize': _itemsPerPage
+    };
+    var result = await _testoviProvider.get(filter: filter);
+
+    if (result.count == 0 && page > 1) {
+      _currentPage--;
+      _fetchData(_currentPage);
+      return;
+    }
+
+    setState(() {
+      testovi = result;
+      if (testovi != null) {
+        _totalItems = testovi!.count;
+      }
+      _currentPage = page;
+    });
   }
 
   @override
@@ -103,58 +136,64 @@ class _TestoviScreenState extends State<TestoviScreen> {
       mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(
-          child: DataTable(
-              headingRowColor:
-                  MaterialStateColor.resolveWith((states) => tableHeaderColor),
-              columns: const [
-                DataColumn(
-                    label: Tooltip(
-                  message: 'Ime testa',
-                  child: Text(
-                    'Naziv',
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )),
-                DataColumn(
-                    label: Tooltip(
-                  message: 'Kratak opis testa',
-                  child: Text(
-                    'Opis',
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )),
-                DataColumn(
-                    label: Tooltip(
-                  message: 'Cijena jednog testa',
-                  child: Text(
-                    'Cijena',
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )),
-                DataColumn(
-                    label: Tooltip(
-                  message:
-                      'Upute koje se trebaju slijediti prije dolaska na test',
-                  child: Text(
-                    'Napomena za pripremu',
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )),
-                DataColumn(
-                    label: Tooltip(
-                  message: 'Datum kada je kreiran test',
-                  child: Text(
-                    'Datum kreiranja',
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )),
-                DataColumn(label: Text('Opcije')),
-              ],
-              rows: testovi != null
-                  ? testovi!.result
-                      .map((test) => DataRow(cells: [
+          child: Column(
+            children: [
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minWidth: double.infinity,
+                ),
+                child: DataTable(
+                  headingRowColor: MaterialStateColor.resolveWith(
+                      (states) => tableHeaderColor),
+                  columns: const [
+                    DataColumn(
+                        label: Tooltip(
+                      message: 'Ime testa',
+                      child: Text(
+                        'Naziv',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )),
+                    DataColumn(
+                        label: Tooltip(
+                      message: 'Kratak opis testa',
+                      child: Text(
+                        'Opis',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )),
+                    DataColumn(
+                        label: Tooltip(
+                      message: 'Cijena jednog testa',
+                      child: Text(
+                        'Cijena',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )),
+                    DataColumn(
+                        label: Tooltip(
+                      message:
+                          'Upute koje se trebaju slijediti prije dolaska na test',
+                      child: Text(
+                        'Napomena za pripremu',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )),
+                    DataColumn(
+                        label: Tooltip(
+                      message: 'Datum kada je kreiran test',
+                      child: Text(
+                        'Datum kreiranja',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )),
+                    DataColumn(label: Text('Opcije')),
+                  ],
+                  rows: testovi != null
+                      ? testovi!.result.map((test) {
+                          return DataRow(cells: [
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 100.0,
                                 child: GestureDetector(
                                   onTap: () {
@@ -178,7 +217,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                               ),
                             ),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 150.0,
                                 child: GestureDetector(
                                   onTap: () {
@@ -206,7 +245,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                               overflow: TextOverflow.fade,
                             )),
                             DataCell(
-                              Container(
+                              SizedBox(
                                 width: 150.0,
                                 child: GestureDetector(
                                   onTap: () {
@@ -240,9 +279,70 @@ class _TestoviScreenState extends State<TestoviScreen> {
                             DataCell(
                               _buildOptionsForTest(context, test),
                             ),
-                          ]))
-                      .toList()
-                  : []),
+                          ]);
+                        }).toList()
+                      : [],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: _currentPage == 1
+                        ? null
+                        : () {
+                            setState(() {
+                              _currentPage--;
+                            });
+                            _fetchData(_currentPage);
+                          },
+                    child: const Text('Prethodna'),
+                  ),
+                  const SizedBox(width: 20),
+                  Text('Stranica $_currentPage/$_totalPages'),
+                  const SizedBox(width: 20),
+                  SizedBox(
+                    width: 70,
+                    child: TextField(
+                      controller: _pageController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: 'Otiđi na',
+                        contentPadding: EdgeInsets.symmetric(vertical: 10),
+                      ),
+                      onSubmitted: (value) {
+                        int? page = int.tryParse(value);
+                        if (page != null && page > 0 && page <= _totalPages) {
+                          setState(() {
+                            _currentPage = page;
+                          });
+                          _fetchData(_currentPage);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Neispravan broj stranice')),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: _currentPage >= _totalPages
+                        ? null
+                        : () {
+                            setState(() {
+                              _currentPage++;
+                            });
+                            _fetchData(_currentPage);
+                          },
+                    child: const Text('Sljedeća'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -289,14 +389,14 @@ class _TestoviScreenState extends State<TestoviScreen> {
           value: 'edit',
           child: Tooltip(
             message: 'Izmjena podataka',
-            child: Icon(Icons.edit),
+            child: Icon(Icons.mode_edit_outline_outlined),
           ),
         ),
         const PopupMenuItem(
           value: 'delete',
           child: Tooltip(
             message: 'Obriši test',
-            child: Icon(Icons.delete),
+            child: Icon(Icons.delete_outline),
           ),
         ),
       ],
@@ -350,7 +450,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                                   tileColor: Colors.blue,
                                   iconColor: primaryWhiteTextColor,
                                   textColor: primaryWhiteTextColor,
-                                  leading: const Icon(Icons.image),
+                                  leading: const Icon(Icons.image_outlined),
                                   title: const Text('Odaberi sliku'),
                                   trailing:
                                       const Icon(Icons.file_upload_outlined),
@@ -560,13 +660,17 @@ class _TestoviScreenState extends State<TestoviScreen> {
                         testParametarID: test.testParametarID);
 
                     double? minVrijednostDouble =
-                        _formKey.currentState?.value['minVrijednost'] != null
+                        _formKey.currentState?.value['minVrijednost'] != null &&
+                                _formKey.currentState?.value['minVrijednost'] !=
+                                    ""
                             ? parseStringToDouble(
                                 _formKey.currentState?.value['minVrijednost'])
                             : null;
 
                     double? maxVrijednostDouble =
-                        _formKey.currentState?.value['maxVrijednost'] != null
+                        _formKey.currentState?.value['maxVrijednost'] != null &&
+                                _formKey.currentState?.value['maxVrijednost'] !=
+                                    ""
                             ? parseStringToDouble(
                                 _formKey.currentState?.value['maxVrijednost'])
                             : null;
@@ -588,11 +692,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
 
                     makeSuccessToast("Uspješno izmijenjeni podaci.");
 
-                    var data = await _testoviProvider.get();
-
-                    setState(() {
-                      testovi = data;
-                    });
+                    _fetchData(_currentPage);
 
                     Navigator.of(context).pop();
                   },
@@ -653,7 +753,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
                                   tileColor: Colors.blue,
                                   iconColor: primaryWhiteTextColor,
                                   textColor: primaryWhiteTextColor,
-                                  leading: const Icon(Icons.image),
+                                  leading: const Icon(Icons.image_outlined),
                                   title: const Text('Odaberi sliku'),
                                   trailing:
                                       const Icon(Icons.file_upload_outlined),
@@ -849,13 +949,17 @@ class _TestoviScreenState extends State<TestoviScreen> {
                     );
 
                     double? minVrijednostDouble =
-                        _formKey.currentState?.value['minVrijednost'] != null
+                        _formKey.currentState?.value['minVrijednost'] != null &&
+                                _formKey.currentState?.value['minVrijednost'] !=
+                                    ""
                             ? parseStringToDouble(
                                 _formKey.currentState?.value['minVrijednost'])
                             : null;
 
                     double? maxVrijednostDouble =
-                        _formKey.currentState?.value['maxVrijednost'] != null
+                        _formKey.currentState?.value['maxVrijednost'] != null &&
+                                _formKey.currentState?.value['maxVrijednost'] !=
+                                    ""
                             ? parseStringToDouble(
                                 _formKey.currentState?.value['maxVrijednost'])
                             : null;
@@ -874,11 +978,7 @@ class _TestoviScreenState extends State<TestoviScreen> {
 
                     makeSuccessToast("Uspješno dodan test.");
 
-                    var data = await _testoviProvider.get();
-
-                    setState(() {
-                      testovi = data;
-                    });
+                    _fetchData(_currentPage);
 
                     Navigator.of(context).pop();
                   },
@@ -977,20 +1077,13 @@ class _TestoviScreenState extends State<TestoviScreen> {
         ),
         controller: _testSearchController,
         onSubmitted: (value) async {
-          var data = await _testoviProvider
-              .get(filter: {'Naziv': _testSearchController.text});
-
-          setState(() {
-            testovi = data;
-          });
+          _currentSearchTerm = value;
+          await _fetchData(1);
         },
         onChanged: (value) async {
           if (value.isEmpty) {
-            var data = await _testoviProvider.get();
-
-            setState(() {
-              testovi = data;
-            });
+            _currentSearchTerm = '';
+            await _fetchData(1);
           }
         },
       ),
@@ -998,16 +1091,13 @@ class _TestoviScreenState extends State<TestoviScreen> {
   }
 
   Future _buildLogicForTestDelete(BuildContext context, Test test) async {
-    if (!await showConfirmationDialog(
-        context, 'Potvrda', 'Da li sigurni da želite obrisati ovaj test?')) {
+    if (!await showConfirmationDialog(context, 'Potvrda',
+        'Da li ste sigurni da želite obrisati ovaj test?')) {
       return;
     }
     await _testoviAndTestParametriProvider.deleteTestAndTestParameter(
         test.testID!, test.testParametarID!);
     makeSuccessToast('Uspješno obrisan test.');
-    var data = await _testoviProvider.get();
-    setState(() {
-      testovi = data;
-    });
+    _fetchData(_currentPage);
   }
 }
