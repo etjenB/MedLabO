@@ -3,7 +3,7 @@ import 'package:medlabo_desktop/models/search_result.dart';
 
 mixin PaginationMixin<T> {
   int currentPage = 1;
-  late int itemsPerPage = 2;
+  late int itemsPerPage = 10;
   final pageController = TextEditingController();
   int totalItems = 0;
   int get totalPages => (totalItems / itemsPerPage).ceil();

@@ -1,10 +1,22 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:medlabo_desktop/models/novost/novost.dart';
+import 'package:medlabo_desktop/models/novost/novost_request.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/providers/novosti_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
+import 'package:medlabo_desktop/utils/constants/nums.dart';
+import 'package:medlabo_desktop/utils/general/dialog_utils.dart';
+import 'package:medlabo_desktop/utils/general/pagination_mixin.dart';
+import 'package:medlabo_desktop/utils/general/toast_utils.dart';
 import 'package:medlabo_desktop/utils/general/util.dart';
+import 'package:medlabo_desktop/widgets/pagination_widget.dart';
 import 'package:provider/provider.dart';
 
 class NovostiIObavijestiScreen extends StatefulWidget {
@@ -15,26 +27,41 @@ class NovostiIObavijestiScreen extends StatefulWidget {
       _NovostiIObavijestiScreenState();
 }
 
-class _NovostiIObavijestiScreenState extends State<NovostiIObavijestiScreen> {
+class _NovostiIObavijestiScreenState extends State<NovostiIObavijestiScreen>
+    with PaginationMixin<Novost> {
   late NovostiProvider _novostiProvider;
   SearchResult<Novost>? novosti;
   TextEditingController _novostSearchController = new TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
+
+  _NovostiIObavijestiScreenState() {
+    itemsPerPage = 4;
+  }
 
   @override
   void initState() {
     super.initState();
     _novostiProvider = context.read<NovostiProvider>();
     initForm();
+    fetchPage(currentPage);
   }
 
   Future initForm() async {
-    var data = await _novostiProvider.get();
+    var data = await _novostiProvider
+        .get(filter: {'Page': 0, 'PageSize': itemsPerPage});
     if (mounted) {
       setState(() {
         novosti = data;
       });
     }
+  }
+
+  void fetchPage(int page) async {
+    var result = await fetchData(
+        page, (filter) => _novostiProvider.get(filter: filter), 'Naslov');
+    setState(() {
+      novosti = result;
+    });
   }
 
   @override
@@ -192,106 +219,174 @@ class _NovostiIObavijestiScreenState extends State<NovostiIObavijestiScreen> {
       mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(
-          child: DataTable(
-              headingRowColor:
-                  MaterialStateColor.resolveWith((states) => tableHeaderColor),
-              columns: const [
-                DataColumn(
-                    label: Tooltip(
-                  message: 'Slika za prikaz novosti',
-                  child: Text(
-                    'Slika',
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )),
-                DataColumn(
-                    label: Tooltip(
-                  message: 'Naslov novosti',
-                  child: Text(
-                    'Naslov',
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )),
-                DataColumn(
-                    label: Tooltip(
-                  message: 'Tekst novosti',
-                  child: Text(
-                    'Sadržaj',
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )),
-                DataColumn(label: Text('Opcije')),
-              ],
-              rows: novosti != null
-                  ? novosti!.result
-                      .map((novost) => DataRow(cells: [
-                            DataCell(
-                              Container(
-                                width: 50,
-                                height: 50,
-                                child: GestureDetector(
-                                  onTap: () {},
-                                  child:
-                                      novost.slika != null && novost.slika != ""
-                                          ? imageFromBase64String(novost.slika!)
-                                          : const Text('Nema slike'),
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              Container(
-                                width: 100.0,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    (novost.naslov?.length ?? 0) > 12
-                                        ? showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                content: Text(novost.naslov ??
-                                                    'Nema naslov'),
+          child: Column(
+            children: [
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  minWidth: double.infinity,
+                ),
+                child: DataTable(
+                    headingRowColor: MaterialStateColor.resolveWith(
+                        (states) => tableHeaderColor),
+                    columns: const [
+                      DataColumn(
+                          label: Tooltip(
+                        message: 'Slika za prikaz novosti',
+                        child: Text(
+                          'Slika',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )),
+                      DataColumn(
+                          label: Tooltip(
+                        message: 'Naslov novosti',
+                        child: Text(
+                          'Naslov',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )),
+                      DataColumn(
+                          label: Tooltip(
+                        message: 'Tekst novosti',
+                        child: Text(
+                          'Sadržaj',
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )),
+                      DataColumn(label: Text('Opcije')),
+                    ],
+                    rows: novosti != null
+                        ? novosti!.result
+                            .map((novost) => DataRow(cells: [
+                                  DataCell(
+                                    Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Container(
+                                        width: 50,
+                                        height: 50,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            if (novost.slika != null &&
+                                                novost.slika != "") {
+                                              showDialog(
+                                                context: context,
+                                                barrierDismissible:
+                                                    true, // Allows closing by tapping outside
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Dialog(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    elevation: 0,
+                                                    child: Container(
+                                                      width: 600,
+                                                      height: 600,
+                                                      child:
+                                                          imageFromBase64String(
+                                                              novost.slika!),
+                                                    ),
+                                                  );
+                                                },
                                               );
-                                            },
-                                          )
-                                        : null;
-                                  },
-                                  child: Text(
-                                    novost.naslov ?? 'Nema naslov',
-                                    overflow: TextOverflow.ellipsis,
+                                            }
+                                          },
+                                          child: novost.slika != null &&
+                                                  novost.slika != ""
+                                              ? imageFromBase64String(
+                                                  novost.slika!)
+                                              : const Text('Nema slike'),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              Container(
-                                width: 300.0,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    (novost.sadrzaj?.length ?? 0) > 50
-                                        ? showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return AlertDialog(
-                                                content: Text(novost.sadrzaj ??
-                                                    'Nema sadrzaj'),
-                                              );
-                                            },
-                                          )
-                                        : null;
-                                  },
-                                  child: Text(
-                                    novost.sadrzaj ?? 'Nema sadrzaj',
-                                    overflow: TextOverflow.ellipsis,
+                                  DataCell(
+                                    Container(
+                                      width: 200.0,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          (novost.naslov?.length ?? 0) > 22
+                                              ? showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      content: Text(
+                                                          novost.naslov ??
+                                                              'Nema naslov'),
+                                                    );
+                                                  },
+                                                )
+                                              : null;
+                                        },
+                                        child: Text(
+                                          novost.naslov ?? 'Nema naslov',
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              _buildOptionsForNovost(context, novost),
-                            ),
-                          ]))
-                      .toList()
-                  : []),
+                                  DataCell(
+                                    Container(
+                                      width: 600.0,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          (novost.sadrzaj?.length ?? 0) > 80
+                                              ? showDialog(
+                                                  context: context,
+                                                  barrierDismissible: true,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      content: ConstrainedBox(
+                                                        constraints:
+                                                            BoxConstraints(
+                                                          maxHeight:
+                                                              MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .height *
+                                                                  0.7,
+                                                          maxWidth: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.7,
+                                                        ),
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          child: Text(novost
+                                                                  .sadrzaj ??
+                                                              'Nema sadrzaj'),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                              : null;
+                                        },
+                                        child: Text(
+                                          novost.sadrzaj ?? 'Nema sadrzaj',
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    _buildOptionsForNovost(context, novost),
+                                  ),
+                                ]))
+                            .toList()
+                        : []),
+              ),
+              const SizedBox(height: 20),
+              PaginationWidget(
+                key: ValueKey(currentPage),
+                currentPage: currentPage,
+                totalPages: totalPages,
+                onPageChanged: (page) {
+                  fetchPage(page);
+                },
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -307,27 +402,199 @@ class _NovostiIObavijestiScreenState extends State<NovostiIObavijestiScreen> {
         ),
         controller: _novostSearchController,
         onSubmitted: (value) async {
-          var data = await _novostiProvider
-              .get(filter: {'Naslov': _novostSearchController.text});
-
-          setState(() {
-            novosti = data;
-          });
+          currentSearchTerm = value;
+          fetchPage(1);
         },
         onChanged: (value) async {
           if (value.isEmpty) {
-            var data = await _novostiProvider.get();
-
-            setState(() {
-              novosti = data;
-            });
+            currentSearchTerm = '';
+            fetchPage(1);
           }
         },
       ),
     );
   }
 
-  _buildDialogForNovostAdd(BuildContext context) {}
+  _buildDialogForNovostAdd(BuildContext context) {
+    String? _selectedImageBase64;
+    return AlertDialog(
+      title: const Text(
+        'Dodavanje novosti',
+        style: heading1,
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          width: 800,
+          child: FormBuilder(
+              key: _formKey,
+              child: Column(
+                children: [
+                  FormBuilderField(
+                    builder: (field) {
+                      return Container(
+                        width: 300,
+                        child: InputDecorator(
+                          decoration: InputDecoration(
+                            labelText: 'Slika',
+                            border: InputBorder.none,
+                            errorText: field.errorText,
+                          ),
+                          child: Column(
+                            children: [
+                              if (_selectedImageBase64 != null)
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Container(
+                                    width: 200,
+                                    height: 150,
+                                    child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: imageFromBase64String(
+                                          _selectedImageBase64!),
+                                    ),
+                                  ),
+                                ),
+                              ListTile(
+                                hoverColor: Colors.blue[700],
+                                tileColor: Colors.blue,
+                                iconColor: primaryWhiteTextColor,
+                                textColor: primaryWhiteTextColor,
+                                leading: const Icon(Icons.image_outlined),
+                                title: const Text('Odaberi sliku'),
+                                trailing:
+                                    const Icon(Icons.file_upload_outlined),
+                                onTap: () async {
+                                  var fileResult = await FilePicker.platform
+                                      .pickFiles(type: FileType.image);
+                                  if (fileResult == null ||
+                                      fileResult.files.single.path == null) {
+                                    return;
+                                  }
+                                  var image =
+                                      File(fileResult.files.single.path!);
+
+                                  if (await image.length() > maxSizeInBytes) {
+                                    // ignore: use_build_context_synchronously
+                                    showErrorDialog(context, 'Greška',
+                                        'Veličina datoteke prelazi 2MB. Molimo odaberite manju datoteku.');
+                                    return;
+                                  }
+                                  var base64Image =
+                                      base64Encode(image.readAsBytesSync());
+                                  setState(() {
+                                    _selectedImageBase64 = base64Image;
+                                  });
+                                  field.didChange(base64Image);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    name: 'slika',
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Slika je obavezna."),
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Naslov'),
+                    name: 'naslov',
+                    maxLength: 100,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(100),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Naslov je obavezan."),
+                      FormBuilderValidators.maxLength(100)
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Sadržaj'),
+                    name: 'sadrzaj',
+                    maxLines: 7,
+                    minLines: 1,
+                    maxLength: 10000,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(10000),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Sadržaj je obavezan."),
+                      FormBuilderValidators.maxLength(10000)
+                    ]),
+                  ),
+                ],
+              )),
+        ),
+      ),
+      actions: [
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Zatvori',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
+                  onPressed: () async {
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
+                    bool shouldProceed = await showConfirmationDialog(
+                        context,
+                        'Potvrda',
+                        'Da li ste sigurni da želite kreirati novost?');
+                    if (!shouldProceed) return;
+
+                    NovostRequest novostInsertRequest = NovostRequest(
+                      naslov: _formKey.currentState?.value['naslov'],
+                      sadrzaj: _formKey.currentState?.value['sadrzaj'],
+                      slika: _formKey.currentState?.value['slika'],
+                    );
+
+                    await _novostiProvider.insert(novostInsertRequest);
+
+                    makeSuccessToast("Uspješno dodana novost.");
+
+                    fetchPage(currentPage);
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Kreiraj novost',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 
   Widget _buildOptionsForNovost(BuildContext context, Novost novost) {
     return PopupMenuButton(
@@ -359,7 +626,7 @@ class _NovostiIObavijestiScreenState extends State<NovostiIObavijestiScreen> {
         const PopupMenuItem(
           value: 'more_info',
           child: Tooltip(
-            message: 'Pregled testa',
+            message: 'Pregled novosti',
             child: Icon(Icons.remove_red_eye_outlined),
           ),
         ),
@@ -373,7 +640,7 @@ class _NovostiIObavijestiScreenState extends State<NovostiIObavijestiScreen> {
         const PopupMenuItem(
           value: 'delete',
           child: Tooltip(
-            message: 'Obriši test',
+            message: 'Obriši novost',
             child: Icon(Icons.delete_outline),
           ),
         ),
@@ -382,15 +649,204 @@ class _NovostiIObavijestiScreenState extends State<NovostiIObavijestiScreen> {
   }
 
   Widget _buildDialogForNovostEdit(BuildContext context, Novost novost) {
-    return const AlertDialog(
-        title: Text(
-          'Izmjena podataka o novosti',
-          style: heading1,
+    String? _selectedImageBase64 = novost.slika;
+    Image? _selectedImage = novost.slika != null && novost.slika != ""
+        ? imageFromBase64String(novost.slika!)
+        : null;
+    return AlertDialog(
+      title: const Text(
+        'Izmjena novosti',
+        style: heading1,
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          width: 800,
+          child: FormBuilder(
+              key: _formKey,
+              child: Column(
+                children: [
+                  FormBuilderField(
+                    initialValue: _selectedImageBase64,
+                    builder: (field) {
+                      return Container(
+                        width: 300,
+                        child: InputDecorator(
+                          decoration: InputDecoration(
+                            labelText: 'Slika',
+                            border: InputBorder.none,
+                            errorText: field.errorText,
+                          ),
+                          child: Column(
+                            children: [
+                              if (_selectedImage != null)
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Container(
+                                    width: 200,
+                                    height: 150,
+                                    child: FittedBox(
+                                      fit: BoxFit.fill,
+                                      child: _selectedImage,
+                                    ),
+                                  ),
+                                ),
+                              ListTile(
+                                hoverColor: Colors.blue[700],
+                                tileColor: Colors.blue,
+                                iconColor: primaryWhiteTextColor,
+                                textColor: primaryWhiteTextColor,
+                                leading: const Icon(Icons.image_outlined),
+                                title: const Text('Odaberi sliku'),
+                                trailing:
+                                    const Icon(Icons.file_upload_outlined),
+                                onTap: () async {
+                                  var fileResult = await FilePicker.platform
+                                      .pickFiles(type: FileType.image);
+                                  if (fileResult == null ||
+                                      fileResult.files.single.path == null) {
+                                    return;
+                                  }
+                                  var image =
+                                      File(fileResult.files.single.path!);
+
+                                  if (await image.length() > maxSizeInBytes) {
+                                    // ignore: use_build_context_synchronously
+                                    showErrorDialog(context, 'Greška',
+                                        'Veličina datoteke prelazi 2MB. Molimo odaberite manju datoteku.');
+                                    return;
+                                  }
+
+                                  var base64Image =
+                                      base64Encode(image.readAsBytesSync());
+                                  setState(() {
+                                    _selectedImage =
+                                        imageFromBase64String(base64Image);
+                                    _selectedImageBase64 = base64Image;
+                                  });
+                                  field.didChange(base64Image);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    name: 'slika',
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Slika je obavezna."),
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Naslov'),
+                    name: 'naslov',
+                    initialValue: novost.naslov,
+                    maxLength: 100,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(100),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Naslov je obavezan."),
+                      FormBuilderValidators.maxLength(40)
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Sadržaj'),
+                    name: 'sadrzaj',
+                    initialValue: novost.sadrzaj,
+                    maxLines: 7,
+                    minLines: 1,
+                    maxLength: 10000,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(10000),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Sadržaj je obavezan."),
+                      FormBuilderValidators.maxLength(10000)
+                    ]),
+                  ),
+                ],
+              )),
         ),
-        content: Text('Testiranje'));
+      ),
+      actions: [
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Zatvori',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
+                  onPressed: () async {
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
+                    bool shouldProceed = await showConfirmationDialog(
+                        context,
+                        'Potvrda',
+                        'Da li ste sigurni da želite izmijeniti podatke?');
+                    if (!shouldProceed) return;
+
+                    NovostRequest novostUpdateRequest = NovostRequest(
+                      naslov: _formKey.currentState?.value['naslov'],
+                      sadrzaj: _formKey.currentState?.value['sadrzaj'],
+                      slika: _selectedImageBase64,
+                    );
+
+                    await _novostiProvider.update(
+                        novost.novostID!, novostUpdateRequest);
+
+                    makeSuccessToast("Uspješno izmijenjeni podaci.");
+
+                    fetchPage(currentPage);
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Spasi izmjene',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
-  _buildLogicForNovostDelete(BuildContext context, Novost novost) {}
+  _buildLogicForNovostDelete(BuildContext context, Novost novost) async {
+    if (!await showConfirmationDialog(context, 'Potvrda',
+        'Da li ste sigurni da želite obrisati ovu novost?')) {
+      return;
+    }
+    await _novostiProvider.delete(novost.novostID!);
+    makeSuccessToast('Uspješno obrisana novost.');
+    fetchPage(currentPage);
+  }
 
   _buildObavijestiHeader() {}
 

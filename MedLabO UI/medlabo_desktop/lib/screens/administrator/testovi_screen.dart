@@ -39,10 +39,6 @@ class _TestoviScreenState extends State<TestoviScreen>
   TextEditingController _testSearchController = new TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
 
-  _TestoviScreenState() {
-    itemsPerPage = 10;
-  }
-
   @override
   void initState() {
     super.initState();
