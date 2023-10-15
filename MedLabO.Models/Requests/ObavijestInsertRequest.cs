@@ -10,11 +10,9 @@ namespace MedLabO.Models.Requests
         public string Naslov { get; set; } = null!;
 
         [Required(AllowEmptyStrings = false)]
+        [MinLength(1)]
         public string Sadrzaj { get; set; } = null!;
 
         public byte[] Slika { get; set; }
-
-        [Required(AllowEmptyStrings = false)]
-        public string AdministratorID { get; set; }
     }
 }

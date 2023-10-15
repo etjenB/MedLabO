@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medlabo_desktop/providers/login_provider.dart';
 import 'package:medlabo_desktop/providers/novosti_provider.dart';
+import 'package:medlabo_desktop/providers/obavijesti_provider.dart';
 import 'package:medlabo_desktop/providers/test_parametri_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_and_test_parametri_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_provider.dart';
@@ -22,6 +23,7 @@ void main() {
                 TestParametriProvider(),
               )),
       ChangeNotifierProvider(create: (_) => NovostiProvider()),
+      ChangeNotifierProvider(create: (_) => ObavijestiProvider()),
     ],
     child: const MyApp(),
   ));
