@@ -9,6 +9,5 @@ namespace MedLabO.Services
 {
     public interface IUslugaService
     {
-        Task<IList<Usluga>> Get();
     }
 }

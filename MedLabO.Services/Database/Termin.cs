@@ -23,9 +23,8 @@ namespace MedLabO.Services.Database
         [Required]
         public bool Obavljen { get; set; } = false;
 
-        //Kada se rezultat prebaci u true mora se postaviti RezultatPDF
         [Required]
-        public bool RezultatTermina { get; set; } = false;
+        public bool PrijemZavrsen { get; set; } = false;
 
         public byte[]? RezultatTerminaPDF { get; set; }
 
