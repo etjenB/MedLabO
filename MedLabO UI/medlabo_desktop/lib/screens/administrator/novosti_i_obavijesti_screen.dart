@@ -120,6 +120,7 @@ class _NovostWidgetState extends State<NovostWidget>
     if (mounted) {
       setState(() {
         novosti = data;
+        totalItems = novosti!.count;
       });
     }
   }
@@ -127,9 +128,11 @@ class _NovostWidgetState extends State<NovostWidget>
   void fetchPage(int page) async {
     var result = await fetchData(
         page, (filter) => _novostiProvider.get(filter: filter), 'Naslov');
-    setState(() {
-      novosti = result;
-    });
+    if (mounted) {
+      setState(() {
+        novosti = result;
+      });
+    }
   }
 
   @override
@@ -889,6 +892,7 @@ class _ObavijestWidgetState extends State<ObavijestWidget>
     if (mounted) {
       setState(() {
         obavijesti = data;
+        totalItems = obavijesti!.count;
       });
     }
   }
@@ -896,9 +900,11 @@ class _ObavijestWidgetState extends State<ObavijestWidget>
   void fetchPage(int page) async {
     var result = await fetchData(
         page, (filter) => _obavijestiProvider.get(filter: filter), 'Naslov');
-    setState(() {
-      obavijesti = result;
-    });
+    if (mounted) {
+      setState(() {
+        obavijesti = result;
+      });
+    }
   }
 
   @override
