@@ -3,6 +3,7 @@ import 'package:medlabo_desktop/screens/administrator/novosti_i_obavijesti_scree
 import 'package:medlabo_desktop/screens/administrator/testovi_screen.dart';
 import 'package:medlabo_desktop/screens/administrator/uposlenici_screen.dart';
 import 'package:medlabo_desktop/screens/administrator/usluge_screen.dart';
+import 'package:medlabo_desktop/screens/common/izvjestaji_screen.dart';
 import 'package:medlabo_desktop/screens/common/pacijenti_screen.dart';
 import 'package:medlabo_desktop/screens/common/profil_screen.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
@@ -34,6 +35,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         const UslugeScreen(),
         const PacijentiScreen(),
         const UposleniciScreen(),
+        const IzvjestajiScreen(),
         const ProfilScreen(),
       ];
       items = [
@@ -49,18 +51,28 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         const SideNavigationBarItem(
             icon: Icons.work_outline, label: 'Uposlenici'),
         const SideNavigationBarItem(
+            icon: Icons.document_scanner_outlined, label: 'Izvještaji'),
+        const SideNavigationBarItem(
             icon: Icons.account_circle_outlined, label: 'Profil'),
       ];
     } else if (widget.user.isMedicinskoOsoblje()) {
-      views = [const UslugeScreen(), const ProfilScreen()];
+      views = [
+        const UslugeScreen(),
+        const IzvjestajiScreen(),
+        const ProfilScreen(),
+      ];
       items = [
         const SideNavigationBarItem(
             icon: Icons.medical_services_outlined, label: 'Usluge'),
         const SideNavigationBarItem(
+            icon: Icons.document_scanner_outlined, label: 'Izvještaji'),
+        const SideNavigationBarItem(
             icon: Icons.account_circle_outlined, label: 'Profil'),
       ];
     } else {
-      views = [const ProfilScreen()];
+      views = [
+        const ProfilScreen(),
+      ];
       items = [
         const SideNavigationBarItem(
             icon: Icons.account_circle_outlined, label: 'Profil')
