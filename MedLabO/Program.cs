@@ -76,6 +76,8 @@ builder.Services.AddTransient<IService<MedLabO.Models.Novost, NovostSearchObject
 
 builder.Services.AddTransient<IService<MedLabO.Models.Obavijest, ObavijestSearchObject>, ObavijestService>();
 
+builder.Services.AddTransient<IService<MedLabO.Models.Usluga, UslugaSearchObject>, UslugaService>();
+
 //Inject DbContext
 //NuGet Potrebno Microsoft.EntityFrameworkCore.SqlServer
 builder.Services.AddDbContext<MedLabOContext>(options =>

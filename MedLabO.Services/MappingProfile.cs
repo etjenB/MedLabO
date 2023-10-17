@@ -25,6 +25,9 @@ namespace MedLabO.Services
             CreateMap<ObavijestInsertRequest, Database.Obavijest>().ReverseMap();
             CreateMap<ObavijestUpdateRequest, Database.Obavijest>().ReverseMap();
             CreateMap<Database.Obavijest, Models.Obavijest>().ReverseMap();
+            CreateMap<UslugaInsertRequest, Database.Usluga>().ReverseMap();
+            CreateMap<UslugaUpdateRequest, Database.Usluga>().ReverseMap();
+            CreateMap<Database.Usluga, Models.Usluga>().ReverseMap();
         }
     }
 }
