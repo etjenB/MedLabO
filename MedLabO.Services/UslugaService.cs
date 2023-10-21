@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MedLabO.Models;
 using MedLabO.Models.Exceptions;
 using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
@@ -13,12 +14,10 @@ namespace MedLabO.Services
     public class UslugaService : CRUDService<Models.Usluga, Database.Usluga, UslugaSearchObject, UslugaInsertRequest, UslugaUpdateRequest>, IUslugaService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly MedLabOContext _db;
 
         public UslugaService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(db, mapper)
         {
             _httpContextAccessor = httpContextAccessor;
-            _db = db;
         }
 
         public override async Task BeforeInsert(Database.Usluga entity, UslugaInsertRequest insert)
@@ -102,6 +101,21 @@ namespace MedLabO.Services
             }
 
             return base.AddFilter(query, search);
+        }
+
+        public override IQueryable<Database.Usluga> AddInclude(IQueryable<Database.Usluga> query, UslugaSearchObject? search = null)
+        {
+            if (search?.IncludeAdministrator == true)
+            {
+                query = query.Include("Administrator");
+            }
+
+            if (search?.IncludeTestovi == true)
+            {
+                query = query.Include("UslugaTestovi");
+            }
+
+            return base.AddInclude(query, search);
         }
     }
 }

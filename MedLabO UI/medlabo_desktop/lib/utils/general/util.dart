@@ -16,6 +16,37 @@ String formatNumberToPrice(dynamic) {
   return f.format(dynamic);
 }
 
+String formatNumberToMinutes(dynamic) {
+  if (dynamic == null) {
+    return "";
+  }
+
+  String suffix;
+  int lastDigit = dynamic % 10;
+  int lastTwoDigits = dynamic % 100;
+
+  if (lastDigit == 1 && lastTwoDigits != 11) {
+    suffix = "Minuta";
+  } else if (lastDigit >= 2 &&
+      lastDigit <= 4 &&
+      (lastTwoDigits < 10 || lastTwoDigits > 20)) {
+    suffix = "Minute";
+  } else {
+    suffix = "Minuta";
+  }
+
+  var f = NumberFormat('###');
+  return "${f.format(dynamic)} $suffix";
+}
+
+String formatNumberToHours(dynamic) {
+  var f = NumberFormat('###.#h');
+  if (dynamic == null) {
+    return "";
+  }
+  return f.format(dynamic);
+}
+
 double? parseStringToDouble(String value) {
   double? newDouble;
   try {
@@ -24,6 +55,16 @@ double? parseStringToDouble(String value) {
     return null;
   }
   return newDouble;
+}
+
+int? parseStringToInt(String value) {
+  int? newInt;
+  try {
+    newInt = int.parse(value);
+  } catch (e) {
+    return null;
+  }
+  return newInt;
 }
 
 String? formatDateTime(String dateTimeString,

@@ -1,4 +1,5 @@
-﻿using MedLabO.Models.Requests;
+﻿using MedLabO.Models;
+using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using System;
