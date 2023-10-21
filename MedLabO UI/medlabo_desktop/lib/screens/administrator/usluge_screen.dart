@@ -10,6 +10,7 @@ import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/test/test.dart';
 import 'package:medlabo_desktop/models/usluga/usluga.dart';
 import 'package:medlabo_desktop/models/usluga/usluga_request.dart';
+import 'package:medlabo_desktop/providers/testovi_provider.dart';
 import 'package:medlabo_desktop/providers/usluge_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/constants/nums.dart';
@@ -29,8 +30,10 @@ class UslugeScreen extends StatefulWidget {
 
 class _UslugeScreenState extends State<UslugeScreen>
     with PaginationMixin<Usluga> {
+  late TestoviProvider _testoviProvider;
   late UslugeProvider _uslugeProvider;
   SearchResult<Usluga>? usluge;
+  SearchResult<Test>? testovi;
   final TextEditingController _uslugaSearchController = TextEditingController();
   final _formKey = GlobalKey<FormBuilderState>();
 
@@ -38,6 +41,7 @@ class _UslugeScreenState extends State<UslugeScreen>
   void initState() {
     super.initState();
     _uslugeProvider = context.read<UslugeProvider>();
+    _testoviProvider = context.read<TestoviProvider>();
     initForm();
     fetchPage(currentPage);
   }
@@ -48,19 +52,24 @@ class _UslugeScreenState extends State<UslugeScreen>
   }
 
   Future initForm() async {
-    var data = await _uslugeProvider
-        .get(filter: {'Page': 0, 'PageSize': itemsPerPage});
+    var data = await _uslugeProvider.get(
+        filter: {'Page': 0, 'PageSize': itemsPerPage, 'IncludeTestovi': true});
+    var _testovi = await _testoviProvider.get();
     if (mounted) {
       setState(() {
         usluge = data;
         totalItems = usluge!.count;
+        testovi = _testovi;
       });
     }
   }
 
   void fetchPage(int page) async {
     var result = await fetchData(
-        page, (filter) => _uslugeProvider.get(filter: filter), 'Naziv');
+        page,
+        (filter) => _uslugeProvider.get(filter: filter),
+        'Naziv',
+        {'IncludeTestovi': true});
     setState(() {
       usluge = result;
     });
@@ -451,6 +460,13 @@ class _UslugeScreenState extends State<UslugeScreen>
     Image? _selectedImage = usluga.slika != null && usluga.slika != ""
         ? imageFromBase64String(usluga.slika!)
         : null;
+    List<Test>? uslugaTestovi = List.from(usluga.uslugaTestovi!);
+    final uslugaTestoviNotifier = ValueNotifier<List<Test>?>(uslugaTestovi);
+    List<Test>? allTests = testovi?.result
+        .where((test) => !uslugaTestovi!
+            .any((existingTest) => existingTest.testID == test.testID))
+        .toList();
+    final allTestsNotifier = ValueNotifier<List<Test>?>(allTests);
     return AlertDialog(
       title: const Text(
         'Izmjena podataka o usluzi',
@@ -622,11 +638,293 @@ class _UslugeScreenState extends State<UslugeScreen>
                     margin: const EdgeInsets.only(top: 10),
                     height: 30,
                     alignment: Alignment.centerLeft,
-                    child: const Text(
-                      'Testovi',
-                      style: heading2,
+                    child: const Row(
+                      children: [
+                        Text(
+                          'Testovi',
+                          style: heading2,
+                        ),
+                        SizedBox(width: 5),
+                        Tooltip(
+                          message:
+                              'Prevucite testove iz Dostupni testovi u Testovi usluge da biste dodali testove usluzi.',
+                          child: Icon(
+                            Icons.info_outline,
+                            size: 18,
+                          ),
+                        )
+                      ],
                     ),
                   ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    height: 500,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.blueAccent)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(bottom: 2.0),
+                                      child: Text(
+                                        'Dostupni testovi',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                    const Padding(
+                                        padding: EdgeInsets.all(10.0),
+                                        child: TextField(
+                                            decoration: InputDecoration(
+                                          hintText: 'Pronađi test...',
+                                          prefixIcon: Icon(Icons.search),
+                                        ))),
+                                    Expanded(
+                                      child:
+                                          ValueListenableBuilder<List<Test>?>(
+                                        valueListenable: allTestsNotifier,
+                                        builder:
+                                            (context, allTestsValue, child) {
+                                          return DragTarget<Test>(
+                                            onAccept: (test) {
+                                              if (!allTests!.contains(test)) {
+                                                uslugaTestovi?.remove(test);
+                                                uslugaTestoviNotifier.value =
+                                                    List.from(uslugaTestovi!);
+                                                allTests.add(test);
+                                                allTestsNotifier.value =
+                                                    List.from(allTests);
+                                              }
+                                            },
+                                            builder: (context, candidateData,
+                                                rejectedData) {
+                                              return ListView.builder(
+                                                itemCount:
+                                                    allTestsValue?.length,
+                                                itemBuilder: (context, index) {
+                                                  return Material(
+                                                    color: Colors.transparent,
+                                                    child: Draggable<Test>(
+                                                      data:
+                                                          allTestsValue?[index],
+                                                      feedback: ConstrainedBox(
+                                                        constraints:
+                                                            const BoxConstraints(
+                                                                maxWidth: 300),
+                                                        child: Material(
+                                                          color: Colors
+                                                              .transparent,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child: ListTile(
+                                                              tileColor: Colors
+                                                                      .blueAccent[
+                                                                  100],
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.0),
+                                                              ),
+                                                              mouseCursor:
+                                                                  SystemMouseCursors
+                                                                      .click,
+                                                              textColor:
+                                                                  primaryWhiteTextColor,
+                                                              title: Text(
+                                                                  allTestsValue?[
+                                                                              index]
+                                                                          .naziv ??
+                                                                      'Greška'),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(4.0),
+                                                        child: ListTile(
+                                                          tileColor: Colors
+                                                              .blueAccent[100],
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8.0),
+                                                          ),
+                                                          mouseCursor:
+                                                              SystemMouseCursors
+                                                                  .click,
+                                                          textColor:
+                                                              primaryWhiteTextColor,
+                                                          title: Text(
+                                                              allTestsValue?[
+                                                                          index]
+                                                                      .naziv ??
+                                                                  'Greška'),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.blueAccent)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.only(bottom: 2.0),
+                                      child: Text(
+                                        'Testovi usluge',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: ValueListenableBuilder<
+                                              List<Test>?>(
+                                          valueListenable:
+                                              uslugaTestoviNotifier,
+                                          builder:
+                                              (context, testoviValue, child) {
+                                            return DragTarget<Test>(
+                                              onAccept: (test) {
+                                                if (!uslugaTestovi!
+                                                    .contains(test)) {
+                                                  uslugaTestovi?.add(test);
+                                                  uslugaTestoviNotifier.value =
+                                                      List.from(uslugaTestovi!);
+                                                  allTests?.remove(test);
+                                                  allTestsNotifier.value =
+                                                      List.from(allTests!);
+                                                }
+                                              },
+                                              builder: (context, candidateData,
+                                                  rejectedData) {
+                                                return ListView.builder(
+                                                  itemCount:
+                                                      testoviValue?.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Material(
+                                                      color: Colors.transparent,
+                                                      child: Draggable<Test>(
+                                                        data: testoviValue?[
+                                                            index],
+                                                        feedback:
+                                                            ConstrainedBox(
+                                                          constraints:
+                                                              const BoxConstraints(
+                                                                  maxWidth:
+                                                                      300),
+                                                          child: Material(
+                                                            color: Colors
+                                                                .transparent,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(4.0),
+                                                              child: ListTile(
+                                                                tileColor: Colors
+                                                                        .blueAccent[
+                                                                    100],
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.0),
+                                                                ),
+                                                                mouseCursor:
+                                                                    SystemMouseCursors
+                                                                        .click,
+                                                                textColor:
+                                                                    primaryWhiteTextColor,
+                                                                title: Text(testoviValue?[
+                                                                            index]
+                                                                        .naziv ??
+                                                                    'Greška'),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4.0),
+                                                          child: ListTile(
+                                                            tileColor: Colors
+                                                                    .blueAccent[
+                                                                100],
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0),
+                                                            ),
+                                                            mouseCursor:
+                                                                SystemMouseCursors
+                                                                    .click,
+                                                            textColor:
+                                                                primaryWhiteTextColor,
+                                                            title: Text(
+                                                                testoviValue?[
+                                                                            index]
+                                                                        .naziv ??
+                                                                    'Greška'),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               )),
         ),
@@ -642,6 +940,8 @@ class _UslugeScreenState extends State<UslugeScreen>
                   style: const ButtonStyle(
                       backgroundColor: MaterialStatePropertyAll(Colors.red)),
                   onPressed: () {
+                    uslugaTestovi = List.from(usluga.uslugaTestovi!);
+                    uslugaTestoviNotifier.value = List.from(uslugaTestovi!);
                     Navigator.of(context).pop();
                   },
                   child: const Text(
@@ -693,6 +993,11 @@ class _UslugeScreenState extends State<UslugeScreen>
                       return;
                     }
 
+                    List<String>? testoviIds = [];
+                    for (var i = 0; i < uslugaTestovi!.length; i++) {
+                      testoviIds.add(uslugaTestovi![i].testID!);
+                    }
+
                     UslugaRequest uslugaUpdateRequest = UslugaRequest(
                         naziv: _formKey.currentState?.value['naziv'],
                         opis: _formKey.currentState?.value['opis'],
@@ -702,7 +1007,8 @@ class _UslugeScreenState extends State<UslugeScreen>
                         rezultatUH: rezultatUHDouble,
                         dostupno:
                             _formKey.currentState?.value['dostupno'] as bool? ??
-                                false);
+                                false,
+                        testovi: testoviIds);
 
                     await _uslugeProvider.update(
                         usluga.uslugaID!, uslugaUpdateRequest);

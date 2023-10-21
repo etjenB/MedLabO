@@ -13,13 +13,17 @@ mixin PaginationMixin<T> {
       int page,
       Future<SearchResult<T>> Function(Map<String, dynamic> filter)
           fetchFunction,
-      [String? searchTermAttribute]) async {
-    var filter = {
+      [String? searchTermAttribute,
+      Map<String, dynamic>? additionalFilters]) async {
+    var defaultFilter = {
       if (currentSearchTerm.isNotEmpty && searchTermAttribute != null)
         searchTermAttribute: currentSearchTerm,
       'Page': page - 1,
-      'PageSize': itemsPerPage
+      'PageSize': itemsPerPage,
     };
+
+    var filter = {...defaultFilter, ...?additionalFilters};
+
     var result = await fetchFunction(filter);
 
     if (result.count == 0 && page > 1) {

@@ -12,7 +12,7 @@ class UslugaRequest {
   double? rezultatUH;
   bool? dostupno;
   String? slika;
-  List<Test>? uslugaTestovi;
+  List<String>? testovi;
 
   UslugaRequest(
       {this.naziv,
@@ -22,7 +22,7 @@ class UslugaRequest {
       this.rezultatUH,
       this.dostupno,
       this.slika,
-      this.uslugaTestovi});
+      this.testovi});
 
   factory UslugaRequest.fromJson(Map<String, dynamic> json) =>
       _$UslugaRequestFromJson(json);

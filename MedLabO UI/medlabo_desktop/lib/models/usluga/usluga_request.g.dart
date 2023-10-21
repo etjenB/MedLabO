@@ -15,9 +15,8 @@ UslugaRequest _$UslugaRequestFromJson(Map<String, dynamic> json) =>
       rezultatUH: (json['rezultatUH'] as num?)?.toDouble(),
       dostupno: json['dostupno'] as bool?,
       slika: json['slika'] as String?,
-      uslugaTestovi: (json['uslugaTestovi'] as List<dynamic>?)
-          ?.map((e) => Test.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      testovi:
+          (json['testovi'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$UslugaRequestToJson(UslugaRequest instance) =>
@@ -29,5 +28,5 @@ Map<String, dynamic> _$UslugaRequestToJson(UslugaRequest instance) =>
       'rezultatUH': instance.rezultatUH,
       'dostupno': instance.dostupno,
       'slika': instance.slika,
-      'uslugaTestovi': instance.uslugaTestovi,
+      'testovi': instance.testovi,
     };
