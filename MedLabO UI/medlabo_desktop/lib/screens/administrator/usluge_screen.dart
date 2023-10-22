@@ -664,132 +664,11 @@ class _UslugeScreenState extends State<UslugeScreen>
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.blueAccent)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(bottom: 2.0),
-                                      child: Text(
-                                        'Dostupni testovi',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    const Padding(
-                                        padding: EdgeInsets.all(10.0),
-                                        child: TextField(
-                                            decoration: InputDecoration(
-                                          hintText: 'Pronađi test...',
-                                          prefixIcon: Icon(Icons.search),
-                                        ))),
-                                    Expanded(
-                                      child:
-                                          ValueListenableBuilder<List<Test>?>(
-                                        valueListenable: allTestsNotifier,
-                                        builder:
-                                            (context, allTestsValue, child) {
-                                          return DragTarget<Test>(
-                                            onAccept: (test) {
-                                              if (!allTests!.contains(test)) {
-                                                uslugaTestovi?.remove(test);
-                                                uslugaTestoviNotifier.value =
-                                                    List.from(uslugaTestovi!);
-                                                allTests.add(test);
-                                                allTestsNotifier.value =
-                                                    List.from(allTests);
-                                              }
-                                            },
-                                            builder: (context, candidateData,
-                                                rejectedData) {
-                                              return ListView.builder(
-                                                itemCount:
-                                                    allTestsValue?.length,
-                                                itemBuilder: (context, index) {
-                                                  return Material(
-                                                    color: Colors.transparent,
-                                                    child: Draggable<Test>(
-                                                      data:
-                                                          allTestsValue?[index],
-                                                      feedback: ConstrainedBox(
-                                                        constraints:
-                                                            const BoxConstraints(
-                                                                maxWidth: 300),
-                                                        child: Material(
-                                                          color: Colors
-                                                              .transparent,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(4.0),
-                                                            child: ListTile(
-                                                              tileColor: Colors
-                                                                      .blueAccent[
-                                                                  100],
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                              ),
-                                                              mouseCursor:
-                                                                  SystemMouseCursors
-                                                                      .click,
-                                                              textColor:
-                                                                  primaryWhiteTextColor,
-                                                              title: Text(
-                                                                  allTestsValue?[
-                                                                              index]
-                                                                          .naziv ??
-                                                                      'Greška'),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(4.0),
-                                                        child: ListTile(
-                                                          tileColor: Colors
-                                                              .blueAccent[100],
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        8.0),
-                                                          ),
-                                                          mouseCursor:
-                                                              SystemMouseCursors
-                                                                  .click,
-                                                          textColor:
-                                                              primaryWhiteTextColor,
-                                                          title: Text(
-                                                              allTestsValue?[
-                                                                          index]
-                                                                      .naziv ??
-                                                                  'Greška'),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            child: SearchableTestList(
+                              allTests: allTests,
+                              allTestsNotifier: allTestsNotifier,
+                              uslugaTestovi: uslugaTestovi,
+                              uslugaTestoviNotifier: uslugaTestoviNotifier,
                             ),
                           ),
                         ),
@@ -1029,6 +908,136 @@ class _UslugeScreenState extends State<UslugeScreen>
           ],
         ),
       ],
+    );
+  }
+}
+
+class SearchableTestList extends StatefulWidget {
+  final ValueNotifier<List<Test>?> allTestsNotifier;
+  final ValueNotifier<List<Test>?> uslugaTestoviNotifier;
+  final List<Test>? allTests;
+  final List<Test>? uslugaTestovi;
+
+  SearchableTestList({
+    required this.allTestsNotifier,
+    required this.uslugaTestoviNotifier,
+    required this.allTests,
+    required this.uslugaTestovi,
+  });
+
+  @override
+  _SearchableTestListState createState() => _SearchableTestListState();
+}
+
+class _SearchableTestListState extends State<SearchableTestList> {
+  String searchQuery = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(bottom: 2.0),
+              child: Text(
+                'Dostupni testovi',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextField(
+                decoration: const InputDecoration(
+                  hintText: 'Pronađi test...',
+                  prefixIcon: Icon(Icons.search),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value;
+                  });
+                },
+              ),
+            ),
+            Expanded(
+              child: ValueListenableBuilder<List<Test>?>(
+                  valueListenable: widget.allTestsNotifier,
+                  builder: (context, allTestsValue, child) {
+                    var filteredTests = searchQuery.isEmpty
+                        ? widget.allTests
+                        : widget.allTests
+                            ?.where((test) => test.naziv!.contains(searchQuery))
+                            .toList();
+                    return DragTarget<Test>(
+                      onAccept: (test) {
+                        if (!widget.allTests!.contains(test)) {
+                          widget.uslugaTestovi?.remove(test);
+                          widget.uslugaTestoviNotifier.value =
+                              List.from(widget.uslugaTestovi!);
+                          widget.allTests?.add(test);
+                          widget.allTestsNotifier.value =
+                              List.from(widget.allTests!);
+                        }
+                      },
+                      builder: (context, candidateData, rejectedData) {
+                        return ListView.builder(
+                          itemCount: filteredTests?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return Material(
+                              color: Colors.transparent,
+                              child: Draggable<Test>(
+                                data: filteredTests?[index],
+                                feedback: ConstrainedBox(
+                                  constraints:
+                                      const BoxConstraints(maxWidth: 300),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: ListTile(
+                                        tileColor: Colors.blueAccent[100],
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
+                                        textColor: primaryWhiteTextColor,
+                                        mouseCursor: SystemMouseCursors.click,
+                                        title: Text(
+                                            filteredTests?[index].naziv ??
+                                                'Greška'),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: ListTile(
+                                    tileColor: Colors.blueAccent[100],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    mouseCursor: SystemMouseCursors.click,
+                                    textColor: primaryWhiteTextColor,
+                                    title: Text(filteredTests?[index].naziv ??
+                                        'Greška'),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  }),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
