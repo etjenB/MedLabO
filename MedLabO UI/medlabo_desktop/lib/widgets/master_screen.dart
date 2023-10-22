@@ -57,13 +57,13 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       ];
     } else if (widget.user.isMedicinskoOsoblje()) {
       views = [
-        const UslugeScreen(),
+        const PacijentiScreen(),
         const IzvjestajiScreen(),
         const ProfilScreen(),
       ];
       items = [
         const SideNavigationBarItem(
-            icon: Icons.medical_services_outlined, label: 'Usluge'),
+            icon: Icons.people_alt_outlined, label: 'Pacijenti'),
         const SideNavigationBarItem(
             icon: Icons.document_scanner_outlined, label: 'Izvještaji'),
         const SideNavigationBarItem(
