@@ -208,7 +208,329 @@ class _UslugeScreenState extends State<UslugeScreen>
     );
   }
 
-  _buildDialogForUslugaAdd(BuildContext context) {}
+  _buildDialogForUslugaAdd(BuildContext context) {
+    String? _selectedImageBase64;
+    List<Test>? uslugaTestovi = [];
+    final uslugaTestoviNotifier = ValueNotifier<List<Test>?>(uslugaTestovi);
+    List<Test>? allTests = testovi != null && testovi?.result != null
+        ? List.from(testovi!.result)
+        : [];
+    final allTestsNotifier = ValueNotifier<List<Test>?>(allTests);
+    return AlertDialog(
+      title: const Text(
+        'Dodavanje nove usluge',
+        style: heading1,
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          width: 800,
+          child: FormBuilder(
+              key: _formKey,
+              child: Column(
+                children: [
+                  FormBuilderField(
+                      builder: (field) {
+                        return Container(
+                          width: 300,
+                          child: InputDecorator(
+                            decoration: const InputDecoration(
+                              labelText: 'Slika',
+                              border: InputBorder.none,
+                            ),
+                            child: Column(
+                              children: [
+                                if (_selectedImageBase64 != null)
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Container(
+                                      width: 200,
+                                      height: 150,
+                                      child: FittedBox(
+                                        fit: BoxFit.fill,
+                                        child: imageFromBase64String(
+                                            _selectedImageBase64!),
+                                      ),
+                                    ),
+                                  ),
+                                ListTile(
+                                  hoverColor: Colors.blue[700],
+                                  tileColor: Colors.blue,
+                                  iconColor: primaryWhiteTextColor,
+                                  textColor: primaryWhiteTextColor,
+                                  leading: const Icon(Icons.image_outlined),
+                                  title: const Text('Odaberi sliku'),
+                                  trailing:
+                                      const Icon(Icons.file_upload_outlined),
+                                  onTap: () async {
+                                    var fileResult = await FilePicker.platform
+                                        .pickFiles(type: FileType.image);
+                                    if (fileResult == null ||
+                                        fileResult.files.single.path == null) {
+                                      return;
+                                    }
+                                    var image =
+                                        File(fileResult.files.single.path!);
+
+                                    if (await image.length() > maxSizeInBytes) {
+                                      // ignore: use_build_context_synchronously
+                                      showErrorDialog(context, 'Greška',
+                                          'Veličina datoteke prelazi 2MB. Molimo odaberite manju datoteku.');
+                                      return;
+                                    }
+                                    var base64Image =
+                                        base64Encode(image.readAsBytesSync());
+                                    setState(() {
+                                      _selectedImageBase64 = base64Image;
+                                    });
+                                    field.didChange(base64Image);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      name: 'slika'),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Naziv'),
+                    name: 'naziv',
+                    maxLength: 40,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(40),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Naziv je obavezan."),
+                      FormBuilderValidators.maxLength(40)
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Opis'),
+                    name: 'opis',
+                    maxLines: 3,
+                    minLines: 1,
+                    maxLength: 1000,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(1000),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Opis je obavezan."),
+                      FormBuilderValidators.maxLength(1000)
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Cijena'),
+                    name: 'cijena',
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                      LengthLimitingTextInputFormatter(6)
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Cijena je obavezna."),
+                      FormBuilderValidators.numeric(
+                          errorText: "Unesite ispravnu cijenu."),
+                      FormBuilderValidators.min(0.1,
+                          errorText: "Cijena mora biti veća od 0."),
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(
+                        labelText: 'Trajanje(u minutama)'),
+                    name: 'trajanjeUMin',
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(6)
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Trajanje(u minutama) je obavezno polje."),
+                      FormBuilderValidators.numeric(
+                          errorText: "Unesite ispravnu vrijednost."),
+                      FormBuilderValidators.min(0.1,
+                          errorText: "Vrijednost mora biti veća od 0."),
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration:
+                        const InputDecoration(labelText: 'Rezultat(u satima)'),
+                    name: 'rezultatUH',
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+                      LengthLimitingTextInputFormatter(6)
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Rezultat(u satima) je obavezno polje."),
+                      FormBuilderValidators.numeric(
+                          errorText: "Unesite ispravnu vrijednost."),
+                      FormBuilderValidators.min(0.1,
+                          errorText: "Vrijednost mora biti veća od 0."),
+                    ]),
+                  ),
+                  FormBuilderCheckbox(
+                    name: 'dostupno',
+                    initialValue: true,
+                    title: const Text('Dostupno'),
+                    validator: FormBuilderValidators.required(),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    height: 30,
+                    alignment: Alignment.centerLeft,
+                    child: const Row(
+                      children: [
+                        Text(
+                          'Testovi',
+                          style: heading2,
+                        ),
+                        SizedBox(width: 5),
+                        Tooltip(
+                          message:
+                              'Prevucite testove iz Dostupni testovi u Testovi usluge da biste dodali testove usluzi.',
+                          child: Icon(
+                            Icons.info_outline,
+                            size: 18,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    height: 500,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: SearchableTestList(
+                              allTests: allTests,
+                              allTestsNotifier: allTestsNotifier,
+                              uslugaTestovi: uslugaTestovi,
+                              uslugaTestoviNotifier: uslugaTestoviNotifier,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: NonSearchableTestList(
+                              allTests: allTests,
+                              allTestsNotifier: allTestsNotifier,
+                              uslugaTestovi: uslugaTestovi,
+                              uslugaTestoviNotifier: uslugaTestoviNotifier,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )),
+        ),
+      ),
+      actions: [
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Zatvori',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
+                  onPressed: () async {
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
+                    bool shouldProceed = await showConfirmationDialog(
+                        context,
+                        'Potvrda',
+                        'Da li ste sigurni da želite kreirati uslugu?');
+                    if (!shouldProceed) return;
+
+                    double? cijenaDouble = parseStringToDouble(
+                        _formKey.currentState?.value['cijena']);
+                    if (cijenaDouble == null) {
+                      Navigator.of(context).pop();
+                      makeErrorToast("Greška pri provjeri cijene.");
+                      return;
+                    }
+                    double? rezultatUHDouble = parseStringToDouble(
+                        _formKey.currentState?.value['rezultatUH']);
+                    if (rezultatUHDouble == null) {
+                      Navigator.of(context).pop();
+                      makeErrorToast(
+                          "Greška pri provjeri polja Rezultat(u satima).");
+                      return;
+                    }
+                    int? trajanjeUMinInt = parseStringToInt(
+                        _formKey.currentState?.value['trajanjeUMin']);
+                    if (trajanjeUMinInt == null) {
+                      Navigator.of(context).pop();
+                      makeErrorToast(
+                          "Greška pri provjeri polja Trajanje(u minutama).");
+                      return;
+                    }
+
+                    List<String>? testoviIds = [];
+                    for (var i = 0; i < uslugaTestovi.length; i++) {
+                      testoviIds.add(uslugaTestovi[i].testID!);
+                    }
+
+                    UslugaRequest uslugaInsertRequest = UslugaRequest(
+                        naziv: _formKey.currentState?.value['naziv'],
+                        opis: _formKey.currentState?.value['opis'],
+                        cijena: cijenaDouble,
+                        slika: _selectedImageBase64,
+                        trajanjeUMin: trajanjeUMinInt,
+                        rezultatUH: rezultatUHDouble,
+                        dostupno:
+                            _formKey.currentState?.value['dostupno'] as bool? ??
+                                false,
+                        testovi: testoviIds);
+
+                    await _uslugeProvider.insert(uslugaInsertRequest);
+
+                    makeSuccessToast("Uspješno kreirana usluga.");
+
+                    fetchPage(currentPage);
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Spasi izmjene',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 
   _buildUslugeDataTable(BuildContext context) {
     return Row(
@@ -499,10 +821,12 @@ class _UslugeScreenState extends State<UslugeScreen>
         : null;
     List<Test>? uslugaTestovi = List.from(usluga.uslugaTestovi!);
     final uslugaTestoviNotifier = ValueNotifier<List<Test>?>(uslugaTestovi);
-    List<Test>? allTests = testovi?.result
-        .where((test) => !uslugaTestovi!
-            .any((existingTest) => existingTest.testID == test.testID))
-        .toList();
+    List<Test>? allTests = testovi != null && testovi?.result != null
+        ? List.from(testovi!.result
+            .where((test) => !uslugaTestovi!
+                .any((existingTest) => existingTest.testID == test.testID))
+            .toList())
+        : [];
     final allTestsNotifier = ValueNotifier<List<Test>?>(allTests);
     return AlertDialog(
       title: const Text(
@@ -712,129 +1036,11 @@ class _UslugeScreenState extends State<UslugeScreen>
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.blueAccent)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(bottom: 2.0),
-                                      child: Text(
-                                        'Testovi usluge',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: ValueListenableBuilder<
-                                              List<Test>?>(
-                                          valueListenable:
-                                              uslugaTestoviNotifier,
-                                          builder:
-                                              (context, testoviValue, child) {
-                                            return DragTarget<Test>(
-                                              onAccept: (test) {
-                                                if (!uslugaTestovi!
-                                                    .contains(test)) {
-                                                  uslugaTestovi?.add(test);
-                                                  uslugaTestoviNotifier.value =
-                                                      List.from(uslugaTestovi!);
-                                                  allTests?.remove(test);
-                                                  allTestsNotifier.value =
-                                                      List.from(allTests!);
-                                                }
-                                              },
-                                              builder: (context, candidateData,
-                                                  rejectedData) {
-                                                return ListView.builder(
-                                                  itemCount:
-                                                      testoviValue?.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return Material(
-                                                      color: Colors.transparent,
-                                                      child: Draggable<Test>(
-                                                        data: testoviValue?[
-                                                            index],
-                                                        feedback:
-                                                            ConstrainedBox(
-                                                          constraints:
-                                                              const BoxConstraints(
-                                                                  maxWidth:
-                                                                      300),
-                                                          child: Material(
-                                                            color: Colors
-                                                                .transparent,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(4.0),
-                                                              child: ListTile(
-                                                                tileColor: Colors
-                                                                        .blueAccent[
-                                                                    100],
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8.0),
-                                                                ),
-                                                                mouseCursor:
-                                                                    SystemMouseCursors
-                                                                        .click,
-                                                                textColor:
-                                                                    primaryWhiteTextColor,
-                                                                title: Text(testoviValue?[
-                                                                            index]
-                                                                        .naziv ??
-                                                                    'Greška'),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(4.0),
-                                                          child: ListTile(
-                                                            tileColor: Colors
-                                                                    .blueAccent[
-                                                                100],
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          8.0),
-                                                            ),
-                                                            mouseCursor:
-                                                                SystemMouseCursors
-                                                                    .click,
-                                                            textColor:
-                                                                primaryWhiteTextColor,
-                                                            title: Text(
-                                                                testoviValue?[
-                                                                            index]
-                                                                        .naziv ??
-                                                                    'Greška'),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                            );
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            child: NonSearchableTestList(
+                              allTests: allTests,
+                              allTestsNotifier: allTestsNotifier,
+                              uslugaTestovi: uslugaTestovi,
+                              uslugaTestoviNotifier: uslugaTestoviNotifier,
                             ),
                           ),
                         ),
@@ -1081,6 +1287,108 @@ class _SearchableTestListState extends State<SearchableTestList> {
                       },
                     );
                   }),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class NonSearchableTestList extends StatelessWidget {
+  final List<Test>? allTests;
+  final ValueNotifier<List<Test>?> allTestsNotifier;
+  final List<Test>? uslugaTestovi;
+  final ValueNotifier<List<Test>?> uslugaTestoviNotifier;
+
+  NonSearchableTestList({
+    required this.allTests,
+    required this.allTestsNotifier,
+    required this.uslugaTestovi,
+    required this.uslugaTestoviNotifier,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(bottom: 2.0),
+              child: Text(
+                'Testovi usluge',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Expanded(
+              child: ValueListenableBuilder<List<Test>?>(
+                valueListenable: uslugaTestoviNotifier,
+                builder: (context, testoviValue, child) {
+                  return DragTarget<Test>(
+                    onAccept: (test) {
+                      if (!uslugaTestovi!.contains(test)) {
+                        uslugaTestovi?.add(test);
+                        uslugaTestoviNotifier.value = List.from(uslugaTestovi!);
+                        allTests?.remove(test);
+                        allTestsNotifier.value = List.from(allTests!);
+                      }
+                    },
+                    builder: (context, candidateData, rejectedData) {
+                      return ListView.builder(
+                        itemCount: testoviValue?.length,
+                        itemBuilder: (context, index) {
+                          return Material(
+                            color: Colors.transparent,
+                            child: Draggable<Test>(
+                              data: testoviValue?[index],
+                              feedback: ConstrainedBox(
+                                constraints:
+                                    const BoxConstraints(maxWidth: 300),
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: ListTile(
+                                      tileColor: Colors.blueAccent[100],
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      mouseCursor: SystemMouseCursors.click,
+                                      textColor: primaryWhiteTextColor,
+                                      title: Text(testoviValue?[index].naziv ??
+                                          'Greška'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: ListTile(
+                                  tileColor: Colors.blueAccent[100],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  mouseCursor: SystemMouseCursors.click,
+                                  textColor: primaryWhiteTextColor,
+                                  title: Text(
+                                      testoviValue?[index].naziv ?? 'Greška'),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
