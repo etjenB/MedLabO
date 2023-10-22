@@ -356,14 +356,51 @@ class _UslugeScreenState extends State<UslugeScreen>
                               formatNumberToHours(usluga.rezultatUH),
                               overflow: TextOverflow.fade,
                             )),
-                            DataCell(Text(
-                              usluga.dostupno == null
-                                  ? 'Nepoznat'
-                                  : usluga.dostupno == true
-                                      ? 'Da'
-                                      : 'Ne',
-                              overflow: TextOverflow.fade,
-                            )),
+                            DataCell(usluga.dostupno == null
+                                ? const Text(
+                                    'Nepoznat',
+                                    overflow: TextOverflow.fade,
+                                  )
+                                : usluga.dostupno == true
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(7.0),
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              color: Colors.green[300],
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              border: Border.all(
+                                                  color: Colors.green,
+                                                  width: 2)),
+                                          child: const Text(
+                                            'Da',
+                                            style: TextStyle(
+                                                color: primaryWhiteTextColor),
+                                          ),
+                                        ),
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.all(7.0),
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              color: Colors.red[300],
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              border: Border.all(
+                                                  color: Colors.red, width: 2)),
+                                          child: const Text(
+                                            'Ne',
+                                            style: TextStyle(
+                                                color: primaryWhiteTextColor),
+                                          ),
+                                        ),
+                                      )),
                             DataCell(Text(
                               usluga.dtKreiranja == null
                                   ? 'Nepoznat'
@@ -423,7 +460,7 @@ class _UslugeScreenState extends State<UslugeScreen>
             );
             break;
           case 'delete':
-            /* await _buildLogicForTestDelete(context, test); */
+            await _buildLogicForUslugaDelete(context, usluga);
             break;
           default:
             break;
@@ -909,6 +946,16 @@ class _UslugeScreenState extends State<UslugeScreen>
         ),
       ],
     );
+  }
+
+  _buildLogicForUslugaDelete(BuildContext context, Usluga usluga) async {
+    if (!await showConfirmationDialog(context, 'Potvrda',
+        'Da li ste sigurni da želite obrisati ovu uslugu?')) {
+      return;
+    }
+    await _uslugeProvider.delete(usluga.uslugaID!);
+    makeSuccessToast('Uspješno obrisana usluga.');
+    fetchPage(currentPage);
   }
 }
 

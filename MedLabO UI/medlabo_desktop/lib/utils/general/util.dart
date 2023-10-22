@@ -26,13 +26,13 @@ String formatNumberToMinutes(dynamic) {
   int lastTwoDigits = dynamic % 100;
 
   if (lastDigit == 1 && lastTwoDigits != 11) {
-    suffix = "Minuta";
+    suffix = "minuta";
   } else if (lastDigit >= 2 &&
       lastDigit <= 4 &&
       (lastTwoDigits < 10 || lastTwoDigits > 20)) {
-    suffix = "Minute";
+    suffix = "minute";
   } else {
-    suffix = "Minuta";
+    suffix = "minuta";
   }
 
   var f = NumberFormat('###');
