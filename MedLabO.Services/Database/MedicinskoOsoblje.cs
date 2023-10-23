@@ -17,7 +17,6 @@ namespace MedLabO.Services.Database
 
         //IsActive nam govori da li ovaj zaposlenik radi u laboratoriju
         //Primjer radi boljeg razumijevanja: ukoliko osoba vise nije u stalnom ili privremenom radnom odnosu onda je IsActive = false;
-        //Takodjer, moze se koristiti ukoliko zaposleni uzme duzi godisnji odmor, moze se staviti IsActive = false;, a kada se vrati moze se staviti IsActive = true;
         [Required]
         public bool IsActive { get; set; } = true;
 

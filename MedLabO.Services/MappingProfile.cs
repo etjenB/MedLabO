@@ -10,6 +10,9 @@ namespace MedLabO.Services
             CreateMap<Database.Administrator, Models.Administrator>().ReverseMap();
             CreateMap<AdministratorInsertRequest, Database.Administrator>().ReverseMap();
             CreateMap<AdministratorUpdateRequest, Database.Administrator>().ReverseMap();
+            CreateMap<Database.MedicinskoOsoblje, Models.MedicinskoOsoblje>().ReverseMap();
+            CreateMap<MedicinskoOsobljeRegistrationRequest, Database.MedicinskoOsoblje>().ReverseMap();
+            CreateMap<MedicinskoOsobljeUpdateRequest, Database.MedicinskoOsoblje>().ReverseMap();
             CreateMap<TestInsertRequest, Database.Test>().ReverseMap();
             CreateMap<TestUpdateRequest, Database.Test>().ReverseMap();
             CreateMap<Database.Test, Models.Test>().ReverseMap();

@@ -4,6 +4,7 @@ using MedLabO.Models.Exceptions;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,15 +34,17 @@ namespace MedLabO.Services
             var set = _db.Set<TDb>();
             TDb entity = _mapper.Map<TDb>(insert);
             await BeforeInsert(entity, insert);
-            set.Add(entity);
-            try
+            if (_db.Entry(entity).State == EntityState.Detached)
             {
-                await _db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-
-                throw new UserException(e.Message);
+                set.Add(entity);
+                try
+                {
+                    await _db.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    throw new UserException(e.Message);
+                }
             }
             return _mapper.Map<T>(entity);
         }
@@ -63,14 +66,20 @@ namespace MedLabO.Services
             {
                 throw new UserException("Error while executing BeforeUpdate method.");
             }
-            try
-            {
-                await _db.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
 
-                throw new UserException(e.Message);
+            if (_db.Entry(entity).State == EntityState.Modified)
+            {
+                try
+                {
+
+                    await _db.SaveChangesAsync();
+
+                }
+                catch (Exception e)
+                {
+
+                    throw new UserException(e.Message);
+                }
             }
             return _mapper.Map<T>(entity);
         }

@@ -56,10 +56,11 @@ builder.Services.AddSwaggerGen(c =>
 
 //Dependency injection
 builder.Services.AddTransient<IAuthService, AuthService>();
-builder.Services.AddTransient<IUslugaService, UslugaService>();
 builder.Services.AddTransient<IAdministratorService, AdministratorService>();
+builder.Services.AddTransient<IMedicinskoOsobljeService, MedicinskoOsobljeService>();
 builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<ITestParametarService, TestParametarService>();
+builder.Services.AddTransient<IUslugaService, UslugaService>();
 builder.Services.AddTransient<INovostService, NovostService>();
 builder.Services.AddTransient<IObavijestService, ObavijestService>();
 
@@ -69,6 +70,8 @@ builder.Services.AddTransient<IService<MedLabO.Models.Test, TestSearchObject>, T
 builder.Services.AddTransient<IService<MedLabO.Models.TestParametar, TestParametarSearchObject>, TestParametarService>();
 
 builder.Services.AddTransient<IService<MedLabO.Models.Administrator, AdministratorSearchObject>, AdministratorService>();
+
+builder.Services.AddTransient<IService<MedLabO.Models.MedicinskoOsoblje, MedicinskoOsobljeSearchObject>, MedicinskoOsobljeService>();
 
 builder.Services.AddTransient<IService<MedLabO.Models.Termin, TerminSearchObject>, TerminService>();
 

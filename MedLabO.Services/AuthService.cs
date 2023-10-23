@@ -14,11 +14,11 @@ namespace MedLabO.Services
 {
     public class AuthService : IAuthService
     {
-        private UserManager<ApplicationUser> _userManager;
+        private UserManager<Database.ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly MedLabOContext _db;
 
-        public AuthService(UserManager<ApplicationUser> userManager, IConfiguration configuration, MedLabOContext db)
+        public AuthService(UserManager<Database.ApplicationUser> userManager, IConfiguration configuration, MedLabOContext db)
         {
             _userManager = userManager;
             _configuration = configuration;
@@ -45,13 +45,13 @@ namespace MedLabO.Services
             return GenerateToken(user, role);
         }
 
-        private async Task<string> DetermineUserRole(ApplicationUser user)
+        private async Task<string> DetermineUserRole(Database.ApplicationUser user)
         {
             var roles = await _userManager.GetRolesAsync(user);
             return roles.FirstOrDefault(r => RoleNames.AllRoles.Contains(r));
         }
 
-        private string GenerateToken(ApplicationUser user, string role)
+        private string GenerateToken(Database.ApplicationUser user, string role)
         {
             var keyString = _configuration["JwtSettings:Key"];
 

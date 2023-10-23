@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:medlabo_desktop/models/test/test.dart';
 
 part 'usluga_request.g.dart';
 
