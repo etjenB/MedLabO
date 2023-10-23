@@ -10,10 +10,10 @@ namespace MedLabO.Services.Database
         //public Guid MedicinskoOsobljeID { get; set; } = Guid.NewGuid();
 
         [Required]
-        public string? Ime { get; set; }
+        public string Ime { get; set; } = null!;
 
         [Required]
-        public string? Prezime { get; set; }
+        public string Prezime { get; set; } = null!;
 
         //IsActive nam govori da li ovaj zaposlenik radi u laboratoriju
         //Primjer radi boljeg razumijevanja: ukoliko osoba vise nije u stalnom ili privremenom radnom odnosu onda je IsActive = false;

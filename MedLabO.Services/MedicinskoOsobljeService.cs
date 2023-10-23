@@ -65,5 +65,15 @@ namespace MedLabO.Services
 
             await _userManager.UpdateAsync(entity);
         }
+
+        public override IQueryable<Database.MedicinskoOsoblje> AddFilter(IQueryable<Database.MedicinskoOsoblje> query, MedicinskoOsobljeSearchObject? search = null)
+        {
+            if (!string.IsNullOrWhiteSpace(search?.ImePrezime))
+            {
+                query = query.Where(t => t.Ime.StartsWith(search.ImePrezime) || t.Prezime.StartsWith(search.ImePrezime));
+            }
+
+            return base.AddFilter(query, search);
+        }
     }
 }
