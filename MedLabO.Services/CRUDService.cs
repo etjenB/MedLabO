@@ -58,15 +58,7 @@ namespace MedLabO.Services
                 throw new EntityNotFoundException("Entity with that ID doesn't exist.");
             }
             _mapper.Map(update, entity);
-            try
-            {
-                await BeforeUpdate(entity, update);
-            }
-            catch
-            {
-                throw new UserException("Error while executing BeforeUpdate method.");
-            }
-
+            await BeforeUpdate(entity, update);
             if (_db.Entry(entity).State == EntityState.Modified)
             {
                 try

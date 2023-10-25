@@ -9,6 +9,7 @@ part of 'medicinsko_osoblje_update_request.dart';
 MedicinskoOsobljeUpdateRequest _$MedicinskoOsobljeUpdateRequestFromJson(
         Map<String, dynamic> json) =>
     MedicinskoOsobljeUpdateRequest(
+      id: json['id'] as String?,
       ime: json['ime'] as String?,
       prezime: json['prezime'] as String?,
       isActive: json['isActive'] as bool?,
@@ -17,7 +18,7 @@ MedicinskoOsobljeUpdateRequest _$MedicinskoOsobljeUpdateRequestFromJson(
       userName: json['userName'] as String?,
       email: json['email'] as String?,
       phoneNumber: json['phoneNumber'] as String?,
-    )..id = json['id'] as String?;
+    );
 
 Map<String, dynamic> _$MedicinskoOsobljeUpdateRequestToJson(
         MedicinskoOsobljeUpdateRequest instance) =>

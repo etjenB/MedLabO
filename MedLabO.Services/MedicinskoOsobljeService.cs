@@ -54,16 +54,22 @@ namespace MedLabO.Services
             var existingUser = await _userManager.FindByNameAsync(insert.UserName);
             if (existingUser != null && existingUser.Id != insert.Id)
             {
-                throw new UserException("Username is already taken.");
+                throw new UserException("Korisnicko ime vec postoji.");
             }
 
             var existingUserByEmail = await _userManager.FindByEmailAsync(insert.Email);
             if (existingUserByEmail != null && existingUserByEmail.Id != insert.Id)
             {
-                throw new UserException("Email is already in use.");
+                throw new UserException("E-mail se vec koristi od strane drugog korisnika.");
             }
 
-            await _userManager.UpdateAsync(entity);
+            try {
+                await _userManager.UpdateAsync(entity);
+            }
+            catch
+            {
+                throw new UserException("Unable to update MedicinskoOsoblje.");
+            }
         }
 
         public override IQueryable<Database.MedicinskoOsoblje> AddFilter(IQueryable<Database.MedicinskoOsoblje> query, MedicinskoOsobljeSearchObject? search = null)

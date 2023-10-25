@@ -15,7 +15,8 @@ class MedicinskoOsobljeUpdateRequest {
   String? phoneNumber;
 
   MedicinskoOsobljeUpdateRequest(
-      {this.ime,
+      {this.id,
+      this.ime,
       this.prezime,
       this.isActive,
       this.spolID,

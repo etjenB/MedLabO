@@ -5,6 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/uposlenik/medicinsko_osoblje.dart';
 import 'package:medlabo_desktop/models/uposlenik/medicinsko_osoblje_registration_request.dart';
+import 'package:medlabo_desktop/models/uposlenik/medicinsko_osoblje_update_request.dart';
 import 'package:medlabo_desktop/providers/medicinsko_osoblje_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/constants/enums.dart';
@@ -332,7 +333,7 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                     decoration: const InputDecoration(labelText: 'Lozinka'),
                     name: 'password',
                     maxLength: 30,
-                    obscureText: true,
+                    obscureText: false,
                     inputFormatters: [
                       LengthLimitingTextInputFormatter(30),
                       FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
@@ -709,8 +710,7 @@ class _UposleniciScreenState extends State<UposleniciScreen>
               context: context,
               barrierDismissible: false,
               builder: (context) {
-                return Text('Dolari');
-                //return _buildDialogForMedicinskoOsobljeEdit(medOso, context);
+                return _buildDialogForUposlenikEdit(medOso, context);
               },
             );
             break;
@@ -735,6 +735,223 @@ class _UposleniciScreenState extends State<UposleniciScreen>
             message: 'Obriši račun uposlenika',
             child: Icon(Icons.delete_outline),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDialogForUposlenikEdit(
+      MedicinskoOsoblje medOso, BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        'Izmjena podataka uposlenika',
+        style: heading1,
+      ),
+      scrollable: true,
+      content: Container(
+        height: 400,
+        width: 800,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: FormBuilder(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        flex: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: FormBuilderTextField(
+                            decoration: const InputDecoration(labelText: 'Ime'),
+                            name: 'ime',
+                            initialValue: medOso.ime,
+                            maxLength: 50,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(50),
+                            ],
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(
+                                  errorText: "Ime je obavezno."),
+                              FormBuilderValidators.maxLength(50)
+                            ]),
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: FormBuilderTextField(
+                            decoration:
+                                const InputDecoration(labelText: 'Prezime'),
+                            name: 'prezime',
+                            initialValue: medOso.prezime,
+                            maxLength: 70,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(70),
+                            ],
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(
+                                  errorText: "Prezime je obavezno."),
+                              FormBuilderValidators.maxLength(70)
+                            ]),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  FormBuilderCheckbox(
+                    name: 'isActive',
+                    initialValue: medOso.isActive,
+                    title: const Text('Aktivan'),
+                    validator: FormBuilderValidators.required(),
+                  ),
+                  FormBuilderDropdown<SpolEnum>(
+                    name: 'spolID',
+                    decoration: const InputDecoration(labelText: 'Spol'),
+                    initialValue: SpolExtension.fromInt(medOso.spol!.spolID!),
+                    validator: FormBuilderValidators.compose(
+                        [FormBuilderValidators.required()]),
+                    items: SpolEnum.values
+                        .map((spol) => DropdownMenuItem(
+                              value: spol,
+                              child: Text(spol.displayName),
+                            ))
+                        .toList(),
+                  ),
+                  FormBuilderDropdown<ZvanjeEnum>(
+                    name: 'zvanjeID',
+                    decoration: const InputDecoration(labelText: 'Zvanje'),
+                    initialValue:
+                        ZvanjeExtension.fromInt(medOso.zvanje!.zvanjeID!),
+                    validator: FormBuilderValidators.compose(
+                        [FormBuilderValidators.required()]),
+                    items: ZvanjeEnum.values
+                        .map((zvanje) => DropdownMenuItem(
+                              value: zvanje,
+                              child: Text(zvanje.displayName),
+                            ))
+                        .toList(),
+                  ),
+                  FormBuilderTextField(
+                    decoration:
+                        const InputDecoration(labelText: 'Korisničko ime'),
+                    name: 'userName',
+                    initialValue: medOso.userName,
+                    maxLength: 30,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(30),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(),
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'E-mail'),
+                    name: 'email',
+                    initialValue: medOso.email,
+                    maxLength: 60,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(60),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.email(),
+                      FormBuilderValidators.required(),
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                      decoration: const InputDecoration(labelText: 'Telefon'),
+                      name: 'phoneNumber',
+                      initialValue: medOso.phoneNumber,
+                      maxLength: 10,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(10),
+                        FilteringTextInputFormatter.allow(RegExp(r'^\d*$')),
+                      ],
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ])),
+                ],
+              )),
+        ),
+      ),
+      actions: [
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Zatvori',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
+                  onPressed: () async {
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
+                    bool shouldProceed = await showConfirmationDialog(
+                        context,
+                        'Potvrda',
+                        'Da li ste sigurni da želite izmjeniti podatke uposlenika?');
+                    if (!shouldProceed) return;
+
+                    MedicinskoOsobljeUpdateRequest
+                        medicinskoOsobljeUpdateRequest =
+                        MedicinskoOsobljeUpdateRequest(
+                      id: medOso.id,
+                      ime: _formKey.currentState?.value['ime'],
+                      prezime: _formKey.currentState?.value['prezime'],
+                      isActive:
+                          _formKey.currentState?.value['isActive'] as bool? ??
+                              false,
+                      spolID:
+                          (_formKey.currentState?.value['spolID'] as SpolEnum)
+                              .intValue,
+                      zvanjeID: (_formKey.currentState?.value['zvanjeID']
+                              as ZvanjeEnum)
+                          .intValue,
+                      userName: _formKey.currentState?.value['userName'],
+                      email: _formKey.currentState?.value['email'],
+                      phoneNumber: _formKey.currentState?.value['phoneNumber'],
+                    );
+
+                    await _medicinskoOsobljeProvider.update(
+                        medOso.id!, medicinskoOsobljeUpdateRequest);
+
+                    makeSuccessToast("Uspješno izmjenjeni podaci.");
+
+                    fetchPage(currentPage);
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Spasi izmjene',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
