@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:medlabo_desktop/models/spol/spol.dart';
+import 'package:medlabo_desktop/models/zvanje/zvanje.dart';
 
 part 'medicinsko_osoblje.g.dart';
 
@@ -9,12 +11,12 @@ class MedicinskoOsoblje {
   bool? isActive;
   String? dtZaposlenja;
   String? dtPrekidRadnogOdnosa;
-  String? spol;
-  String? zvanjeID;
+  Spol? spol;
+  Zvanje? zvanje;
   String? id;
   String? userName;
   String? email;
-  String? phone;
+  String? phoneNumber;
 
   MedicinskoOsoblje(
       {this.ime,
@@ -23,11 +25,11 @@ class MedicinskoOsoblje {
       this.dtZaposlenja,
       this.dtPrekidRadnogOdnosa,
       this.spol,
-      this.zvanjeID,
+      this.zvanje,
       this.id,
       this.userName,
       this.email,
-      this.phone});
+      this.phoneNumber});
 
   factory MedicinskoOsoblje.fromJson(Map<String, dynamic> json) =>
       _$MedicinskoOsobljeFromJson(json);

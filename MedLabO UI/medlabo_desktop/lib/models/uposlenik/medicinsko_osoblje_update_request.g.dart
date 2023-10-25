@@ -12,11 +12,11 @@ MedicinskoOsobljeUpdateRequest _$MedicinskoOsobljeUpdateRequestFromJson(
       ime: json['ime'] as String?,
       prezime: json['prezime'] as String?,
       isActive: json['isActive'] as bool?,
-      spol: json['spol'] as String?,
-      zvanjeID: json['zvanjeID'] as String?,
+      spolID: json['spolID'] as int?,
+      zvanjeID: json['zvanjeID'] as int?,
       userName: json['userName'] as String?,
       email: json['email'] as String?,
-      phone: json['phone'] as String?,
+      phoneNumber: json['phoneNumber'] as String?,
     )..id = json['id'] as String?;
 
 Map<String, dynamic> _$MedicinskoOsobljeUpdateRequestToJson(
@@ -26,9 +26,9 @@ Map<String, dynamic> _$MedicinskoOsobljeUpdateRequestToJson(
       'ime': instance.ime,
       'prezime': instance.prezime,
       'isActive': instance.isActive,
-      'spol': instance.spol,
+      'spolID': instance.spolID,
       'zvanjeID': instance.zvanjeID,
       'userName': instance.userName,
       'email': instance.email,
-      'phone': instance.phone,
+      'phoneNumber': instance.phoneNumber,
     };

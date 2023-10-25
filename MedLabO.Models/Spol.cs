@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Models
 {
-    public class Zvanje
+    public class Spol
     {
-        public int? ZvanjeID { get; set; }
+        public int? SpolID { get; set; }
+        public string? Kod { get; set; }
         public string? Naziv { get; set; }
-        public string? Opis { get; set; }
     }
 }

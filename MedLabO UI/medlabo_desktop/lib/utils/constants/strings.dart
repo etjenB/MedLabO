@@ -1,5 +1,6 @@
 const String appTitle = 'MedLabO';
 
+//Roles enum
 enum RolesEnum { administrator, medicinskoOsoblje, pacijent }
 
 final Map<RolesEnum, String> roles = {

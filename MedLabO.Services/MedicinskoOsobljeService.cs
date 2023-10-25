@@ -29,13 +29,13 @@ namespace MedLabO.Services
             var existingUser = await _userManager.FindByNameAsync(entity.UserName);
             if (existingUser != null)
             {
-                throw new UserException("Username is already taken.");
+                throw new UserException("Korisnicko ime vec postoji.");
             }
 
             var existingUserByEmail = await _userManager.FindByEmailAsync(entity.Email);
             if (existingUserByEmail != null)
             {
-                throw new UserException("Email is already in use.");
+                throw new UserException("E-mail se vec koristi od strane drugog korisnika.");
             }
 
             try
@@ -74,6 +74,21 @@ namespace MedLabO.Services
             }
 
             return base.AddFilter(query, search);
+        }
+
+        public override IQueryable<Database.MedicinskoOsoblje> AddInclude(IQueryable<Database.MedicinskoOsoblje> query, MedicinskoOsobljeSearchObject? search = null)
+        {
+            if (search?.IncludeSpol == true)
+            {
+                query = query.Include("Spol");
+            }
+
+            if (search?.IncludeZvanje == true)
+            {
+                query = query.Include("Zvanje");
+            }
+
+            return base.AddInclude(query, search);
         }
     }
 }

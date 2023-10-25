@@ -12,12 +12,12 @@ MedicinskoOsobljeRegistrationRequest
           ime: json['ime'] as String?,
           prezime: json['prezime'] as String?,
           isActive: json['isActive'] as bool?,
-          spol: json['spol'] as String?,
-          zvanjeID: json['zvanjeID'] as String?,
+          spolID: json['spolID'] as int?,
+          zvanjeID: json['zvanjeID'] as int?,
           userName: json['userName'] as String?,
           password: json['password'] as String?,
           email: json['email'] as String?,
-          phone: json['phone'] as String?,
+          phoneNumber: json['phoneNumber'] as String?,
         );
 
 Map<String, dynamic> _$MedicinskoOsobljeRegistrationRequestToJson(
@@ -26,10 +26,10 @@ Map<String, dynamic> _$MedicinskoOsobljeRegistrationRequestToJson(
       'ime': instance.ime,
       'prezime': instance.prezime,
       'isActive': instance.isActive,
-      'spol': instance.spol,
+      'spolID': instance.spolID,
       'zvanjeID': instance.zvanjeID,
       'userName': instance.userName,
       'password': instance.password,
       'email': instance.email,
-      'phone': instance.phone,
+      'phoneNumber': instance.phoneNumber,
     };

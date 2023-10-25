@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/uposlenik/medicinsko_osoblje.dart';
+import 'package:medlabo_desktop/models/uposlenik/medicinsko_osoblje_registration_request.dart';
 import 'package:medlabo_desktop/providers/medicinsko_osoblje_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
+import 'package:medlabo_desktop/utils/constants/enums.dart';
+import 'package:medlabo_desktop/utils/general/dialog_utils.dart';
 import 'package:medlabo_desktop/utils/general/pagination_mixin.dart';
+import 'package:medlabo_desktop/utils/general/toast_utils.dart';
 import 'package:medlabo_desktop/utils/general/util.dart';
 import 'package:medlabo_desktop/widgets/pagination_widget.dart';
 import 'package:provider/provider.dart';
@@ -38,8 +44,12 @@ class _UposleniciScreenState extends State<UposleniciScreen>
   }
 
   Future initForm() async {
-    var data = await _medicinskoOsobljeProvider
-        .get(filter: {'Page': 0, 'PageSize': itemsPerPage});
+    var data = await _medicinskoOsobljeProvider.get(filter: {
+      'Page': 0,
+      'PageSize': itemsPerPage,
+      'IncludeSpol': true,
+      'IncludeZvanje': true
+    });
     if (mounted) {
       setState(() {
         medicinskoOsoblje = data;
@@ -52,7 +62,8 @@ class _UposleniciScreenState extends State<UposleniciScreen>
     var result = await fetchData(
         page,
         (filter) => _medicinskoOsobljeProvider.get(filter: filter),
-        'ImePrezime');
+        'ImePrezime',
+        {'IncludeSpol': true, 'IncludeZvanje': true});
     setState(() {
       medicinskoOsoblje = result;
     });
@@ -191,7 +202,248 @@ class _UposleniciScreenState extends State<UposleniciScreen>
     );
   }
 
-  _buildDialogForUposlenikAdd(BuildContext context) {}
+  _buildDialogForUposlenikAdd(BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        'Registracija novog uposlenika',
+        style: heading1,
+      ),
+      scrollable: true,
+      content: Container(
+        height: 400,
+        width: 800,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: FormBuilder(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        flex: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: FormBuilderTextField(
+                            decoration: const InputDecoration(labelText: 'Ime'),
+                            name: 'ime',
+                            maxLength: 50,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(50),
+                            ],
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(
+                                  errorText: "Ime je obavezno."),
+                              FormBuilderValidators.maxLength(50)
+                            ]),
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: FormBuilderTextField(
+                            decoration:
+                                const InputDecoration(labelText: 'Prezime'),
+                            name: 'prezime',
+                            maxLength: 70,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(70),
+                            ],
+                            validator: FormBuilderValidators.compose([
+                              FormBuilderValidators.required(
+                                  errorText: "Prezime je obavezno."),
+                              FormBuilderValidators.maxLength(70)
+                            ]),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  FormBuilderCheckbox(
+                    name: 'isActive',
+                    initialValue: true,
+                    title: const Text('Aktivan'),
+                    validator: FormBuilderValidators.required(),
+                  ),
+                  FormBuilderDropdown<SpolEnum>(
+                    name: 'spolID',
+                    decoration: const InputDecoration(labelText: 'Spol'),
+                    initialValue: SpolEnum.musko,
+                    validator: FormBuilderValidators.compose(
+                        [FormBuilderValidators.required()]),
+                    items: SpolEnum.values
+                        .map((spol) => DropdownMenuItem(
+                              value: spol,
+                              child: Text(spol.displayName),
+                            ))
+                        .toList(),
+                  ),
+                  FormBuilderDropdown<ZvanjeEnum>(
+                    name: 'zvanjeID',
+                    decoration: const InputDecoration(labelText: 'Zvanje'),
+                    initialValue: ZvanjeEnum.ljekar,
+                    validator: FormBuilderValidators.compose(
+                        [FormBuilderValidators.required()]),
+                    items: ZvanjeEnum.values
+                        .map((zvanje) => DropdownMenuItem(
+                              value: zvanje,
+                              child: Text(zvanje.displayName),
+                            ))
+                        .toList(),
+                  ),
+                  FormBuilderTextField(
+                    decoration:
+                        const InputDecoration(labelText: 'Korisničko ime'),
+                    name: 'userName',
+                    maxLength: 30,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(30),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(),
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'E-mail'),
+                    name: 'email',
+                    maxLength: 60,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(60),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.email(),
+                      FormBuilderValidators.required(),
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                      decoration: const InputDecoration(labelText: 'Telefon'),
+                      name: 'phoneNumber',
+                      maxLength: 10,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(10),
+                        FilteringTextInputFormatter.allow(RegExp(r'^\d*$')),
+                      ],
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ])),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Lozinka'),
+                    name: 'password',
+                    maxLength: 30,
+                    obscureText: true,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(30),
+                      FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(),
+                      FormBuilderValidators.minLength(8),
+                      FormBuilderValidators.maxLength(30),
+                      (val) {
+                        if (!RegExp(r'(?=.*[A-Z])').hasMatch(val ?? '')) {
+                          return 'Mora sadržavati najmanje jedno veliko slovo';
+                        }
+                        return null;
+                      },
+                      (val) {
+                        if (!RegExp(r'(?=.*[a-z])').hasMatch(val ?? '')) {
+                          return 'Mora sadržavati najmanje jedno malo slovo';
+                        }
+                        return null;
+                      },
+                      (val) {
+                        if (!RegExp(r'(?=.*[0-9])').hasMatch(val ?? '')) {
+                          return 'Mora sadržavati najmanje jedan broj';
+                        }
+                        return null;
+                      },
+                    ]),
+                  ),
+                ],
+              )),
+        ),
+      ),
+      actions: [
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Zatvori',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
+                  onPressed: () async {
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
+                    bool shouldProceed = await showConfirmationDialog(
+                        context,
+                        'Potvrda',
+                        'Da li ste sigurni da želite kreirati novi račun za uposlenika?');
+                    if (!shouldProceed) return;
+
+                    MedicinskoOsobljeRegistrationRequest
+                        medicinskoOsobljeRegistrationRequest =
+                        MedicinskoOsobljeRegistrationRequest(
+                      ime: _formKey.currentState?.value['ime'],
+                      prezime: _formKey.currentState?.value['prezime'],
+                      isActive:
+                          _formKey.currentState?.value['isActive'] as bool? ??
+                              false,
+                      spolID:
+                          (_formKey.currentState?.value['spolID'] as SpolEnum)
+                              .intValue,
+                      zvanjeID: (_formKey.currentState?.value['zvanjeID']
+                              as ZvanjeEnum)
+                          .intValue,
+                      userName: _formKey.currentState?.value['userName'],
+                      password: _formKey.currentState?.value['password'],
+                      email: _formKey.currentState?.value['email'],
+                      phoneNumber: _formKey.currentState?.value['phoneNumber'],
+                    );
+
+                    await _medicinskoOsobljeProvider
+                        .insert(medicinskoOsobljeRegistrationRequest);
+
+                    makeSuccessToast("Uspješno dodan račun.");
+
+                    fetchPage(currentPage);
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Kreiraj račun',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 
   _buildUposleniciDataTable(BuildContext context) {
     return Row(
@@ -342,15 +594,16 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                             )),
                             DataCell(Text(
                               medOso.dtPrekidRadnogOdnosa == null
-                                  ? 'Nepoznat'
+                                  ? 'Nema'
                                   : formatDateTime(
                                           medOso.dtPrekidRadnogOdnosa!) ??
-                                      'Nepoznat',
+                                      'Nema',
                               overflow: TextOverflow.fade,
                             )),
-                            DataCell(medOso.spol == null
+                            DataCell(medOso.spol == null &&
+                                    medOso.spol?.naziv != null
                                 ? const Text(
-                                    'Nepoznat',
+                                    'Nema',
                                     overflow: TextOverflow.fade,
                                   )
                                 : Padding(
@@ -366,7 +619,7 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                                           border: Border.all(
                                               color: Colors.black, width: 2)),
                                       child: Text(
-                                        medOso.spol!,
+                                        medOso.spol!.naziv!,
                                         style: const TextStyle(
                                             color: primaryWhiteTextColor),
                                       ),

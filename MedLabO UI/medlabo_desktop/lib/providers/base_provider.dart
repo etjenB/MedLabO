@@ -146,15 +146,35 @@ abstract class BaseProvider<T> with ChangeNotifier {
         return {'isValid': false, 'message': "Nemate pravo pristupa resursu."};
 
       case 500:
-        return {'isValid': false, 'message': "Greška na serveru."};
+        return {
+          'isValid': false,
+          'message': extractErrorMessage(response.body)
+        };
 
       default:
         if (response.statusCode >= 200 && response.statusCode <= 299) {
           return {'isValid': true, 'message': ""};
         } else {
-          return {'isValid': false, 'message': "Greška."};
+          return {
+            'isValid': false,
+            'message': extractErrorMessage(response.body)
+          };
         }
     }
+  }
+
+  String extractErrorMessage(String responseBody) {
+    try {
+      var parsedJson = jsonDecode(responseBody);
+      if (parsedJson.containsKey('errors') &&
+          parsedJson['errors'].containsKey('Error') &&
+          parsedJson['errors']['Error'].isNotEmpty) {
+        return parsedJson['errors']['Error'][0];
+      }
+    } catch (e) {
+      return responseBody;
+    }
+    return responseBody;
   }
 
   String getQueryString(Map params,

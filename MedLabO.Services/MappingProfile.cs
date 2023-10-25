@@ -13,6 +13,8 @@ namespace MedLabO.Services
             CreateMap<Database.MedicinskoOsoblje, Models.MedicinskoOsoblje>().ReverseMap();
             CreateMap<MedicinskoOsobljeRegistrationRequest, Database.MedicinskoOsoblje>().ReverseMap();
             CreateMap<MedicinskoOsobljeUpdateRequest, Database.MedicinskoOsoblje>().ReverseMap();
+            CreateMap<Database.Spol, Models.Spol>().ReverseMap();
+            CreateMap<Database.Zvanje, Models.Zvanje>().ReverseMap();
             CreateMap<TestInsertRequest, Database.Test>().ReverseMap();
             CreateMap<TestUpdateRequest, Database.Test>().ReverseMap();
             CreateMap<Database.Test, Models.Test>().ReverseMap();

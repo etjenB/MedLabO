@@ -7,23 +7,23 @@ class MedicinskoOsobljeRegistrationRequest {
   String? ime;
   String? prezime;
   bool? isActive;
-  String? spol;
-  String? zvanjeID;
+  int? spolID;
+  int? zvanjeID;
   String? userName;
   String? password;
   String? email;
-  String? phone;
+  String? phoneNumber;
 
   MedicinskoOsobljeRegistrationRequest(
       {this.ime,
       this.prezime,
       this.isActive,
-      this.spol,
+      this.spolID,
       this.zvanjeID,
       this.userName,
       this.password,
       this.email,
-      this.phone});
+      this.phoneNumber});
 
   factory MedicinskoOsobljeRegistrationRequest.fromJson(
           Map<String, dynamic> json) =>

@@ -4,6 +4,7 @@ using MedLabO.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedLabO.Services.Migrations
 {
     [DbContext(typeof(MedLabOContext))]
-    partial class MedLabOContextModelSnapshot : ModelSnapshot
+    [Migration("20231024180439_006-spol-as-foreign-key")]
+    partial class _006spolasforeignkey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,7 +127,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasIndex("AdministratorID");
 
-                    b.ToTable("Novosti", (string)null);
+                    b.ToTable("Novosti");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Obavijest", b =>
@@ -159,7 +161,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasIndex("AdministratorID");
 
-                    b.ToTable("Obavijesti", (string)null);
+                    b.ToTable("Obavijesti");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Racun", b =>
@@ -176,7 +178,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasKey("TerminID");
 
-                    b.ToTable("Racuni", (string)null);
+                    b.ToTable("Racuni");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Rezultat", b =>
@@ -206,7 +208,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasKey("RezultatID");
 
-                    b.ToTable("Rezultati", (string)null);
+                    b.ToTable("Rezultati");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Spol", b =>
@@ -227,7 +229,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasKey("SpolID");
 
-                    b.ToTable("Spolovi", (string)null);
+                    b.ToTable("Spolovi");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Termin", b =>
@@ -283,7 +285,7 @@ namespace MedLabO.Services.Migrations
                         .IsUnique()
                         .HasFilter("[ZakljucakID] IS NOT NULL");
 
-                    b.ToTable("Termini", (string)null);
+                    b.ToTable("Termini");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.TerminTest", b =>
@@ -303,7 +305,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasIndex("TerminID");
 
-                    b.ToTable("TerminTest", (string)null);
+                    b.ToTable("TerminTest");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Test", b =>
@@ -347,7 +349,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasIndex("TestParametarID");
 
-                    b.ToTable("Testovi", (string)null);
+                    b.ToTable("Testovi");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.TestParametar", b =>
@@ -370,7 +372,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasKey("TestParametarID");
 
-                    b.ToTable("TestParametri", (string)null);
+                    b.ToTable("TestParametri");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Usluga", b =>
@@ -415,7 +417,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasIndex("AdministratorID");
 
-                    b.ToTable("Usluge", (string)null);
+                    b.ToTable("Usluge");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Zakljucak", b =>
@@ -434,16 +436,14 @@ namespace MedLabO.Services.Migrations
 
                     b.HasKey("TerminID");
 
-                    b.ToTable("Zakljucci", (string)null);
+                    b.ToTable("Zakljucci");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Zvanje", b =>
                 {
-                    b.Property<int>("ZvanjeID")
+                    b.Property<Guid>("ZvanjeID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ZvanjeID"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Naziv")
                         .IsRequired()
@@ -454,7 +454,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasKey("ZvanjeID");
 
-                    b.ToTable("Zvanja", (string)null);
+                    b.ToTable("Zvanja");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -604,7 +604,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasIndex("UslugaTerminiTerminID");
 
-                    b.ToTable("TerminUsluga", (string)null);
+                    b.ToTable("TerminUsluga");
                 });
 
             modelBuilder.Entity("TestUsluga", b =>
@@ -619,7 +619,7 @@ namespace MedLabO.Services.Migrations
 
                     b.HasIndex("UslugaTestoviTestID");
 
-                    b.ToTable("TestUsluga", (string)null);
+                    b.ToTable("TestUsluga");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Administrator", b =>
@@ -669,8 +669,8 @@ namespace MedLabO.Services.Migrations
                     b.Property<int?>("SpolID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ZvanjeID")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ZvanjeID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasIndex("SpolID");
 
@@ -887,11 +887,13 @@ namespace MedLabO.Services.Migrations
                         .WithMany()
                         .HasForeignKey("SpolID");
 
-                    b.HasOne("MedLabO.Services.Database.Zvanje", null)
+                    b.HasOne("MedLabO.Services.Database.Zvanje", "Zvanje")
                         .WithMany("MedicinskoOsoblje")
                         .HasForeignKey("ZvanjeID");
 
                     b.Navigation("Spol");
+
+                    b.Navigation("Zvanje");
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Pacijent", b =>

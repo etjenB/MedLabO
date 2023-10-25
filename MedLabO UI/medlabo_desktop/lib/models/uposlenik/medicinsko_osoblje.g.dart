@@ -13,12 +13,16 @@ MedicinskoOsoblje _$MedicinskoOsobljeFromJson(Map<String, dynamic> json) =>
       isActive: json['isActive'] as bool?,
       dtZaposlenja: json['dtZaposlenja'] as String?,
       dtPrekidRadnogOdnosa: json['dtPrekidRadnogOdnosa'] as String?,
-      spol: json['spol'] as String?,
-      zvanjeID: json['zvanjeID'] as String?,
+      spol: json['spol'] == null
+          ? null
+          : Spol.fromJson(json['spol'] as Map<String, dynamic>),
+      zvanje: json['zvanje'] == null
+          ? null
+          : Zvanje.fromJson(json['zvanje'] as Map<String, dynamic>),
       id: json['id'] as String?,
       userName: json['userName'] as String?,
       email: json['email'] as String?,
-      phone: json['phone'] as String?,
+      phoneNumber: json['phoneNumber'] as String?,
     );
 
 Map<String, dynamic> _$MedicinskoOsobljeToJson(MedicinskoOsoblje instance) =>
@@ -29,9 +33,9 @@ Map<String, dynamic> _$MedicinskoOsobljeToJson(MedicinskoOsoblje instance) =>
       'dtZaposlenja': instance.dtZaposlenja,
       'dtPrekidRadnogOdnosa': instance.dtPrekidRadnogOdnosa,
       'spol': instance.spol,
-      'zvanjeID': instance.zvanjeID,
+      'zvanje': instance.zvanje,
       'id': instance.id,
       'userName': instance.userName,
       'email': instance.email,
-      'phone': instance.phone,
+      'phoneNumber': instance.phoneNumber,
     };

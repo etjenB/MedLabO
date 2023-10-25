@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedLabO.Services.Database
 {
@@ -22,9 +23,11 @@ namespace MedLabO.Services.Database
 
         public string? Adresa { get; set; }
 
-        public string? Spol { get; set; }
-
         //Lista svih termina pacijenta
         public virtual ICollection<Termin> Termini { get; set; } = new List<Termin>();
+
+        [ForeignKey("Spol")]
+        public int? SpolID { get; set; }
+        public Spol? Spol { get; set; } = null!;
     }
 }

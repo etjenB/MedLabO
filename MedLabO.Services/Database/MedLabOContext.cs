@@ -15,6 +15,8 @@ namespace MedLabO.Services.Database
         public virtual DbSet<MedicinskoOsoblje> MedicinskoOsoblje { get; set; }
         public virtual DbSet<Pacijent> Pacijenti { get; set; }
 
+        public virtual DbSet<Spol> Spolovi { get; set; }
+
         public virtual DbSet<Novost> Novosti { get; set; }
         public virtual DbSet<Obavijest> Obavijesti { get; set; }
         public virtual DbSet<Zvanje> Zvanja { get; set; }

@@ -8,21 +8,21 @@ class MedicinskoOsobljeUpdateRequest {
   String? ime;
   String? prezime;
   bool? isActive;
-  String? spol;
-  String? zvanjeID;
+  int? spolID;
+  int? zvanjeID;
   String? userName;
   String? email;
-  String? phone;
+  String? phoneNumber;
 
   MedicinskoOsobljeUpdateRequest(
       {this.ime,
       this.prezime,
       this.isActive,
-      this.spol,
+      this.spolID,
       this.zvanjeID,
       this.userName,
       this.email,
-      this.phone});
+      this.phoneNumber});
 
   factory MedicinskoOsobljeUpdateRequest.fromJson(Map<String, dynamic> json) =>
       _$MedicinskoOsobljeUpdateRequestFromJson(json);

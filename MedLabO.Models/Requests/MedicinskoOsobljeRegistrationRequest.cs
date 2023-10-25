@@ -21,10 +21,10 @@ namespace MedLabO.Models.Requests
         public bool IsActive { get; set; }
 
         [Required]
-        public string Spol { get; set; }
+        public int SpolID { get; set; }
 
         [Required]
-        public string ZvanjeID { get; set; }
+        public int ZvanjeID { get; set; }
 
         [Required]
         [MaxLength(30)]

@@ -5,7 +5,7 @@ namespace MedLabO.Services.Database
     public class Zvanje
     {
         [Key]
-        public Guid ZvanjeID { get; set; } = Guid.NewGuid();
+        public int ZvanjeID { get; set; }
 
         [Required]
         public string Naziv { get; set; } = null!;

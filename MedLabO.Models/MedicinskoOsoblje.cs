@@ -15,8 +15,9 @@ namespace MedLabO.Models
         public bool IsActive { get; set; }
         public DateTime DTZaposlenja { get; set; }
         public DateTime? DTPrekidRadnogOdnosa { get; set; }
-        public string Spol { get; set; }
-        public string? ZvanjeID { get; set; }
+        public int? SpolID { get; set; }
+        public virtual Spol? Spol { get; set; }
+        public int? ZvanjeID { get; set; }
         public virtual Zvanje? Zvanje { get; set; }
     }
 }

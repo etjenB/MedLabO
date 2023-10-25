@@ -27,17 +27,19 @@ namespace MedLabO.Services.Database
         //Datum prekida radnog odnosa
         public DateTime? DTPrekidRadnogOdnosa { get; set; }
 
-        [Required]
-        public string Spol { get; set; } = null!;
-
         //Lista odobrenih termina
         public virtual ICollection<Termin> OdobreniTermini { get; set; } = new List<Termin>();
+
+
+        [ForeignKey("Spol")]
+        public int? SpolID { get; set; }
+        public Spol? Spol { get; set; } = null!;
 
         //Jedan zaposlenik moze imati samo jedno zvanje tj. ulogu koju obavlja u laboratoriju
         //Npr. Doktor, LaboratorijskiTehnicar itd.
         //Dok potencijalno postoji vise zaposlenika sa istim zvanjem
         [ForeignKey("Zvanje")]
-        public Guid? ZvanjeID { get; set; }
+        public int? ZvanjeID { get; set; }
 
         public virtual Zvanje? Zvanje { get; set; } = null!;
     }

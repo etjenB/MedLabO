@@ -649,10 +649,10 @@ class _TestoviScreenState extends State<TestoviScreen>
         'Dodavanje novog testa',
         style: heading1,
       ),
-      content: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          width: 800,
+      content: Container(
+        width: 800,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
           child: FormBuilder(
               key: _formKey,
               child: Column(
