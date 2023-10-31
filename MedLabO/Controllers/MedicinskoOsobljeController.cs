@@ -2,6 +2,7 @@
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MedLabO.Controllers
 {
@@ -9,8 +10,16 @@ namespace MedLabO.Controllers
     [Route("[controller]")]
     public class MedicinskoOsobljeController : BaseCRUDController<Models.MedicinskoOsoblje, MedicinskoOsobljeSearchObject, MedicinskoOsobljeRegistrationRequest, MedicinskoOsobljeUpdateRequest>
     {
+        private IMedicinskoOsobljeService _medicinskoOsobljeService;
         public MedicinskoOsobljeController(ILogger<BaseController<Models.MedicinskoOsoblje, MedicinskoOsobljeSearchObject>> logger, IMedicinskoOsobljeService service) : base(logger, service)
         {
+            _medicinskoOsobljeService = service;
+        }
+
+        [HttpPut("ChangePassword")]
+        public async Task ChangePassword(ChangePasswordRequest request)
+        {
+            await _medicinskoOsobljeService.ChangePassword(request);
         }
     }
 }

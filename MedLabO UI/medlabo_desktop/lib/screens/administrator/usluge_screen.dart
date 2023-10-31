@@ -70,9 +70,11 @@ class _UslugeScreenState extends State<UslugeScreen>
         (filter) => _uslugeProvider.get(filter: filter),
         'Naziv',
         {'IncludeTestovi': true});
-    setState(() {
-      usluge = result;
-    });
+    if (mounted) {
+      setState(() {
+        usluge = result;
+      });
+    }
   }
 
   @override

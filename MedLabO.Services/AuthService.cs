@@ -35,6 +35,16 @@ namespace MedLabO.Services
                 throw new UserException("Invalid login attempt.");
             }
 
+            if (user is Database.MedicinskoOsoblje && (user as Database.MedicinskoOsoblje)?.IsActive == false)
+            {
+                throw new UserException("User's account is not active.");
+            }
+
+            if (user is Database.ApplicationUser && (user as Database.ApplicationUser)?.isDeleted == true)
+            {
+                throw new UserException("User's account is deleted.");
+            }
+
             var role = await DetermineUserRole(user);
 
             if (string.IsNullOrEmpty(role))

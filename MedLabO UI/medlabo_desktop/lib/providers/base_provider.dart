@@ -8,18 +8,18 @@ import 'package:medlabo_desktop/models/search_result.dart';
 import '../utils/general/toast_utils.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
-  static String? _baseUrl;
-  String _endpoint = "";
+  static String? baseUrl;
+  String endpoint = "";
   final storage = const FlutterSecureStorage();
 
-  BaseProvider(String endpoint) {
-    _endpoint = endpoint;
-    _baseUrl = const String.fromEnvironment("baseUrl",
+  BaseProvider(String endp) {
+    endpoint = endp;
+    baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "https://localhost:7213/");
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {
-    var url = '$_baseUrl$_endpoint';
+    var url = '$baseUrl$endpoint';
 
     if (filter != null) {
       url += '?${getQueryString(filter)}';
@@ -50,7 +50,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   }
 
   Future<T> getById(String id) async {
-    var url = '$_baseUrl$_endpoint/$id';
+    var url = '$baseUrl$endpoint/$id';
 
     var uri = Uri.parse(url);
 
@@ -69,7 +69,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   }
 
   Future<T> update(String id, [dynamic request]) async {
-    var url = '$_baseUrl$_endpoint/$id';
+    var url = '$baseUrl$endpoint/$id';
 
     var uri = Uri.parse(url);
 
@@ -88,7 +88,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   }
 
   Future<T> insert(dynamic request) async {
-    var url = '$_baseUrl$_endpoint';
+    var url = '$baseUrl$endpoint';
     var uri = Uri.parse(url);
     var headers = await createHeaders();
     var jsonRequest = jsonEncode(request);
@@ -105,7 +105,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   }
 
   Future delete(String id) async {
-    var url = '$_baseUrl$_endpoint/$id';
+    var url = '$baseUrl$endpoint/$id';
     var uri = Uri.parse(url);
     var headers = await createHeaders();
     var response = await http.delete(uri, headers: headers);

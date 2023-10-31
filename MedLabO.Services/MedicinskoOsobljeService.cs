@@ -18,10 +18,27 @@ namespace MedLabO.Services
     public class MedicinskoOsobljeService : CRUDService<Models.MedicinskoOsoblje, Database.MedicinskoOsoblje, MedicinskoOsobljeSearchObject, MedicinskoOsobljeRegistrationRequest, MedicinskoOsobljeUpdateRequest>, IMedicinskoOsobljeService
     {
         private UserManager<Database.ApplicationUser> _userManager;
+        private MedLabOContext _dbContext;
 
         public MedicinskoOsobljeService(MedLabOContext db, IMapper mapper, UserManager<Database.ApplicationUser> userManager) : base(db, mapper)
         {
             _userManager = userManager;
+            _dbContext = db;
+        }
+
+        public async Task ChangePassword(ChangePasswordRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (user == null)
+            {
+                throw new EntityNotFoundException("Korisnik nije pronađen.");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                throw new UserException("Lozinka nije tačna.");
+            }
         }
 
         public override async Task BeforeInsert(MedicinskoOsoblje entity, MedicinskoOsobljeRegistrationRequest insert)
@@ -74,6 +91,11 @@ namespace MedLabO.Services
 
         public override IQueryable<Database.MedicinskoOsoblje> AddFilter(IQueryable<Database.MedicinskoOsoblje> query, MedicinskoOsobljeSearchObject? search = null)
         {
+            if (search?.IncludeSoftDeleted==false)
+            {
+                query = query.Where(t => !t.isDeleted);
+            }
+
             if (!string.IsNullOrWhiteSpace(search?.ImePrezime))
             {
                 query = query.Where(t => t.Ime.StartsWith(search.ImePrezime) || t.Prezime.StartsWith(search.ImePrezime));

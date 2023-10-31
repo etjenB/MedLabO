@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:medlabo_desktop/models/common/change_password_request.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/uposlenik/medicinsko_osoblje.dart';
 import 'package:medlabo_desktop/models/uposlenik/medicinsko_osoblje_registration_request.dart';
@@ -49,7 +50,8 @@ class _UposleniciScreenState extends State<UposleniciScreen>
       'Page': 0,
       'PageSize': itemsPerPage,
       'IncludeSpol': true,
-      'IncludeZvanje': true
+      'IncludeZvanje': true,
+      'IncludeSoftDeleted': false
     });
     if (mounted) {
       setState(() {
@@ -63,11 +65,16 @@ class _UposleniciScreenState extends State<UposleniciScreen>
     var result = await fetchData(
         page,
         (filter) => _medicinskoOsobljeProvider.get(filter: filter),
-        'ImePrezime',
-        {'IncludeSpol': true, 'IncludeZvanje': true});
-    setState(() {
-      medicinskoOsoblje = result;
+        'ImePrezime', {
+      'IncludeSpol': true,
+      'IncludeZvanje': true,
+      'IncludeSoftDeleted': false
     });
+    if (mounted) {
+      setState(() {
+        medicinskoOsoblje = result;
+      });
+    }
   }
 
   @override
@@ -303,7 +310,8 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                       LengthLimitingTextInputFormatter(30),
                     ],
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(),
+                      FormBuilderValidators.required(
+                          errorText: "Korisničko ime je obavezno."),
                     ]),
                   ),
                   FormBuilderTextField(
@@ -314,8 +322,10 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                       LengthLimitingTextInputFormatter(60),
                     ],
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.email(),
-                      FormBuilderValidators.required(),
+                      FormBuilderValidators.email(
+                          errorText: "Unesite pravilan email."),
+                      FormBuilderValidators.required(
+                          errorText: "E-mail je obavezan."),
                     ]),
                   ),
                   FormBuilderTextField(
@@ -327,7 +337,8 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                         FilteringTextInputFormatter.allow(RegExp(r'^\d*$')),
                       ],
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
+                        FormBuilderValidators.required(
+                            errorText: "Telefon je obavezan."),
                       ])),
                   FormBuilderTextField(
                     decoration: const InputDecoration(labelText: 'Lozinka'),
@@ -339,9 +350,14 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                       FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
                     ],
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(),
-                      FormBuilderValidators.minLength(8),
-                      FormBuilderValidators.maxLength(30),
+                      FormBuilderValidators.required(
+                          errorText: "Lozinka je obavezna."),
+                      FormBuilderValidators.minLength(8,
+                          errorText:
+                              "Lozinka mora imati minimalno 8 karaktera."),
+                      FormBuilderValidators.maxLength(30,
+                          errorText:
+                              "Lozinka može imati maksimalno 30 karaktera."),
                       (val) {
                         if (!RegExp(r'(?=.*[A-Z])').hasMatch(val ?? '')) {
                           return 'Mora sadržavati najmanje jedno veliko slovo';
@@ -714,8 +730,17 @@ class _UposleniciScreenState extends State<UposleniciScreen>
               },
             );
             break;
+          case 'changePassword':
+            // ignore: use_build_context_synchronously
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return _buildDialogForUposlenikChangePassword(medOso, context);
+              },
+            );
           case 'delete':
-            //await _buildLogicForMedicinskoOsobljeDelete(context, medOso);
+            await _buildLogicForUposlenikDelete(context, medOso);
             break;
           default:
             break;
@@ -727,6 +752,13 @@ class _UposleniciScreenState extends State<UposleniciScreen>
           child: Tooltip(
             message: 'Izmjena podataka',
             child: Icon(Icons.mode_edit_outline_outlined),
+          ),
+        ),
+        const PopupMenuItem(
+          value: 'changePassword',
+          child: Tooltip(
+            message: 'Promjena lozinke',
+            child: Icon(Icons.password_outlined),
           ),
         ),
         const PopupMenuItem(
@@ -845,7 +877,8 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                       LengthLimitingTextInputFormatter(30),
                     ],
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(),
+                      FormBuilderValidators.required(
+                          errorText: "Korisničko ime je obavezno."),
                     ]),
                   ),
                   FormBuilderTextField(
@@ -857,8 +890,10 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                       LengthLimitingTextInputFormatter(60),
                     ],
                     validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.email(),
-                      FormBuilderValidators.required(),
+                      FormBuilderValidators.email(
+                          errorText: "Unesite ispravan email."),
+                      FormBuilderValidators.required(
+                          errorText: "E-mail je obavezan."),
                     ]),
                   ),
                   FormBuilderTextField(
@@ -871,7 +906,8 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                         FilteringTextInputFormatter.allow(RegExp(r'^\d*$')),
                       ],
                       validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
+                        FormBuilderValidators.required(
+                            errorText: "Telefon je obavezan."),
                       ])),
                 ],
               )),
@@ -946,6 +982,156 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                   },
                   child: const Text(
                     'Spasi izmjene',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  _buildLogicForUposlenikDelete(
+      BuildContext context, MedicinskoOsoblje medOso) async {
+    if (!await showConfirmationDialog(context, 'Potvrda',
+        'Da li ste sigurni da želite obrisati ovog uposlenika?')) {
+      return;
+    }
+    await _medicinskoOsobljeProvider.delete(medOso.id!);
+    makeSuccessToast('Uspješno obrisan uposlenik.');
+    fetchPage(currentPage);
+  }
+
+  Widget _buildDialogForUposlenikChangePassword(
+      MedicinskoOsoblje medOso, BuildContext context) {
+    return AlertDialog(
+      title: const Text(
+        'Promjena lozinke uposlenika',
+        style: heading1,
+      ),
+      scrollable: true,
+      content: Container(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: FormBuilder(
+              key: _formKey,
+              child: Column(children: [
+                FormBuilderTextField(
+                  decoration: const InputDecoration(labelText: 'Stara lozinka'),
+                  name: 'oldPassword',
+                  maxLength: 30,
+                  obscureText: false,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(30),
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                  ],
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(
+                        errorText: "Lozinka je obavezna."),
+                    FormBuilderValidators.maxLength(30,
+                        errorText:
+                            "Lozinka može imati maksimalno 30 karaktera."),
+                  ]),
+                ),
+                FormBuilderTextField(
+                  decoration: const InputDecoration(labelText: 'Nova Lozinka'),
+                  name: 'newPassword',
+                  maxLength: 30,
+                  obscureText: false,
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(30),
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9]')),
+                  ],
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(
+                        errorText: "Lozinka je obavezna."),
+                    FormBuilderValidators.minLength(8,
+                        errorText: "Lozinka mora imati minimalno 8 karaktera."),
+                    FormBuilderValidators.maxLength(30,
+                        errorText:
+                            "Lozinka može imati maksimalno 30 karaktera."),
+                    (val) {
+                      if (!RegExp(r'(?=.*[A-Z])').hasMatch(val ?? '')) {
+                        return 'Mora sadržavati najmanje jedno veliko slovo';
+                      }
+                      return null;
+                    },
+                    (val) {
+                      if (!RegExp(r'(?=.*[a-z])').hasMatch(val ?? '')) {
+                        return 'Mora sadržavati najmanje jedno malo slovo';
+                      }
+                      return null;
+                    },
+                    (val) {
+                      if (!RegExp(r'(?=.*[0-9])').hasMatch(val ?? '')) {
+                        return 'Mora sadržavati najmanje jedan broj';
+                      }
+                      return null;
+                    },
+                  ]),
+                ),
+              ])),
+        ),
+      ),
+      actions: [
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Zatvori',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
+                  onPressed: () async {
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
+                    bool shouldProceed = await showConfirmationDialog(
+                        context,
+                        'Potvrda',
+                        'Da li ste sigurni da želite promjeniti lozinku uposlenika?');
+                    if (!shouldProceed) return;
+
+                    ChangePasswordRequest changePasswordRequest =
+                        ChangePasswordRequest(
+                            userId: medOso.id,
+                            oldPassword:
+                                _formKey.currentState?.value['oldPassword'],
+                            newPassword:
+                                _formKey.currentState?.value['newPassword']);
+
+                    await _medicinskoOsobljeProvider
+                        .changePassword(changePasswordRequest);
+
+                    makeSuccessToast("Uspješno promjenjena lozinka.");
+
+                    fetchPage(currentPage);
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Spasi promjenu',
                     style: TextStyle(color: primaryWhiteTextColor),
                   ),
                 ),

@@ -63,7 +63,8 @@ namespace MedLabO.Services
         {
             var entity = await _db.Set<TDb>().FindAsync(id);
             if (entity is null) throw new EntityNotFoundException();
-            _db.Set<TDb>().Remove(entity);
+            if (entity is Database.ApplicationUser) (entity as Database.ApplicationUser).isDeleted = true;
+            else _db.Set<TDb>().Remove(entity);
             await _db.SaveChangesAsync();
         }
     }

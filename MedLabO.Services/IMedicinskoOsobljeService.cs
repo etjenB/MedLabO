@@ -10,5 +10,6 @@ namespace MedLabO.Services
 {
     public interface IMedicinskoOsobljeService : ICRUDService<Models.MedicinskoOsoblje, MedicinskoOsobljeSearchObject, MedicinskoOsobljeRegistrationRequest, MedicinskoOsobljeUpdateRequest>
     {
+        Task ChangePassword(ChangePasswordRequest request);
     }
 }

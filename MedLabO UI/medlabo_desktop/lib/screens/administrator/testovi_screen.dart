@@ -69,9 +69,11 @@ class _TestoviScreenState extends State<TestoviScreen>
   void fetchPage(int page) async {
     var result = await fetchData(
         page, (filter) => _testoviProvider.get(filter: filter), 'Naziv');
-    setState(() {
-      testovi = result;
-    });
+    if (mounted) {
+      setState(() {
+        testovi = result;
+      });
+    }
   }
 
   @override
