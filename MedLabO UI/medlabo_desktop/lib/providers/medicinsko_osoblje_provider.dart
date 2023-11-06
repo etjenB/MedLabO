@@ -30,4 +30,23 @@ class MedicinskoOsobljeProvider extends BaseProvider<MedicinskoOsoblje> {
 
     throw Exception("Failed update request");
   }
+
+  Future<MedicinskoOsoblje> getByIdWithProperties(String id) async {
+    var url = '${BaseProvider.baseUrl}$endpoint/GetByIdWithProperties/$id';
+
+    var uri = Uri.parse(url);
+
+    var headers = await createHeaders();
+
+    var response = await http.get(uri, headers: headers);
+
+    if (isValidResponse(response)['isValid']) {
+      var data = jsonDecode(response.body);
+      return fromJson(data);
+    }
+
+    makeErrorToast(isValidResponse(response)['message'] ?? '');
+
+    throw Exception("Failed get request");
+  }
 }

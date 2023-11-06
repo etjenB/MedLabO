@@ -21,5 +21,11 @@ namespace MedLabO.Controllers
         {
             await _medicinskoOsobljeService.ChangePassword(request);
         }
+
+        [HttpGet("GetByIdWithProperties/{id}")]
+        public async Task<IActionResult> GetByIdWithProperties(Guid id)
+        {
+            return Ok(await _medicinskoOsobljeService.GetByIdWithProperties(id));
+        }
     }
 }

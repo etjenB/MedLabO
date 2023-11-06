@@ -10,8 +10,16 @@ namespace MedLabO.Controllers
     [Route("[controller]")]
     public class AdministratorController : BaseCRUDController<Models.Administrator, AdministratorSearchObject, AdministratorInsertRequest, AdministratorUpdateRequest>
     {
+        private readonly IAdministratorService _administratorService;
         public AdministratorController(ILogger<BaseController<Administrator, AdministratorSearchObject>> logger, IAdministratorService service) : base(logger, service)
         {
+            _administratorService = service;
+        }
+
+        [HttpPut("ChangePassword")]
+        public async Task ChangePassword(ChangePasswordRequest request)
+        {
+            await _administratorService.ChangePassword(request);
         }
     }
 }

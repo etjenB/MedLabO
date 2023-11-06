@@ -1,6 +1,6 @@
 ﻿namespace MedLabO.Models
 {
-    public class Administrator
+    public class Administrator : ApplicationUser
     {
         public string Id { get; set; }
         public string? Ime { get; set; }

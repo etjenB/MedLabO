@@ -14,6 +14,10 @@ class AuthUtil {
     return AuthUtil._(token, decodedToken);
   }
 
+  String getUserId() {
+    return decodedToken['name'];
+  }
+
   bool isAdministrator() {
     return decodedToken['role'] == 'Administrator';
   }

@@ -7,12 +7,13 @@ class ChangePasswordRequest {
   String? userId;
   String? oldPassword;
   String? newPassword;
+  String? confirmNewPassword;
 
-  ChangePasswordRequest({
-    this.userId,
-    this.oldPassword,
-    this.newPassword,
-  });
+  ChangePasswordRequest(
+      {this.userId,
+      this.oldPassword,
+      this.newPassword,
+      this.confirmNewPassword});
 
   factory ChangePasswordRequest.fromJson(Map<String, dynamic> json) =>
       _$ChangePasswordRequestFromJson(json);

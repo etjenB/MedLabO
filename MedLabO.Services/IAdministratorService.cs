@@ -5,5 +5,6 @@ namespace MedLabO.Services
 {
     public interface IAdministratorService : ICRUDService<Models.Administrator, AdministratorSearchObject, AdministratorInsertRequest, AdministratorUpdateRequest>
     {
+        Task ChangePassword(ChangePasswordRequest request);
     }
 }

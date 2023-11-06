@@ -41,6 +41,15 @@ namespace MedLabO.Services
             }
         }
 
+        public virtual async Task<Models.MedicinskoOsoblje> GetByIdWithProperties(Guid id)
+        {
+            var entity = await _db.Set<Database.MedicinskoOsoblje>().FindAsync(id);
+            if (entity is null) throw new EntityNotFoundException();
+            entity.Zvanje = await _db.Zvanja.FirstOrDefaultAsync(z => entity.ZvanjeID == z.ZvanjeID);
+            entity.Spol = await _db.Spolovi.FirstOrDefaultAsync(s => entity.SpolID == s.SpolID);
+            return _mapper.Map<Models.MedicinskoOsoblje>(entity);
+        }
+
         public override async Task BeforeInsert(MedicinskoOsoblje entity, MedicinskoOsobljeRegistrationRequest insert)
         {
             var existingUser = await _userManager.FindByNameAsync(entity.UserName);

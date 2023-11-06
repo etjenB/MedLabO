@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medlabo_desktop/providers/administratori_provider.dart';
 import 'package:medlabo_desktop/providers/login_provider.dart';
 import 'package:medlabo_desktop/providers/medicinsko_osoblje_provider.dart';
 import 'package:medlabo_desktop/providers/novosti_provider.dart';
@@ -28,6 +29,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => ObavijestiProvider()),
       ChangeNotifierProvider(create: (_) => UslugeProvider()),
       ChangeNotifierProvider(create: (_) => MedicinskoOsobljeProvider()),
+      ChangeNotifierProvider(create: (_) => AdministratoriProvider()),
     ],
     child: const MyApp(),
   ));

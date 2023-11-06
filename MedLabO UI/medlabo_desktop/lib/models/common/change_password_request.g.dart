@@ -12,6 +12,7 @@ ChangePasswordRequest _$ChangePasswordRequestFromJson(
       userId: json['userId'] as String?,
       oldPassword: json['oldPassword'] as String?,
       newPassword: json['newPassword'] as String?,
+      confirmNewPassword: json['confirmNewPassword'] as String?,
     );
 
 Map<String, dynamic> _$ChangePasswordRequestToJson(
@@ -20,4 +21,5 @@ Map<String, dynamic> _$ChangePasswordRequestToJson(
       'userId': instance.userId,
       'oldPassword': instance.oldPassword,
       'newPassword': instance.newPassword,
+      'confirmNewPassword': instance.confirmNewPassword,
     };

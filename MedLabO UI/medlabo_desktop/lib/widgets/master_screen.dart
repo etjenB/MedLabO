@@ -36,7 +36,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         const PacijentiScreen(),
         const UposleniciScreen(),
         const IzvjestajiScreen(),
-        const ProfilScreen(),
+        const AdministratorProfilScreen(),
       ];
       items = [
         const SideNavigationBarItem(
@@ -59,7 +59,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       views = [
         const PacijentiScreen(),
         const IzvjestajiScreen(),
-        const ProfilScreen(),
+        const MedicinskoOsobljeProfilScreen(),
       ];
       items = [
         const SideNavigationBarItem(
@@ -71,7 +71,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       ];
     } else {
       views = [
-        const ProfilScreen(),
+        //const ProfilScreen(),
       ];
       items = [
         const SideNavigationBarItem(
