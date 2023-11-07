@@ -6,6 +6,7 @@ import 'package:medlabo_desktop/screens/administrator/usluge_screen.dart';
 import 'package:medlabo_desktop/screens/common/izvjestaji_screen.dart';
 import 'package:medlabo_desktop/screens/common/pacijenti_screen.dart';
 import 'package:medlabo_desktop/screens/common/profil_screen.dart';
+import 'package:medlabo_desktop/screens/medicinsko_osoblje/obavijesti_screen.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/constants/strings.dart';
 import 'package:medlabo_desktop/utils/general/auth_util.dart';
@@ -57,11 +58,14 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       ];
     } else if (widget.user.isMedicinskoOsoblje()) {
       views = [
+        const ObavijestiScreen(),
         const PacijentiScreen(),
         const IzvjestajiScreen(),
         const MedicinskoOsobljeProfilScreen(),
       ];
       items = [
+        const SideNavigationBarItem(
+            icon: Icons.dynamic_feed_rounded, label: 'Obavijesti'),
         const SideNavigationBarItem(
             icon: Icons.people_alt_outlined, label: 'Pacijenti'),
         const SideNavigationBarItem(
