@@ -165,6 +165,8 @@ class _LoginPageState extends State<LoginPage> {
                               final user = await AuthUtil.create();
                               setState(() {
                                 loginFailed = false;
+                                _usernameController.text = "";
+                                _passwordController.text = "";
                               });
                               // ignore: use_build_context_synchronously
                               Navigator.of(context).push(MaterialPageRoute(
