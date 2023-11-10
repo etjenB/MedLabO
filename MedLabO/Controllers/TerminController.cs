@@ -1,4 +1,5 @@
 ﻿using MedLabO.Models;
+using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -6,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace MedLabO.Controllers
 {
     [ApiController]
-    public class TerminController : BaseController<Models.Termin, TerminSearchObject>
+    public class TerminController : BaseCRUDController<Models.Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest>
     {
-        public TerminController(ILogger<BaseController<Termin, TerminSearchObject>> logger, IService<Termin, TerminSearchObject> service) : base(logger, service)
+        public TerminController(ILogger<BaseController<Termin, TerminSearchObject>> logger, ITerminService service) : base(logger, service)
         {
         }
     }

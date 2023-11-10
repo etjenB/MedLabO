@@ -6,7 +6,9 @@ import 'package:medlabo_desktop/screens/administrator/usluge_screen.dart';
 import 'package:medlabo_desktop/screens/common/izvjestaji_screen.dart';
 import 'package:medlabo_desktop/screens/common/pacijenti_screen.dart';
 import 'package:medlabo_desktop/screens/common/profil_screen.dart';
+import 'package:medlabo_desktop/screens/medicinsko_osoblje/arhiva_screen.dart';
 import 'package:medlabo_desktop/screens/medicinsko_osoblje/obavijesti_screen.dart';
+import 'package:medlabo_desktop/screens/medicinsko_osoblje/termini_screen.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/constants/strings.dart';
 import 'package:medlabo_desktop/utils/general/auth_util.dart';
@@ -59,6 +61,8 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
     } else if (widget.user.isMedicinskoOsoblje()) {
       views = [
         const ObavijestiScreen(),
+        const TerminiScreen(),
+        const ArhivaScreen(),
         const PacijentiScreen(),
         const IzvjestajiScreen(),
         const MedicinskoOsobljeProfilScreen(),
@@ -66,6 +70,10 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       items = [
         const SideNavigationBarItem(
             icon: Icons.dynamic_feed_rounded, label: 'Obavijesti'),
+        const SideNavigationBarItem(
+            icon: Icons.schedule_outlined, label: 'Termini'),
+        const SideNavigationBarItem(
+            icon: Icons.archive_outlined, label: 'Arhiva'),
         const SideNavigationBarItem(
             icon: Icons.people_alt_outlined, label: 'Pacijenti'),
         const SideNavigationBarItem(

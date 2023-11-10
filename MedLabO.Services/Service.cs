@@ -64,6 +64,7 @@ namespace MedLabO.Services
             var entity = await _db.Set<TDb>().FindAsync(id);
             if (entity is null) throw new EntityNotFoundException();
             if (entity is Database.ApplicationUser) (entity as Database.ApplicationUser).isDeleted = true;
+            else if (entity is Database.SoftDeleteEntity) (entity as Database.SoftDeleteEntity).isDeleted = true;
             else _db.Set<TDb>().Remove(entity);
             await _db.SaveChangesAsync();
         }

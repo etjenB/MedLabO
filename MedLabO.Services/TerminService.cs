@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
-    public class TerminService : Service<Models.Termin, Database.Termin, TerminSearchObject>, ITerminService
+    public class TerminService : CRUDService<Models.Termin, Database.Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest>, ITerminService
     {
         public TerminService(MedLabOContext db, IMapper mapper) : base(db, mapper)
         {
@@ -33,9 +34,24 @@ namespace MedLabO.Services
         public override IQueryable<Termin> AddInclude(IQueryable<Termin> query, TerminSearchObject? search = null)
         {
 
-            if (search?.IncludeRezultat == true)
+            if (search?.IncludeTerminTestovi == true)
             {
-                query = query.Include("TestTerminRezultati.Rezultat");
+                query = query.Include("TerminTestovi");
+            }
+
+            if (search?.IncludeTerminUsluge == true)
+            {
+                query = query.Include("TerminUsluge");
+            }
+
+            if (search?.IncludeTerminTestoviRezultati == true)
+            {
+                query = query.Include("TerminTestovi.Rezultat");
+            }
+
+            if (search?.IncludeTerminTestoviRezultati == true)
+            {
+                query = query.Include("TerminUsluge.UslugaTestovi");
             }
 
             return base.AddInclude(query, search);

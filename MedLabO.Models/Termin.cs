@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Models
 {
-    public class Termin
+    public class Termin : SoftDeleteEntity
     {
         public Guid TerminID { get; set; }
         public DateTime DTTermina { get; set; }
@@ -18,7 +18,8 @@ namespace MedLabO.Models
         public bool Obavljen { get; set; } = false;
         public bool RezultatTermina { get; set; } = false;
         public byte[]? RezultatTerminaPDF { get; set; }
-        public virtual ICollection<TerminTest> TestTerminRezultati { get; set; } = new List<TerminTest>();
+        public ICollection<Usluga> TerminUsluge { get; set; } = new List<Usluga>();
+        public ICollection<TerminTest> TerminTestovi { get; set; } = new List<TerminTest>();
         //public string? PacijentID { get; set; }
         //public virtual Pacijent? Pacijent { get; set; }
         //public string? MedicinskoOsobljeID { get; set; }

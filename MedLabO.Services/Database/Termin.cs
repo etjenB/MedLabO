@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedLabO.Services.Database
 {
-    public class Termin
+    public class Termin : SoftDeleteEntity
     {
         [Key]
         public Guid TerminID { get; set; } = Guid.NewGuid();
@@ -29,7 +29,7 @@ namespace MedLabO.Services.Database
         public byte[]? RezultatTerminaPDF { get; set; }
 
         public virtual ICollection<Usluga> TerminUsluge { get; set; } = new List<Usluga>();
-        public virtual ICollection<TerminTest> TestTerminRezultati { get; set; } = new List<TerminTest>();
+        public virtual ICollection<TerminTest> TerminTestovi { get; set; } = new List<TerminTest>();
 
         //[ForeignKey("Pacijent")]
         //public string PacijentID { get; set; }

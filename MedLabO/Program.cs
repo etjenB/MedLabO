@@ -61,6 +61,7 @@ builder.Services.AddTransient<IMedicinskoOsobljeService, MedicinskoOsobljeServic
 builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<ITestParametarService, TestParametarService>();
 builder.Services.AddTransient<IUslugaService, UslugaService>();
+builder.Services.AddTransient<ITerminService, TerminService>();
 builder.Services.AddTransient<INovostService, NovostService>();
 builder.Services.AddTransient<IObavijestService, ObavijestService>();
 

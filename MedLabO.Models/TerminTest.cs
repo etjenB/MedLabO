@@ -12,6 +12,6 @@ namespace MedLabO.Models
         public Guid? TestID { get; set; }
         public Guid? TerminID { get; set; }
         public Guid? RezultatID { get; set; }
-        public virtual Rezultat? Rezultat { get; set; } = null!;
+        public Rezultat? Rezultat { get; set; } = null!;
     }
 }

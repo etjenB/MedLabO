@@ -20,8 +20,8 @@ namespace MedLabO.Models
         public DateTime DTKreiranja { get; set; }
         public DateTime? DTZadnjeModifikacije { get; set; }
         public byte[]? Slika { get; set; }
-        public virtual ICollection<Test> UslugaTestovi { get; set; } = new List<Test>();
+        public ICollection<Test> UslugaTestovi { get; set; } = new List<Test>();
         public string? AdministratorID { get; set; }
-        public virtual Administrator? Administrator { get; set; }
+        public Administrator? Administrator { get; set; }
     }
 }
