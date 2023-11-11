@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MedLabO.Models;
 using MedLabO.Models.Exceptions;
 using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
@@ -11,7 +10,7 @@ using System.Security.Claims;
 
 namespace MedLabO.Services
 {
-    public class TestService : CRUDService<Models.Test, Database.Test, TestSearchObject, TestInsertRequest, TestUpdateRequest>, ITestService
+    public class TestService : CRUDService<Models.Test.Test, Database.Test, TestSearchObject, TestInsertRequest, TestUpdateRequest>, ITestService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -20,7 +19,7 @@ namespace MedLabO.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<Models.Test> ChangeName(Guid Id, string newName)
+        public async Task<Models.Test.Test> ChangeName(Guid Id, string newName)
         {
             var test = await _db.FindAsync<Database.Test>(Id);
             if (test == null)
@@ -30,7 +29,7 @@ namespace MedLabO.Services
 
             test.Naziv = newName;
             await _db.SaveChangesAsync();
-            return _mapper.Map<Models.Test>(test);
+            return _mapper.Map<Models.Test.Test>(test);
         }
 
         public override async Task BeforeInsert(Database.Test entity, TestInsertRequest insert)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MedLabO.Models.Test;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -9,9 +10,10 @@ namespace MedLabO.Models
 {
     public class TerminTest
     {
-        public Guid? TestID { get; set; }
         public Guid? TerminID { get; set; }
+        public Guid? TestID { get; set; }
+        public TestWithoutTerminTestovi? Test { get; set; }
         public Guid? RezultatID { get; set; }
-        public Rezultat? Rezultat { get; set; } = null!;
+        public Rezultat? Rezultat { get; set; }
     }
 }

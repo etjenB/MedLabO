@@ -1,4 +1,4 @@
-﻿namespace MedLabO.Models
+﻿namespace MedLabO.Models.Test
 {
     public class Test
     {
@@ -15,7 +15,5 @@
         public string? TestParametarID { get; set; }
         public virtual TestParametar? TestParametar { get; set; }
         public virtual ICollection<TerminTest> TerminTestovi { get; set; } = new List<TerminTest>();
-        //public string? RezultatID { get; set; }
-        //public virtual Rezultat? Rezultat { get; set; }
     }
 }

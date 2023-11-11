@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using MedLabO.Models.Pacijent;
 using MedLabO.Models.Requests;
+using MedLabO.Models.Test;
 
 namespace MedLabO.Services
 {
@@ -13,17 +15,24 @@ namespace MedLabO.Services
             CreateMap<Database.MedicinskoOsoblje, Models.MedicinskoOsoblje>().ReverseMap();
             CreateMap<MedicinskoOsobljeRegistrationRequest, Database.MedicinskoOsoblje>().ReverseMap();
             CreateMap<MedicinskoOsobljeUpdateRequest, Database.MedicinskoOsoblje>().ReverseMap();
+            CreateMap<Database.Pacijent, Pacijent>().ReverseMap();
+            CreateMap<Database.Pacijent, PacijentWithoutTermini>().ReverseMap();
             CreateMap<Database.Spol, Models.Spol>().ReverseMap();
             CreateMap<Database.Zvanje, Models.Zvanje>().ReverseMap();
             CreateMap<TestInsertRequest, Database.Test>().ReverseMap();
             CreateMap<TestUpdateRequest, Database.Test>().ReverseMap();
-            CreateMap<Database.Test, Models.Test>().ReverseMap();
+            CreateMap<Database.Test, Test>().ReverseMap();
+            CreateMap<Database.Test, TestWithoutTerminTestovi>().ReverseMap();
             CreateMap<TestParametarInsertRequest, Database.TestParametar>().ReverseMap();
             CreateMap<TestParametarUpdateRequest, Database.TestParametar>().ReverseMap();
             CreateMap<Database.TestParametar, Models.TestParametar>().ReverseMap();
             CreateMap<Database.Rezultat, Models.Rezultat>().ReverseMap();
             CreateMap<Database.Termin, Models.Termin>().ReverseMap();
+            CreateMap<TerminInsertRequest, Database.Termin>().ReverseMap();
+            CreateMap<TerminUpdateRequest, Database.Termin>().ReverseMap();
             CreateMap<Database.TerminTest, Models.TerminTest>().ReverseMap();
+            CreateMap<Database.Racun, Models.Racun>().ReverseMap();
+            CreateMap<Database.Zakljucak, Models.Zakljucak>().ReverseMap();
             CreateMap<NovostInsertRequest, Database.Novost>().ReverseMap();
             CreateMap<NovostUpdateRequest, Database.Novost>().ReverseMap();
             CreateMap<Database.Novost, Models.Novost>().ReverseMap();

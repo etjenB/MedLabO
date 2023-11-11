@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MedLabO.Models.Pacijent;
 
 namespace MedLabO.Models
 {
@@ -18,18 +19,20 @@ namespace MedLabO.Models
         public bool Obavljen { get; set; } = false;
         public bool RezultatTermina { get; set; } = false;
         public byte[]? RezultatTerminaPDF { get; set; }
+
         public ICollection<Usluga> TerminUsluge { get; set; } = new List<Usluga>();
         public ICollection<TerminTest> TerminTestovi { get; set; } = new List<TerminTest>();
-        //public string? PacijentID { get; set; }
-        //public virtual Pacijent? Pacijent { get; set; }
-        //public string? MedicinskoOsobljeID { get; set; }
 
-        //public virtual MedicinskoOsoblje? MedicinskoOsoblje { get; set; }
-        //public Guid? RacunID { get; set; }
+        public string? PacijentID { get; set; }
+        public PacijentWithoutTermini? Pacijent { get; set; }
 
-        //public virtual Racun? Racun { get; set; }
-        //public Guid? ZakljucakID { get; set; }
+        public string? MedicinskoOsobljeID { get; set; }
+        public MedicinskoOsoblje? MedicinskoOsoblje { get; set; }
 
-        //public virtual Zakljucak? Zakljucak { get; set; }
+        public string? RacunID { get; set; }
+        public Racun? Racun { get; set; }
+
+        public string? ZakljucakID { get; set; }
+        public Zakljucak? Zakljucak { get; set; }
     }
 }
