@@ -8,7 +8,7 @@ import 'package:medlabo_desktop/screens/common/pacijenti_screen.dart';
 import 'package:medlabo_desktop/screens/common/profil_screen.dart';
 import 'package:medlabo_desktop/screens/medicinsko_osoblje/arhiva_screen.dart';
 import 'package:medlabo_desktop/screens/medicinsko_osoblje/obavijesti_screen.dart';
-import 'package:medlabo_desktop/screens/medicinsko_osoblje/termini_screen.dart';
+import 'package:medlabo_desktop/screens/medicinsko_osoblje/termini/termini_screen.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/constants/strings.dart';
 import 'package:medlabo_desktop/utils/general/auth_util.dart';
