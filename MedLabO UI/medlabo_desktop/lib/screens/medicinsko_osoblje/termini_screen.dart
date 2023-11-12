@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/termin/termin.dart';
+import 'package:medlabo_desktop/models/termin/termin_odobravanje_request.dart';
 import 'package:medlabo_desktop/providers/termini_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
+import 'package:medlabo_desktop/utils/general/dialog_utils.dart';
 import 'package:medlabo_desktop/utils/general/pagination_mixin.dart';
+import 'package:medlabo_desktop/utils/general/toast_utils.dart';
 import 'package:medlabo_desktop/utils/general/util.dart';
 import 'package:medlabo_desktop/widgets/pagination_widget.dart';
 import 'package:provider/provider.dart';
@@ -254,7 +259,6 @@ class TabelaZaOdobrenjaWidget extends StatefulWidget {
 
 class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
     with PaginationMixin<Termin> {
-  final _formKey = GlobalKey<FormBuilderState>();
   late TerminiProvider _terminiProvider;
   SearchResult<Termin>? termini;
   TextEditingController _terminSearchController = new TextEditingController();
@@ -280,6 +284,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
     var data = await _terminiProvider.get(filter: {
       'Page': 0,
       'PageSize': itemsPerPage,
+      'NaCekanju': true,
       'IncludeTerminTestovi': true,
       'IncludeTerminUsluge': true,
       'IncludeTerminTestoviTestovi': true,
@@ -299,6 +304,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
   void fetchPage(int page) async {
     var result = await fetchData(
         page, (filter) => _terminiProvider.get(filter: filter), 'FTS', {
+      'NaCekanju': true,
       'IncludeTerminTestovi': true,
       'IncludeTerminUsluge': true,
       'IncludeTerminTestoviTestovi': true,
@@ -463,55 +469,33 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
 
   Widget _buildDialogForTerminZahtjevPreview(
       BuildContext context, Termin termin) {
+    final _formKey = GlobalKey<FormBuilderState>();
     return AlertDialog(
-      title: Text(
-        "Zahtjev za termin: ${termin.pacijent?.ime ?? 'Nema imena'} ${termin.pacijent?.prezime ?? 'Nema prezimena'} - ${formatDateTime(termin.dtTermina!)}",
-        style: heading1,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+              "Zahtjev za termin: ${termin.pacijent?.ime ?? 'Nema imena'} ${termin.pacijent?.prezime ?? 'Nema prezimena'} - ${formatDateTime(termin.dtTermina!)}",
+              style: heading1,
+              overflow: TextOverflow.visible,
+            ),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
       ),
       content: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Container(
-          child: Column(
-            children: [
-              Wrap(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 1, color: Colors.black)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Column(
-                        children: [
-                          const Text(
-                            "Pacijent",
-                            style: heading2,
-                          ),
-                          Text("Ime: ${termin.pacijent?.ime ?? 'Nepoznato'}"),
-                          Text(
-                              "Prezime: ${termin.pacijent?.prezime ?? 'Nepoznato'}"),
-                          Text(
-                              "Korisničko ime: ${termin.pacijent?.userName ?? 'Nepoznato'}"),
-                          Text(
-                              "Email: ${termin.pacijent?.email ?? 'Nepoznato'}"),
-                          Text(
-                              "Telefon: ${termin.pacijent?.phoneNumber ?? 'Nepoznato'}"),
-                          Text(
-                              "Spol: ${termin.pacijent?.spol?.naziv ?? 'Nepoznato'}"),
-                          Text(
-                              "Datum rođenja: ${termin.pacijent?.datumRodjenja == null ? 'Nepoznato' : formatDateTime(termin.pacijent!.datumRodjenja!)}"),
-                          Text(
-                              "Adresa: ${termin.pacijent?.adresa ?? 'Nepoznato'}"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Wrap(children: [
+        child: Column(
+          children: [
+            Wrap(
+              children: [
                 Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -521,19 +505,218 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
                     child: Column(
                       children: [
                         const Text(
-                          "Napomena pacijenta",
+                          "Pacijent",
                           style: heading2,
                         ),
-                        Text(termin.napomena ?? 'Nema'),
+                        Text("Ime: ${termin.pacijent?.ime ?? 'Nepoznato'}"),
+                        Text(
+                            "Prezime: ${termin.pacijent?.prezime ?? 'Nepoznato'}"),
+                        Text(
+                            "Korisničko ime: ${termin.pacijent?.userName ?? 'Nepoznato'}"),
+                        Text("Email: ${termin.pacijent?.email ?? 'Nepoznato'}"),
+                        Text(
+                            "Telefon: ${termin.pacijent?.phoneNumber ?? 'Nepoznato'}"),
+                        Text(
+                            "Spol: ${termin.pacijent?.spol?.naziv ?? 'Nepoznato'}"),
+                        Text(
+                            "Datum rođenja: ${termin.pacijent?.datumRodjenja == null ? 'Nepoznato' : formatDateTime(termin.pacijent!.datumRodjenja!)}"),
+                        Text(
+                            "Adresa: ${termin.pacijent?.adresa ?? 'Nepoznato'}"),
                       ],
                     ),
                   ),
                 ),
-              ]),
-            ],
-          ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Wrap(children: [
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.black)),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Napomena pacijenta",
+                        style: heading2,
+                      ),
+                      Text(termin.napomena ?? 'Nema'),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 5,
+            ),
+            Wrap(children: [
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.black)),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Usluge",
+                        style: heading2,
+                      ),
+                      if (termin.terminUsluge != null &&
+                          termin.terminUsluge!.isNotEmpty)
+                        ...termin.terminUsluge!.map((element) {
+                          return Text(element.naziv ?? 'Nepoznato');
+                        }).toList()
+                      else
+                        const Text('Nema'),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 5,
+            ),
+            Wrap(children: [
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.black)),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Testovi",
+                        style: heading2,
+                      ),
+                      if (termin.terminTestovi != null &&
+                          termin.terminTestovi!.isNotEmpty)
+                        ...termin.terminTestovi!.map((element) {
+                          return Text(element.test?.naziv ?? 'Nepoznato');
+                        }).toList()
+                      else
+                        const Text('Nema'),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 5,
+            ),
+            FormBuilder(
+              key: _formKey,
+              child: FormBuilderTextField(
+                decoration: const InputDecoration(labelText: 'Odgovor'),
+                name: 'odgovor',
+                maxLength: 300,
+                minLines: 1,
+                maxLines: 3,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(300),
+                ],
+                validator: FormBuilderValidators.compose(
+                    [FormBuilderValidators.maxLength(300)]),
+              ),
+            ),
+          ],
         ),
       ),
+      actions: [
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  onPressed: () async {
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
+                    bool shouldProceed = await showConfirmationDialog(
+                        context,
+                        'Potvrda',
+                        'Da li ste sigurni da želite odbiti zahtjev za termin?');
+                    if (!shouldProceed) return;
+
+                    TerminOdobravanjeRequest terminOdobravanjeRequest =
+                        TerminOdobravanjeRequest(
+                      terminID: termin.terminID,
+                      odgovor: _formKey.currentState?.value['odgovor'],
+                      status: false,
+                    );
+
+                    await _terminiProvider
+                        .terminOdobravanje(terminOdobravanjeRequest);
+
+                    makeAlertToast("Zahtjev za termin odbijen.", "warning",
+                        Alignment.center);
+
+                    fetchPage(currentPage);
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Odbij zahtjev',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
+                  onPressed: () async {
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
+                    bool shouldProceed = await showConfirmationDialog(
+                        context,
+                        'Potvrda',
+                        'Da li ste sigurni da želite odobriti termin?');
+                    if (!shouldProceed) return;
+
+                    TerminOdobravanjeRequest terminOdobravanjeRequest =
+                        TerminOdobravanjeRequest(
+                      terminID: termin.terminID,
+                      odgovor: _formKey.currentState?.value['odgovor'],
+                      status: true,
+                    );
+
+                    await _terminiProvider
+                        .terminOdobravanje(terminOdobravanjeRequest);
+
+                    makeSuccessToast("Uspješno odobren termin.");
+
+                    fetchPage(currentPage);
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Odobri termin',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

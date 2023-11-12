@@ -1,4 +1,4 @@
-﻿using MedLabO.Models.Requests;
+﻿using MedLabO.Models.Requests.Termin;
 using MedLabO.Models.SearchObjects;
 using System;
 using System.Collections.Generic;
@@ -10,5 +10,6 @@ namespace MedLabO.Services
 {
     public interface ITerminService : ICRUDService<Models.Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest>
     {
+        Task TerminOdobravanje(TerminOdobravanjeRequest request);
     }
 }

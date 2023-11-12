@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MedLabO.Models.Requests
+namespace MedLabO.Models.Requests.Termin
 {
     public class TerminInsertRequest
     {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MedLabO.Models.Exceptions;
-using MedLabO.Models.Requests;
+using MedLabO.Models.Requests.Termin;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +21,39 @@ namespace MedLabO.Services
         public TerminService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(db, mapper)
         {
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        public async Task TerminOdobravanje(TerminOdobravanjeRequest request)
+        {
+            var termin = await _db.Termini.FirstOrDefaultAsync(t => t.TerminID == request.TerminID);
+            if (termin == null)
+            {
+                throw new EntityNotFoundException("Termin nije pronađen.");
+            }
+
+            try
+            {
+                string? currentUserId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+                if (string.IsNullOrEmpty(currentUserId))
+                {
+                    throw new UserException("Korisnik nije pronađen.");
+                }
+                termin.MedicinskoOsobljeID = Guid.Parse(currentUserId);
+                termin.Status = request.Status;
+                termin.Odgovor = request.Odgovor;
+
+                if (!request.Status)
+                {
+                    termin.isDeleted = true;
+                }
+
+                _db.Termini.Update(termin);
+                await _db.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new UserException("Usljed greške termin nije modifikovan.");
+            }
         }
 
         public override async Task BeforeInsert(Database.Termin entity, TerminInsertRequest insert)
@@ -64,6 +97,16 @@ namespace MedLabO.Services
             else
             {
                 query = query.Where(t => t.Obavljen == false);
+            }
+
+            if (search?.Odobren == true)
+            {
+                query = query.Where(t => t.Status == true);
+            }
+
+            if (search?.NaCekanju == true)
+            {
+                query = query.Where(t => t.Status == null);
             }
 
             if (!string.IsNullOrWhiteSpace(search?.FTS))

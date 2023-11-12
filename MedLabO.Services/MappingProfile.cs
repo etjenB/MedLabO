@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MedLabO.Models.Pacijent;
 using MedLabO.Models.Requests;
+using MedLabO.Models.Requests.Termin;
 using MedLabO.Models.Test;
 
 namespace MedLabO.Services

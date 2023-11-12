@@ -4,6 +4,8 @@
     {
         public string? FTS { get; set; }
         public bool Obavljen { get; set; } = false;
+        public bool Odobren { get; set; } = false;
+        public bool NaCekanju { get; set; } = false;
         public bool IncludeTerminTestovi { get; set; } = false;
         public bool IncludeTerminUsluge { get; set; } = false;
         public bool IncludeTerminTestoviRezultati { get; set; } = false;
