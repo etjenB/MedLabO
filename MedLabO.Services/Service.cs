@@ -28,11 +28,18 @@ namespace MedLabO.Services
 
             query = AddInclude(query, search);
 
+            query = ApplyOrdering(query, search);
+
             result.Count = await query.CountAsync();
 
             if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
             {
                 query = query.Skip(search.Page.Value * search.PageSize.Value).Take(search.PageSize.Value);
+            }
+
+            if (search?.UseSplitQuery == true)
+            {
+                query = query.AsSplitQuery();
             }
 
             var list = await query.ToListAsync();
@@ -48,6 +55,11 @@ namespace MedLabO.Services
         }
 
         public virtual IQueryable<TDb> AddInclude(IQueryable<TDb> query, TSearch? search = null)
+        {
+            return query;
+        }
+
+        public virtual IQueryable<TDb> ApplyOrdering(IQueryable<TDb> query, TSearch? search)
         {
             return query;
         }

@@ -14,8 +14,12 @@ namespace MedLabO.Models
         public Guid TerminID { get; set; }
         public DateTime DTTermina { get; set; }
         public bool? Status { get; set; }
+        [MaxLength(300, ErrorMessage = "Maksimalna dužina napomene je 300 karaktera.")]
         public string? Napomena { get; set; }
+        [MaxLength(300, ErrorMessage = "Maksimalna dužina odgovora je 300 karaktera.")]
         public string? Odgovor { get; set; }
+        [MaxLength(300, ErrorMessage = "Maksimalna dužina razloga otkazivanja je 300 karaktera.")]
+        public string? RazlogOtkazivanja { get; set; }
         public bool Obavljen { get; set; } = false;
         public bool RezultatTermina { get; set; } = false;
         public byte[]? RezultatTerminaPDF { get; set; }

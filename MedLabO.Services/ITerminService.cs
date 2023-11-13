@@ -11,5 +11,6 @@ namespace MedLabO.Services
     public interface ITerminService : ICRUDService<Models.Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest>
     {
         Task TerminOdobravanje(TerminOdobravanjeRequest request);
+        Task TerminOtkazivanje(TerminOtkazivanjeRequest request);
     }
 }

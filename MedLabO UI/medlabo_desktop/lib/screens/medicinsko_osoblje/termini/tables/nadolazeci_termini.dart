@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/termin/termin.dart';
-import 'package:medlabo_desktop/models/termin/termin_odobravanje_request.dart';
+import 'package:medlabo_desktop/models/termin/termin_otkazivanje_request.dart';
 import 'package:medlabo_desktop/providers/termini_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/general/dialog_utils.dart';
@@ -14,21 +14,21 @@ import 'package:medlabo_desktop/utils/general/util.dart';
 import 'package:medlabo_desktop/widgets/pagination_widget.dart';
 import 'package:provider/provider.dart';
 
-class TabelaZaOdobrenjaWidget extends StatefulWidget {
-  const TabelaZaOdobrenjaWidget({super.key});
+class NadolazeciTerminiWidget extends StatefulWidget {
+  const NadolazeciTerminiWidget({super.key});
 
   @override
-  State<TabelaZaOdobrenjaWidget> createState() =>
-      _TabelaZaOdobrenjaWidgetState();
+  State<NadolazeciTerminiWidget> createState() =>
+      _NadolazeciTerminiWidgetState();
 }
 
-class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
+class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
     with PaginationMixin<Termin> {
   late TerminiProvider _terminiProvider;
   SearchResult<Termin>? termini;
   TextEditingController _terminSearchController = new TextEditingController();
 
-  _TabelaZaOdobrenjaWidgetState() {
+  _NadolazeciTerminiWidgetState() {
     itemsPerPage = 4;
   }
 
@@ -50,7 +50,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
       'Page': 0,
       'PageSize': itemsPerPage,
       'UseSplitQuery': true,
-      'NaCekanju': true,
+      'Odobren': true,
       'OrderByDTTermina': true,
       'IncludeTerminTestovi': true,
       'IncludeTerminUsluge': true,
@@ -58,6 +58,8 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
       'IncludeTerminUslugeTestovi': true,
       'IncludeTerminPacijent': true,
       'IncludeTerminPacijentSpol': true,
+      'IncludeTerminMedicinskoOsoblje': true,
+      'IncludeTerminMedicinskoOsobljeZvanje': true,
     });
 
     if (mounted) {
@@ -72,7 +74,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
     var result = await fetchData(
         page, (filter) => _terminiProvider.get(filter: filter), 'FTS', {
       'UseSplitQuery': true,
-      'NaCekanju': true,
+      'Odobren': true,
       'OrderByDTTermina': true,
       'IncludeTerminTestovi': true,
       'IncludeTerminUsluge': true,
@@ -80,6 +82,8 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
       'IncludeTerminUslugeTestovi': true,
       'IncludeTerminPacijent': true,
       'IncludeTerminPacijentSpol': true,
+      'IncludeTerminMedicinskoOsoblje': true,
+      'IncludeTerminMedicinskoOsobljeZvanje': true,
     });
     if (mounted) {
       setState(() {
@@ -96,7 +100,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
           color: Colors.blue[900],
           child: Padding(
             padding: EdgeInsets.all(8),
-            child: _buildTabelaZaOdobrenjaHeader(),
+            child: _buildNadolazeciTerminiHeader(),
           ),
         ),
         Padding(
@@ -122,41 +126,27 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Flexible(
-                                  flex: 7,
+                                  flex: 8,
                                   child: Text(
                                       "${termini!.result[index].pacijent?.ime ?? 'Nema imena'} ${termini!.result[index].pacijent?.prezime ?? 'Nema prezimena'} - ${formatDateTime(termini!.result[index].dtTermina!)}"),
                                 ),
                                 Flexible(
-                                  flex: 3,
+                                  flex: 2,
                                   child: Row(
                                     children: [
                                       Expanded(
-                                          child: ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStatePropertyAll(
-                                                          Colors.red[400])),
-                                              onPressed: () async {
-                                                await _odbijTermin(
-                                                    termini!.result[index],
-                                                    null);
-                                              },
-                                              child: const Text("Odbij"))),
-                                      const SizedBox(
-                                        width: 3,
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStatePropertyAll(
+                                                      Colors.red[400])),
+                                          onPressed: () async {
+                                            await _otkaziTermin(
+                                                termini!.result[index], null);
+                                          },
+                                          child: const Text("Otkaži"),
+                                        ),
                                       ),
-                                      Expanded(
-                                          child: ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStatePropertyAll(
-                                                          Colors.green[400])),
-                                              onPressed: () async {
-                                                await _odobriTermin(
-                                                    termini!.result[index],
-                                                    null);
-                                              },
-                                              child: const Text("Odobri"))),
                                     ],
                                   ),
                                 )
@@ -167,7 +157,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
                                 context: context,
                                 barrierDismissible: false,
                                 builder: (context) {
-                                  return _buildDialogForTerminZahtjevPreview(
+                                  return _buildDialogForNadolazeciTerminPreview(
                                       context, termini!.result[index]);
                                 },
                               )
@@ -197,7 +187,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
     );
   }
 
-  _buildTabelaZaOdobrenjaHeader() {
+  _buildNadolazeciTerminiHeader() {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -213,7 +203,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
                 children: [
                   RichText(
                     text: const TextSpan(
-                      text: 'Tabela za odobrenja',
+                      text: 'Nadolazeći termini',
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 22,
@@ -222,7 +212,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
                   ),
                   const Tooltip(
                     message:
-                        'Tabela termina u kojoj se nalaze termini koji tek trebaju biti odobreni ili odbijeni.',
+                        'Tabela termina u kojoj se nalaze termini koji su zakazani za nadolazeće dane.',
                     child: Icon(
                       Icons.info_outline,
                       size: 18,
@@ -238,14 +228,14 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
           flex: 5,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-            child: _buildTabelaZaOdobrenjaHeaderSearch(),
+            child: _buildNadolazeciTerminiHeaderSearch(),
           ),
         ),
       ],
     );
   }
 
-  _buildTabelaZaOdobrenjaHeaderSearch() {
+  _buildNadolazeciTerminiHeaderSearch() {
     return SizedBox(
       width: 300,
       child: TextField(
@@ -279,7 +269,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
     );
   }
 
-  Widget _buildDialogForTerminZahtjevPreview(
+  Widget _buildDialogForNadolazeciTerminPreview(
       BuildContext context, Termin termin) {
     final _formKey = GlobalKey<FormBuilderState>();
     return AlertDialog(
@@ -288,7 +278,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
         children: [
           Expanded(
             child: Text(
-              "Zahtjev za termin: ${termin.pacijent?.ime ?? 'Nema imena'} ${termin.pacijent?.prezime ?? 'Nema prezimena'} - ${formatDateTime(termin.dtTermina!)}",
+              "Termin: ${termin.pacijent?.ime ?? 'Nema imena'} ${termin.pacijent?.prezime ?? 'Nema prezimena'} - ${formatDateTime(termin.dtTermina!)}",
               style: heading1,
               overflow: TextOverflow.visible,
             ),
@@ -306,6 +296,51 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
+            Wrap(children: [
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.black)),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Termin odobrio/la",
+                        style: heading2,
+                      ),
+                      Text(
+                          "${termin.medicinskoOsoblje?.zvanje?.naziv}: ${termin.medicinskoOsoblje?.ime ?? 'Nepoznato'} ${termin.medicinskoOsoblje?.prezime ?? 'Nepoznato'}"),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 5,
+            ),
+            Wrap(children: [
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.black)),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Odgovor",
+                        style: heading2,
+                      ),
+                      Text(termin.odgovor ?? 'Nema'),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
+            const SizedBox(
+              height: 5,
+            ),
             Wrap(
               children: [
                 Container(
@@ -424,8 +459,9 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
             FormBuilder(
               key: _formKey,
               child: FormBuilderTextField(
-                decoration: const InputDecoration(labelText: 'Odgovor'),
-                name: 'odgovor',
+                decoration:
+                    const InputDecoration(labelText: 'Razlog otkazivanja'),
+                name: 'razlogOtkazivanja',
                 maxLength: 300,
                 minLines: 1,
                 maxLines: 3,
@@ -455,37 +491,13 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
                       return;
                     }
 
-                    await _odbijTermin(
-                        termin, _formKey.currentState?.value['odgovor']);
+                    await _otkaziTermin(termin,
+                        _formKey.currentState?.value['razlogOtkazivanja']);
 
                     Navigator.of(context).pop();
                   },
                   child: const Text(
-                    'Odbij zahtjev',
-                    style: TextStyle(color: primaryWhiteTextColor),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.green)),
-                  onPressed: () async {
-                    if (_formKey.currentState == null ||
-                        !_formKey.currentState!.saveAndValidate()) {
-                      return;
-                    }
-
-                    await _odobriTermin(
-                        termin, _formKey.currentState?.value['odgovor']);
-
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    'Odobri termin',
+                    'Otkaži termin',
                     style: TextStyle(color: primaryWhiteTextColor),
                   ),
                 ),
@@ -497,40 +509,20 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
     );
   }
 
-  Future _odbijTermin(Termin termin, dynamic odgovorValue) async {
-    bool shouldProceed = await showConfirmationDialog(context, 'Potvrda',
-        'Da li ste sigurni da želite odbiti zahtjev za termin?');
-    if (!shouldProceed) return;
-
-    TerminOdobravanjeRequest terminOdobravanjeRequest =
-        TerminOdobravanjeRequest(
-      terminID: termin.terminID,
-      odgovor: odgovorValue,
-      status: false,
-    );
-
-    await _terminiProvider.terminOdobravanje(terminOdobravanjeRequest);
-
-    makeAlertToast("Zahtjev za termin odbijen.", "warning", Alignment.center);
-
-    fetchPage(currentPage);
-  }
-
-  Future _odobriTermin(Termin termin, dynamic odgovorValue) async {
+  Future _otkaziTermin(Termin termin, dynamic razlogOtkazivanjaValue) async {
     bool shouldProceed = await showConfirmationDialog(
-        context, 'Potvrda', 'Da li ste sigurni da želite odobriti termin?');
+        context, 'Potvrda', 'Da li ste sigurni da želite otkazati termin?');
     if (!shouldProceed) return;
 
-    TerminOdobravanjeRequest terminOdobravanjeRequest =
-        TerminOdobravanjeRequest(
+    TerminOtkazivanjeRequest terminOtkazivanjeRequest =
+        TerminOtkazivanjeRequest(
       terminID: termin.terminID,
-      odgovor: odgovorValue,
-      status: true,
+      razlogOtkazivanja: razlogOtkazivanjaValue,
     );
 
-    await _terminiProvider.terminOdobravanje(terminOdobravanjeRequest);
+    await _terminiProvider.terminOtkazivanje(terminOtkazivanjeRequest);
 
-    makeSuccessToast("Uspješno odobren termin.");
+    makeAlertToast("Termin otkazan.", "warning", Alignment.center);
 
     fetchPage(currentPage);
   }

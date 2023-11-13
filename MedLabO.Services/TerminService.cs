@@ -56,6 +56,35 @@ namespace MedLabO.Services
             }
         }
 
+        public async Task TerminOtkazivanje(TerminOtkazivanjeRequest request)
+        {
+            var termin = await _db.Termini.FirstOrDefaultAsync(t => t.TerminID == request.TerminID);
+            if (termin == null)
+            {
+                throw new EntityNotFoundException("Termin nije pronađen.");
+            }
+
+            try
+            {
+                string? currentUserId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+                if (string.IsNullOrEmpty(currentUserId))
+                {
+                    throw new UserException("Korisnik nije pronađen.");
+                }
+                termin.MedicinskoOsobljeID = Guid.Parse(currentUserId);
+                termin.Status = false;
+                termin.RazlogOtkazivanja = request.RazlogOtkazivanja;
+                termin.isDeleted = true;
+
+                _db.Termini.Update(termin);
+                await _db.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new UserException("Usljed greške termin nije otkazan.");
+            }
+        }
+
         public override async Task BeforeInsert(Database.Termin entity, TerminInsertRequest insert)
         {
             try
@@ -160,6 +189,11 @@ namespace MedLabO.Services
                 query = query.Include("MedicinskoOsoblje");
             }
 
+            if (search?.IncludeTerminMedicinskoOsobljeZvanje == true)
+            {
+                query = query.Include("MedicinskoOsoblje.Zvanje");
+            }
+
             if (search?.IncludeTerminRacun == true)
             {
                 query = query.Include("Racun");
@@ -171,6 +205,16 @@ namespace MedLabO.Services
             }
 
             return base.AddInclude(query, search);
+        }
+
+        public override IQueryable<Termin> ApplyOrdering(IQueryable<Termin> query, TerminSearchObject? search = null)
+        {
+            if (search?.OrderByDTTermina == true)
+            {
+                query = query.OrderBy(t => t.DTTermina);
+            }
+
+            return base.AddFilter(query, search);
         }
     }
 }

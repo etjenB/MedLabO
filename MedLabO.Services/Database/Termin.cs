@@ -15,10 +15,15 @@ namespace MedLabO.Services.Database
         public bool? Status { get; set; }
 
         //Napomenu navodi pacijent ukoliko zeli
+        [MaxLength(300)]
         public string? Napomena { get; set; }
 
         //Odgovor unose zaposlenici laboratorija
+        [MaxLength(300)]
         public string? Odgovor { get; set; }
+
+        [MaxLength(300)]
+        public string? RazlogOtkazivanja { get; set; }
 
         [Required]
         public bool Obavljen { get; set; } = false;
