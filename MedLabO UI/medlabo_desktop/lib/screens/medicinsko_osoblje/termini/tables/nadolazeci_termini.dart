@@ -5,7 +5,11 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/termin/termin.dart';
 import 'package:medlabo_desktop/models/termin/termin_otkazivanje_request.dart';
+import 'package:medlabo_desktop/models/test/test.dart';
+import 'package:medlabo_desktop/models/usluga/usluga.dart';
 import 'package:medlabo_desktop/providers/termini_provider.dart';
+import 'package:medlabo_desktop/providers/testovi_provider.dart';
+import 'package:medlabo_desktop/providers/usluge_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/general/dialog_utils.dart';
 import 'package:medlabo_desktop/utils/general/pagination_mixin.dart';
@@ -27,6 +31,8 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
   late TerminiProvider _terminiProvider;
   SearchResult<Termin>? termini;
   TextEditingController _terminSearchController = new TextEditingController();
+  late TestoviProvider _testoviProvider;
+  late UslugeProvider _uslugeProvider;
 
   _NadolazeciTerminiWidgetState() {
     itemsPerPage = 4;
@@ -36,6 +42,8 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
   void initState() {
     super.initState();
     _terminiProvider = context.read<TerminiProvider>();
+    _uslugeProvider = context.read<UslugeProvider>();
+    _testoviProvider = context.read<TestoviProvider>();
     initForm();
     fetchPage(currentPage);
   }
@@ -52,10 +60,6 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
       'UseSplitQuery': true,
       'Odobren': true,
       'OrderByDTTermina': true,
-      'IncludeTerminTestovi': true,
-      'IncludeTerminUsluge': true,
-      'IncludeTerminTestoviTestovi': true,
-      'IncludeTerminUslugeTestovi': true,
       'IncludeTerminPacijent': true,
       'IncludeTerminPacijentSpol': true,
       'IncludeTerminMedicinskoOsoblje': true,
@@ -76,10 +80,6 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
       'UseSplitQuery': true,
       'Odobren': true,
       'OrderByDTTermina': true,
-      'IncludeTerminTestovi': true,
-      'IncludeTerminUsluge': true,
-      'IncludeTerminTestoviTestovi': true,
-      'IncludeTerminUslugeTestovi': true,
       'IncludeTerminPacijent': true,
       'IncludeTerminPacijentSpol': true,
       'IncludeTerminMedicinskoOsoblje': true,
@@ -152,15 +152,32 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
                                 )
                               ],
                             ),
-                            onTap: () => {
+                            onTap: () {
                               showDialog(
                                 context: context,
                                 barrierDismissible: false,
                                 builder: (context) {
-                                  return _buildDialogForNadolazeciTerminPreview(
-                                      context, termini!.result[index]);
+                                  return FutureBuilder<Widget>(
+                                    future:
+                                        _buildDialogForNadolazeciTerminPreview(
+                                            context, termini!.result[index]),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<Widget> snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Center(
+                                            child: CircularProgressIndicator(
+                                          strokeWidth: 8,
+                                        ));
+                                      } else if (snapshot.hasError) {
+                                        return Text('Error: ${snapshot.error}');
+                                      } else {
+                                        return snapshot.data!;
+                                      }
+                                    },
+                                  );
                                 },
-                              )
+                              );
                             },
                           ),
                         ),
@@ -269,8 +286,12 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
     );
   }
 
-  Widget _buildDialogForNadolazeciTerminPreview(
-      BuildContext context, Termin termin) {
+  Future<Widget> _buildDialogForNadolazeciTerminPreview(
+      BuildContext context, Termin termin) async {
+    List<Usluga>? usluge =
+        await _uslugeProvider.getTestoviByTerminId(termin.terminID!);
+    List<Test>? testovi =
+        await _testoviProvider.getTestoviByTerminId(termin.terminID!);
     final _formKey = GlobalKey<FormBuilderState>();
     return AlertDialog(
       title: Row(
@@ -413,9 +434,8 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
                         "Usluge",
                         style: heading2,
                       ),
-                      if (termin.terminUsluge != null &&
-                          termin.terminUsluge!.isNotEmpty)
-                        ...termin.terminUsluge!.map((element) {
+                      if (usluge.isNotEmpty)
+                        ...usluge.map((element) {
                           return Text(element.naziv ?? 'Nepoznato');
                         }).toList()
                       else
@@ -441,10 +461,9 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
                         "Testovi",
                         style: heading2,
                       ),
-                      if (termin.terminTestovi != null &&
-                          termin.terminTestovi!.isNotEmpty)
-                        ...termin.terminTestovi!.map((element) {
-                          return Text(element.test?.naziv ?? 'Nepoznato');
+                      if (testovi.isNotEmpty)
+                        ...testovi.map((element) {
+                          return Text(element.naziv ?? 'Nepoznato');
                         }).toList()
                       else
                         const Text('Nema'),

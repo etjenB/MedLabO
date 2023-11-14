@@ -19,17 +19,16 @@ namespace MedLabO.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<Models.Test.Test> ChangeName(Guid Id, string newName)
+        public async Task<ICollection<Models.Test.TestWithoutTerminTestovi>?> GetTestoviByTerminId(Guid terminId)
         {
-            var test = await _db.FindAsync<Database.Test>(Id);
-            if (test == null)
+            var terminTestovi = _db.TerminTest.Where(tt => tt.TerminID == terminId);
+            if (terminTestovi==null)throw new EntityNotFoundException("Termin nije pronađen.");
+            List<Database.Test> testovi = new List<Database.Test>();
+            foreach (var tt in terminTestovi)
             {
-                throw new UserException("Test not found.");
+                testovi.Add(await _db.Testovi.FirstOrDefaultAsync(t => t.TestID == tt.TestID));
             }
-
-            test.Naziv = newName;
-            await _db.SaveChangesAsync();
-            return _mapper.Map<Models.Test.Test>(test);
+            return _mapper.Map<List<Models.Test.TestWithoutTerminTestovi>>(testovi);
         }
 
         public override async Task BeforeInsert(Database.Test entity, TestInsertRequest insert)

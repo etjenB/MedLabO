@@ -12,5 +12,6 @@ namespace MedLabO.Services
 {
     public interface IUslugaService : ICRUDService<Models.Usluga, UslugaSearchObject, UslugaInsertRequest, UslugaUpdateRequest>
     {
+        Task<ICollection<Models.Usluga>?> GetUslugeByTerminId(Guid terminId);
     }
 }

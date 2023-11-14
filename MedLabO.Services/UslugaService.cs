@@ -20,6 +20,18 @@ namespace MedLabO.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<ICollection<Models.Usluga>?> GetUslugeByTerminId(Guid terminId)
+        {
+            var termin = await _db.Termini.Include(t=>t.TerminUsluge).FirstOrDefaultAsync(t => t.TerminID == terminId);
+            if (termin == null) throw new EntityNotFoundException("Termin nije pronađen.");
+            List<Database.Usluga> usluge = new List<Database.Usluga>();
+            foreach (var tu in termin.TerminUsluge)
+            {
+                usluge.Add(await _db.Usluge.FirstOrDefaultAsync(u => u.UslugaID == tu.UslugaID));
+            }
+            return _mapper.Map<List<Models.Usluga>>(usluge);
+        }
+
         public override async Task BeforeInsert(Database.Usluga entity, UslugaInsertRequest insert)
         {
             try

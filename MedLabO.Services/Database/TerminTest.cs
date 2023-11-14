@@ -7,12 +7,12 @@ namespace MedLabO.Services.Database
         public Guid? TestID { get; set; }
         public Guid? TerminID { get; set; }
 
-        public virtual Test? Test { get; set; }
-        public virtual Termin? Termin { get; set; }
+        public Test? Test { get; set; }
+        public Termin? Termin { get; set; }
 
         [ForeignKey("Rezultat")]
         public Guid? RezultatID { get; set; }
 
-        public virtual Rezultat? Rezultat { get; set; } = null!;
+        public Rezultat? Rezultat { get; set; } = null!;
     }
 }

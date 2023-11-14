@@ -6,6 +6,6 @@ namespace MedLabO.Services
 {
     public interface ITestService : ICRUDService<Test, TestSearchObject, TestInsertRequest, TestUpdateRequest>
     {
-        public Task<Test> ChangeName(Guid Id, string newName);
+        Task<ICollection<Models.Test.TestWithoutTerminTestovi>> GetTestoviByTerminId(Guid terminId);
     }
 }
