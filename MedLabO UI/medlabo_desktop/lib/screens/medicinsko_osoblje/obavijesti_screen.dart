@@ -34,6 +34,7 @@ class _ObavijestiScreenState extends State<ObavijestiScreen> {
         filter: {'Page': pageKey, 'PageSize': _pageSize},
       );
       final isLastPage = newItems.result.length < _pageSize;
+      if (!mounted) return;
       if (isLastPage) {
         _pagingController.appendLastPage(newItems.result);
       } else {

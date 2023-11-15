@@ -12,6 +12,13 @@ class TerminiScreen extends StatefulWidget {
 }
 
 class _TerminiScreenState extends State<TerminiScreen> {
+  final GlobalKey<NadolazeciTerminiWidgetState> nadolazeciTerminiKey =
+      GlobalKey();
+
+  void refreshNadolazeciTermini() {
+    nadolazeciTerminiKey.currentState?.refreshWidget();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -60,9 +67,10 @@ class _TerminiScreenState extends State<TerminiScreen> {
                         ),
                       ],
                     ),
-                    child: const SingleChildScrollView(
+                    child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      child: TabelaZaOdobrenjaWidget(),
+                      child: TabelaZaOdobrenjaWidget(
+                          onRefreshNadolazeciTermini: refreshNadolazeciTermini),
                     ),
                   ),
                 ),
@@ -112,9 +120,9 @@ class _TerminiScreenState extends State<TerminiScreen> {
                         ),
                       ],
                     ),
-                    child: const SingleChildScrollView(
+                    child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      child: NadolazeciTerminiWidget(),
+                      child: NadolazeciTerminiWidget(key: nadolazeciTerminiKey),
                     ),
                   ),
                 ),

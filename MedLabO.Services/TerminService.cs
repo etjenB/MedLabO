@@ -138,6 +138,21 @@ namespace MedLabO.Services
                 query = query.Where(t => t.Status == null);
             }
 
+            if (search?.TerminiInFuture == true)
+            {
+                query = query.Where(t => t.DTTermina.Date > DateTime.Now.Date);
+            }
+
+            if (search?.TerminiToday == true)
+            {
+                query = query.Where(t => t.DTTermina.Date == DateTime.Now.Date);
+            }
+
+            if (search?.TerminiBefore == true)
+            {
+                query = query.Where(t => t.DTTermina.Date < DateTime.Now.Date);
+            }
+
             if (!string.IsNullOrWhiteSpace(search?.FTS))
             {
                 query = query.Where(t => (t.Pacijent != null && t.Pacijent.Ime != null && t.Pacijent.Ime.StartsWith(search.FTS)) || (t.Pacijent != null && t.Pacijent.Prezime != null && t.Pacijent.Prezime.StartsWith(search.FTS)));

@@ -6,6 +6,9 @@
         public bool Obavljen { get; set; } = false;
         public bool Odobren { get; set; } = false;
         public bool NaCekanju { get; set; } = false;
+        public bool TerminiInFuture { get; set; } = false;
+        public bool TerminiToday { get; set; } = false;
+        public bool TerminiBefore { get; set; } = false; 
         public bool OrderByDTTermina { get; set; } = false;
         public bool IncludeTerminTestovi { get; set; } = false;
         public bool IncludeTerminUsluge { get; set; } = false;

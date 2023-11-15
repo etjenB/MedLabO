@@ -19,7 +19,11 @@ import 'package:medlabo_desktop/widgets/pagination_widget.dart';
 import 'package:provider/provider.dart';
 
 class TabelaZaOdobrenjaWidget extends StatefulWidget {
-  const TabelaZaOdobrenjaWidget({super.key});
+  final Function onRefreshNadolazeciTermini;
+
+  const TabelaZaOdobrenjaWidget(
+      {Key? key, required this.onRefreshNadolazeciTermini})
+      : super(key: key);
 
   @override
   State<TabelaZaOdobrenjaWidget> createState() =>
@@ -159,7 +163,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
                                               child: const Text("Odobri"))),
                                     ],
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             onTap: () {
@@ -268,7 +272,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
         style: const TextStyle(color: primaryWhiteTextColor),
         decoration: const InputDecoration(
           hintStyle: TextStyle(color: primaryLightTextColor),
-          hintText: 'Pronađi termin...',
+          hintText: 'Pronađi pacijenta...',
           prefixIcon: Icon(
             Icons.search,
             color: primaryWhiteTextColor,
@@ -549,6 +553,8 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
     await _terminiProvider.terminOdobravanje(terminOdobravanjeRequest);
 
     makeSuccessToast("Uspješno odobren termin.");
+
+    widget.onRefreshNadolazeciTermini();
 
     fetchPage(currentPage);
   }

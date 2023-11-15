@@ -23,10 +23,10 @@ class NadolazeciTerminiWidget extends StatefulWidget {
 
   @override
   State<NadolazeciTerminiWidget> createState() =>
-      _NadolazeciTerminiWidgetState();
+      NadolazeciTerminiWidgetState();
 }
 
-class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
+class NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
     with PaginationMixin<Termin> {
   late TerminiProvider _terminiProvider;
   SearchResult<Termin>? termini;
@@ -34,7 +34,7 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
   late TestoviProvider _testoviProvider;
   late UslugeProvider _uslugeProvider;
 
-  _NadolazeciTerminiWidgetState() {
+  NadolazeciTerminiWidgetState() {
     itemsPerPage = 4;
   }
 
@@ -59,6 +59,7 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
       'PageSize': itemsPerPage,
       'UseSplitQuery': true,
       'Odobren': true,
+      'TerminiInFuture': true,
       'OrderByDTTermina': true,
       'IncludeTerminPacijent': true,
       'IncludeTerminPacijentSpol': true,
@@ -79,6 +80,7 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
         page, (filter) => _terminiProvider.get(filter: filter), 'FTS', {
       'UseSplitQuery': true,
       'Odobren': true,
+      'TerminiInFuture': true,
       'OrderByDTTermina': true,
       'IncludeTerminPacijent': true,
       'IncludeTerminPacijentSpol': true,
@@ -90,6 +92,12 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
         termini = result;
       });
     }
+  }
+
+  void refreshWidget() {
+    setState(() {
+      fetchPage(currentPage);
+    });
   }
 
   @override
@@ -149,7 +157,7 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
                                       ),
                                     ],
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             onTap: () {
@@ -259,7 +267,7 @@ class _NadolazeciTerminiWidgetState extends State<NadolazeciTerminiWidget>
         style: const TextStyle(color: primaryWhiteTextColor),
         decoration: const InputDecoration(
           hintStyle: TextStyle(color: primaryLightTextColor),
-          hintText: 'Pronađi termin...',
+          hintText: 'Pronađi pacijenta...',
           prefixIcon: Icon(
             Icons.search,
             color: primaryWhiteTextColor,
