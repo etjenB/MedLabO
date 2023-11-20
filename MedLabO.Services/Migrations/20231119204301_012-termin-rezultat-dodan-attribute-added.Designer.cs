@@ -4,6 +4,7 @@ using MedLabO.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedLabO.Services.Migrations
 {
     [DbContext(typeof(MedLabOContext))]
-    partial class MedLabOContextModelSnapshot : ModelSnapshot
+    [Migration("20231119204301_012-termin-rezultat-dodan-attribute-added")]
+    partial class _012terminrezultatdodanattributeadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,7 +261,7 @@ namespace MedLabO.Services.Migrations
                     b.Property<Guid?>("PacijentID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Placeno")
+                    b.Property<bool>("PrijemZavrsen")
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("RacunID")
@@ -276,9 +278,6 @@ namespace MedLabO.Services.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<bool?>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("ZakljucakDodan")
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("ZakljucakID")

@@ -13,7 +13,9 @@ Termin _$TerminFromJson(Map<String, dynamic> json) => Termin(
       napomena: json['napomena'] as String?,
       odgovor: json['odgovor'] as String?,
       obavljen: json['obavljen'] as bool?,
-      rezultatTermina: json['rezultatTermina'] as bool?,
+      rezultatDodan: json['rezultatDodan'] as bool?,
+      zakljucakDodan: json['zakljucakDodan'] as bool?,
+      placeno: json['placeno'] as bool?,
       rezultatTerminaPDF: json['rezultatTerminaPDF'] as String?,
       terminUsluge: (json['terminUsluge'] as List<dynamic>?)
           ?.map((e) => Usluga.fromJson(e as Map<String, dynamic>))
@@ -44,7 +46,9 @@ Map<String, dynamic> _$TerminToJson(Termin instance) => <String, dynamic>{
       'napomena': instance.napomena,
       'odgovor': instance.odgovor,
       'obavljen': instance.obavljen,
-      'rezultatTermina': instance.rezultatTermina,
+      'rezultatDodan': instance.rezultatDodan,
+      'zakljucakDodan': instance.zakljucakDodan,
+      'placeno': instance.placeno,
       'rezultatTerminaPDF': instance.rezultatTerminaPDF,
       'terminUsluge': instance.terminUsluge,
       'terminTestovi': instance.terminTestovi,

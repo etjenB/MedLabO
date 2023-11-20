@@ -28,8 +28,11 @@ namespace MedLabO.Services.Database
         [Required]
         public bool Obavljen { get; set; } = false;
 
-        [Required]
-        public bool PrijemZavrsen { get; set; } = false;
+        public bool RezultatDodan { get; set; } = false;
+
+        public bool ZakljucakDodan { get; set; } = false;
+
+        public bool Placeno { get; set; } = false;
 
         public byte[]? RezultatTerminaPDF { get; set; }
 

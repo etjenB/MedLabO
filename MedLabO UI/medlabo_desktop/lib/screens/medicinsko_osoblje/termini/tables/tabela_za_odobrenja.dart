@@ -150,17 +150,18 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
                                         width: 3,
                                       ),
                                       Expanded(
-                                          child: ElevatedButton(
-                                              style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStatePropertyAll(
-                                                          Colors.green[400])),
-                                              onPressed: () async {
-                                                await _odobriTermin(
-                                                    termini!.result[index],
-                                                    null);
-                                              },
-                                              child: const Text("Odobri"))),
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStatePropertyAll(
+                                                      Colors.green[400])),
+                                          onPressed: () async {
+                                            await _odobriTermin(
+                                                termini!.result[index], null);
+                                          },
+                                          child: const Text("Odobri"),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),

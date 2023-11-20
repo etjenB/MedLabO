@@ -16,7 +16,9 @@ class Termin {
   String? napomena;
   String? odgovor;
   bool? obavljen;
-  bool? rezultatTermina;
+  bool? rezultatDodan;
+  bool? zakljucakDodan;
+  bool? placeno;
   String? rezultatTerminaPDF;
   List<Usluga>? terminUsluge;
   List<TerminTest>? terminTestovi;
@@ -33,7 +35,9 @@ class Termin {
       this.napomena,
       this.odgovor,
       this.obavljen,
-      this.rezultatTermina,
+      this.rezultatDodan,
+      this.zakljucakDodan,
+      this.placeno,
       this.rezultatTerminaPDF,
       this.terminUsluge,
       this.terminTestovi,

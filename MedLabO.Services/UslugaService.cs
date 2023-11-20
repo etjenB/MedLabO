@@ -27,7 +27,7 @@ namespace MedLabO.Services
             List<Database.Usluga> usluge = new List<Database.Usluga>();
             foreach (var tu in termin.TerminUsluge)
             {
-                usluge.Add(await _db.Usluge.FirstOrDefaultAsync(u => u.UslugaID == tu.UslugaID));
+                usluge.Add(await _db.Usluge.Include(u=>u.UslugaTestovi).FirstOrDefaultAsync(u => u.UslugaID == tu.UslugaID));
             }
             return _mapper.Map<List<Models.Usluga>>(usluge);
         }

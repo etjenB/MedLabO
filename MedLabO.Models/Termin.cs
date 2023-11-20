@@ -21,7 +21,9 @@ namespace MedLabO.Models
         [MaxLength(300, ErrorMessage = "Maksimalna dužina razloga otkazivanja je 300 karaktera.")]
         public string? RazlogOtkazivanja { get; set; }
         public bool Obavljen { get; set; } = false;
-        public bool RezultatTermina { get; set; } = false;
+        public bool RezultatDodan { get; set; }
+        public bool ZakljucakDodan { get; set; }
+        public bool Placeno { get; set; }
         public byte[]? RezultatTerminaPDF { get; set; }
 
         public ICollection<Usluga> TerminUsluge { get; set; } = new List<Usluga>();

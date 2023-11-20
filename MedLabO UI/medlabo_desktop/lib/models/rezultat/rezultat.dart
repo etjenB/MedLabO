@@ -12,7 +12,7 @@ class Rezultat {
   String? rezStr;
   double? razlikaOdNormalne;
 
-  Rezultat(
+  Rezultat({
     this.rezultatID,
     this.dtRezultata,
     this.testZakljucak,
@@ -20,7 +20,7 @@ class Rezultat {
     this.rezFlo,
     this.rezStr,
     this.razlikaOdNormalne,
-  );
+  });
 
   factory Rezultat.fromJson(Map<String, dynamic> json) =>
       _$RezultatFromJson(json);

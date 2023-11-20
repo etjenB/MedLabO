@@ -7,13 +7,13 @@ part of 'rezultat.dart';
 // **************************************************************************
 
 Rezultat _$RezultatFromJson(Map<String, dynamic> json) => Rezultat(
-      json['rezultatID'] as String?,
-      json['dtRezultata'] as String?,
-      json['testZakljucak'] as String?,
-      json['obiljezen'] as bool?,
-      (json['rezFlo'] as num?)?.toDouble(),
-      json['rezStr'] as String?,
-      (json['razlikaOdNormalne'] as num?)?.toDouble(),
+      rezultatID: json['rezultatID'] as String?,
+      dtRezultata: json['dtRezultata'] as String?,
+      testZakljucak: json['testZakljucak'] as String?,
+      obiljezen: json['obiljezen'] as bool?,
+      rezFlo: (json['rezFlo'] as num?)?.toDouble(),
+      rezStr: json['rezStr'] as String?,
+      razlikaOdNormalne: (json['razlikaOdNormalne'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$RezultatToJson(Rezultat instance) => <String, dynamic>{

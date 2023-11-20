@@ -29,5 +29,19 @@ namespace MedLabO.Controllers
         {
             await _terminService.TerminOtkazivanje(request);
         }
+
+        [HttpPut("TerminDodavanjeRezultata")]
+        [Authorize(Roles = "MedicinskoOsoblje")]
+        public async Task TerminDodavanjeRezultata(TerminTestRezultatRequest request)
+        {
+            await _terminService.TerminDodavanjeRezultata(request);
+        }
+
+        [HttpPut("TerminDodavanjeZakljucka")]
+        [Authorize(Roles = "MedicinskoOsoblje")]
+        public async Task TerminDodavanjeZakljucka(TerminZakljucakRequest request)
+        {
+            await _terminService.TerminDodavanjeZakljucka(request);
+        }
     }
 }

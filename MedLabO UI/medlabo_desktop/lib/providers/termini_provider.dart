@@ -48,4 +48,40 @@ class TerminiProvider extends BaseProvider<Termin> {
 
     throw Exception("Failed terminOtkazivanje request");
   }
+
+  Future terminDodavanjeRezultata(dynamic request) async {
+    var url = '${BaseProvider.baseUrl}$endpoint/TerminDodavanjeRezultata';
+
+    var uri = Uri.parse(url);
+
+    var headers = await createHeaders();
+    var jsonRequest = jsonEncode(request);
+    var response = await http.put(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)['isValid']) {
+      return;
+    }
+
+    makeErrorToast(isValidResponse(response)['message'] ?? '');
+
+    throw Exception("Failed terminDodavanjeRezultata request");
+  }
+
+  Future terminDodavanjeZakljucka(dynamic request) async {
+    var url = '${BaseProvider.baseUrl}$endpoint/TerminDodavanjeZakljucka';
+
+    var uri = Uri.parse(url);
+
+    var headers = await createHeaders();
+    var jsonRequest = jsonEncode(request);
+    var response = await http.put(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)['isValid']) {
+      return;
+    }
+
+    makeErrorToast(isValidResponse(response)['message'] ?? '');
+
+    throw Exception("Failed terminDodavanjeZakljucka request");
+  }
 }

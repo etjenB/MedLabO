@@ -4,6 +4,7 @@ using MedLabO.Models.Requests.Termin;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -85,6 +86,81 @@ namespace MedLabO.Services
             }
         }
 
+        public async Task TerminDodavanjeRezultata(TerminTestRezultatRequest request)
+        {
+            if (request == null || request.TestIDs == null || request.Rezultati == null)
+            {
+                throw new UserException("Dodavanje rezultata nije moguće.");
+            }
+
+            var termin = await _db.Termini.FirstOrDefaultAsync(t => t.TerminID == request.TerminID);
+
+            if (termin == null)
+            {
+                throw new EntityNotFoundException("Termin ne postoji.");
+            }
+
+            var counter = 0;
+            foreach (var testID in request.TestIDs)
+            {
+                var terminTest = await _db.TerminTest.FirstOrDefaultAsync(tt => tt.TestID.ToString() == testID && tt.TerminID == request.TerminID);
+                var test = await _db.Testovi.Include(t=>t.TestParametar).FirstOrDefaultAsync(t => t.TestID.ToString() == testID);
+                if (test == null) throw new EntityNotFoundException("Test ne postoji.");
+                if (test.TestParametar == null) throw new UserException("Test parametar za dati test ne postoji.");
+
+                var rezultat = request.Rezultati[counter];
+                rezultat.DTRezultata = DateTime.Now;
+                if (rezultat.RezFlo != null && 
+                    test.TestParametar.MinVrijednost != null && 
+                    rezultat.RezFlo < test.TestParametar.MinVrijednost)
+                {
+                    rezultat.RazlikaOdNormalne = rezultat.RezFlo - test.TestParametar.MinVrijednost;
+                    rezultat.Obiljezen = true;
+                }else if (rezultat.RezFlo != null &&
+                    test.TestParametar.MaxVrijednost != null &&
+                    rezultat.RezFlo > test.TestParametar.MaxVrijednost)
+                {
+                    rezultat.RazlikaOdNormalne = rezultat.RezFlo - test.TestParametar.MaxVrijednost;
+                    rezultat.Obiljezen = true;
+                }
+
+                if (terminTest != null)
+                {
+                    terminTest.Rezultat = _mapper.Map<Database.Rezultat>(rezultat);
+                }
+                else
+                {
+                    await _db.TerminTest.AddAsync(new TerminTest() { TerminID = request.TerminID, TestID = Guid.Parse(testID), Rezultat = _mapper.Map<Database.Rezultat>(rezultat) });
+                }
+                termin.RezultatDodan = true;
+                await _db.SaveChangesAsync();
+                counter++;
+            }
+        }
+
+        public async Task TerminDodavanjeZakljucka(TerminZakljucakRequest request)
+        {
+            if (request == null)
+            {
+                throw new UserException("Dodavanje zaključka nije moguće.");
+            }
+
+            var termin = await _db.Termini.FirstOrDefaultAsync(t => t.TerminID == request.TerminID);
+            if (termin == null) throw new EntityNotFoundException("Termin nije pronađen.");
+            try
+            {
+                var zakljucak = await _db.Zakljucci.AddAsync(new Zakljucak { TerminID = request.TerminID, Opis = request.Opis, Detaljno = request.Detaljno });
+                termin.Zakljucak = zakljucak.Entity;
+                termin.ZakljucakDodan = true;
+                _db.Termini.Update(termin);
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new UserException(e.Message);
+            }
+        }
+
         public override async Task BeforeInsert(Database.Termin entity, TerminInsertRequest insert)
         {
             try
@@ -126,6 +202,16 @@ namespace MedLabO.Services
             else
             {
                 query = query.Where(t => t.Obavljen == false);
+            }
+
+            if (search?.Finaliziran == true)
+            {
+                query = query.Where(t => t.ZakljucakDodan != false && t.Placeno != false && t.RezultatDodan != false);
+            }
+
+            if (search?.UObradi == true)
+            {
+                query = query.Where(t => t.ZakljucakDodan == false || t.Placeno == false || t.RezultatDodan == false);
             }
 
             if (search?.Odobren == true)

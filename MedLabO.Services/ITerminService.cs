@@ -12,5 +12,7 @@ namespace MedLabO.Services
     {
         Task TerminOdobravanje(TerminOdobravanjeRequest request);
         Task TerminOtkazivanje(TerminOtkazivanjeRequest request);
+        Task TerminDodavanjeRezultata(TerminTestRezultatRequest request);
+        Task TerminDodavanjeZakljucka(TerminZakljucakRequest request);
     }
 }
