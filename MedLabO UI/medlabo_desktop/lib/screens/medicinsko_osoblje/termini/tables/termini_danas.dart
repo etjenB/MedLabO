@@ -695,7 +695,12 @@ class _TerminiDanasWidgetState extends State<TerminiDanasWidget>
         await _testoviProvider.getTestoviByTerminId(termin.terminID!);
     List<Test> allTests = List.from(testovi);
     for (var usluga in usluge) {
-      allTests.addAll(usluga.uslugaTestovi ?? []);
+      for (var i = 0; i < usluga.uslugaTestovi!.length; i++) {
+        if (!allTests.any(
+            (element) => element.testID == usluga.uslugaTestovi![i].testID)) {
+          allTests.add(usluga.uslugaTestovi![i]);
+        }
+      }
     }
     final _formKey = GlobalKey<FormBuilderState>();
 

@@ -275,7 +275,6 @@ class _NedovrseniTerminiWidgetState extends State<NedovrseniTerminiWidget>
         await _uslugeProvider.getTestoviByTerminId(termin.terminID!);
     List<Test>? testovi =
         await _testoviProvider.getTestoviByTerminId(termin.terminID!);
-    final _formKey = GlobalKey<FormBuilderState>();
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
