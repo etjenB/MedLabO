@@ -224,6 +224,11 @@ namespace MedLabO.Services
                 query = query.Where(t => t.Status == null);
             }
 
+            if (search?.Obrisan == true)
+            {
+                query = query.Where(t => t.isDeleted == true);
+            }
+
             if (search?.TerminiInFuture == true)
             {
                 query = query.Where(t => t.DTTermina.Date > DateTime.Now.Date);

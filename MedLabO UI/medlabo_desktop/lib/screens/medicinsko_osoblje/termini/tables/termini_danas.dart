@@ -824,9 +824,6 @@ class _TerminiDanasWidgetState extends State<TerminiDanasWidget>
               rezultati: rezultati,
             );
 
-            //izgleda da radi al treba jos testirat i koja logika ce bit kad se doda pa zeleno dugme dal inital value
-            //stavljat za polja i da se ne mogu editovat ili da mogu il kako sta
-
             await _terminiProvider.terminDodavanjeRezultata(terminTestRezultat);
 
             makeSuccessToast("Uspješno spremljeni rezultati.");

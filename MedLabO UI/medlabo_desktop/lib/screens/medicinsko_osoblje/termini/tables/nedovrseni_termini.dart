@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:medlabo_desktop/models/rezultat/rezultat.dart';
 import 'package:medlabo_desktop/models/search_result.dart';
 import 'package:medlabo_desktop/models/termin/termin.dart';
+import 'package:medlabo_desktop/models/termin/termin_otkazivanje_request.dart';
+import 'package:medlabo_desktop/models/termin/termin_test_rezultat_request.dart';
+import 'package:medlabo_desktop/models/termin/termin_zakljucak_request.dart';
 import 'package:medlabo_desktop/models/test/test.dart';
 import 'package:medlabo_desktop/models/usluga/usluga.dart';
 import 'package:medlabo_desktop/providers/termini_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_provider.dart';
 import 'package:medlabo_desktop/providers/usluge_provider.dart';
 import 'package:medlabo_desktop/utils/constants/design.dart';
+import 'package:medlabo_desktop/utils/general/dialog_utils.dart';
 import 'package:medlabo_desktop/utils/general/pagination_mixin.dart';
+import 'package:medlabo_desktop/utils/general/toast_utils.dart';
 import 'package:medlabo_desktop/utils/general/util.dart';
 import 'package:medlabo_desktop/widgets/pagination_widget.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +62,7 @@ class _NedovrseniTerminiWidgetState extends State<NedovrseniTerminiWidget>
       'PageSize': itemsPerPage,
       'UseSplitQuery': true,
       'Odobren': true,
+      'UObradi': true,
       'TerminiBefore': true,
       'OrderByDTTermina': true,
       'IncludeTerminPacijent': true,
@@ -75,6 +84,7 @@ class _NedovrseniTerminiWidgetState extends State<NedovrseniTerminiWidget>
         page, (filter) => _terminiProvider.get(filter: filter), 'FTS', {
       'UseSplitQuery': true,
       'Odobren': true,
+      'UObradi': true,
       'TerminiBefore': true,
       'OrderByDTTermina': true,
       'IncludeTerminPacijent': true,
@@ -129,10 +139,150 @@ class _NedovrseniTerminiWidgetState extends State<NedovrseniTerminiWidget>
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Flexible(
-                                  flex: 10,
+                                  flex: 5,
                                   child: Text(
                                       "${termini!.result[index].pacijent?.ime ?? 'Nema imena'} ${termini!.result[index].pacijent?.prezime ?? 'Nema prezimena'} - ${formatDateTime(termini!.result[index].dtTermina!)}"),
                                 ),
+                                Flexible(
+                                  flex: 5,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor: termini!
+                                                        .result[index]
+                                                        .placeno ==
+                                                    true
+                                                ? MaterialStatePropertyAll(
+                                                    Colors.green[300])
+                                                : MaterialStatePropertyAll(
+                                                    Colors.orange[300]),
+                                          ),
+                                          onPressed: () {},
+                                          child: const Icon(
+                                              Icons.monetization_on_outlined),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 6,
+                                      ),
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor: termini!
+                                                        .result[index]
+                                                        .zakljucakDodan ==
+                                                    true
+                                                ? MaterialStatePropertyAll(
+                                                    Colors.green[300])
+                                                : MaterialStatePropertyAll(
+                                                    Colors.orange[300]),
+                                          ),
+                                          onPressed: () async {
+                                            termini!.result[index]
+                                                        .zakljucakDodan !=
+                                                    true
+                                                ? showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder: (context) {
+                                                      return _buildZakljucakDialog(
+                                                          context,
+                                                          termini!
+                                                              .result[index]);
+                                                    },
+                                                  )
+                                                : null;
+                                          },
+                                          child: const Icon(
+                                              Icons.article_outlined),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 6,
+                                      ),
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor: termini!
+                                                        .result[index]
+                                                        .rezultatDodan ==
+                                                    true
+                                                ? MaterialStatePropertyAll(
+                                                    Colors.green[300])
+                                                : MaterialStatePropertyAll(
+                                                    Colors.orange[300]),
+                                          ),
+                                          onPressed: () async {
+                                            termini!.result[index]
+                                                        .rezultatDodan !=
+                                                    true
+                                                ? showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder: (context) {
+                                                      return FutureBuilder<
+                                                          Widget>(
+                                                        future:
+                                                            _buildRezultatDialog(
+                                                                context,
+                                                                termini!.result[
+                                                                    index]),
+                                                        builder: (BuildContext
+                                                                context,
+                                                            AsyncSnapshot<
+                                                                    Widget>
+                                                                snapshot) {
+                                                          if (snapshot
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .waiting) {
+                                                            return const Center(
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                              strokeWidth: 8,
+                                                            ));
+                                                          } else if (snapshot
+                                                              .hasError) {
+                                                            return Text(
+                                                                'Error: ${snapshot.error}');
+                                                          } else {
+                                                            return snapshot
+                                                                .data!;
+                                                          }
+                                                        },
+                                                      );
+                                                    },
+                                                  )
+                                                : null;
+                                          },
+                                          child: const Icon(
+                                              Icons.add_chart_rounded),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 6,
+                                      ),
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStatePropertyAll(
+                                                    Colors.red[500]),
+                                          ),
+                                          onPressed: () async {
+                                            await _otkaziTermin(
+                                                termini!.result[index], null);
+                                          },
+                                          child: const Icon(
+                                            Icons.delete_forever_outlined,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
                             onTap: () {
@@ -275,6 +425,7 @@ class _NedovrseniTerminiWidgetState extends State<NedovrseniTerminiWidget>
         await _uslugeProvider.getTestoviByTerminId(termin.terminID!);
     List<Test>? testovi =
         await _testoviProvider.getTestoviByTerminId(termin.terminID!);
+    final _formKey = GlobalKey<FormBuilderState>();
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -454,9 +605,330 @@ class _NedovrseniTerminiWidgetState extends State<NedovrseniTerminiWidget>
                 ),
               ),
             ]),
+            const SizedBox(
+              height: 5,
+            ),
+            FormBuilder(
+              key: _formKey,
+              child: FormBuilderTextField(
+                decoration:
+                    const InputDecoration(labelText: 'Razlog otkazivanja'),
+                name: 'razlogOtkazivanja',
+                maxLength: 300,
+                minLines: 1,
+                maxLines: 3,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(300),
+                ],
+                validator: FormBuilderValidators.compose(
+                    [FormBuilderValidators.maxLength(300)]),
+              ),
+            ),
           ],
         ),
       ),
+      actions: [
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(Colors.red)),
+                  onPressed: () async {
+                    if (_formKey.currentState == null ||
+                        !_formKey.currentState!.saveAndValidate()) {
+                      return;
+                    }
+
+                    await _otkaziTermin(termin,
+                        _formKey.currentState?.value['razlogOtkazivanja']);
+
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    'Otkaži termin',
+                    style: TextStyle(color: primaryWhiteTextColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Future _otkaziTermin(Termin termin, dynamic razlogOtkazivanjaValue) async {
+    bool shouldProceed = await showConfirmationDialog(
+        context, 'Potvrda', 'Da li ste sigurni da želite otkazati termin?');
+    if (!shouldProceed) return;
+
+    TerminOtkazivanjeRequest terminOtkazivanjeRequest =
+        TerminOtkazivanjeRequest(
+      terminID: termin.terminID,
+      razlogOtkazivanja: razlogOtkazivanjaValue,
+    );
+
+    await _terminiProvider.terminOtkazivanje(terminOtkazivanjeRequest);
+
+    makeAlertToast("Termin otkazan.", "warning", Alignment.center);
+
+    fetchPage(currentPage);
+  }
+
+  Widget _buildZakljucakDialog(BuildContext context, Termin termin) {
+    final _formKey = GlobalKey<FormBuilderState>();
+
+    return AlertDialog(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+                "Zaključak za termin: ${formatDateTime(termin.dtTermina!)}"),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          width: 800,
+          child: FormBuilder(
+              key: _formKey,
+              child: Column(
+                children: [
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Opis'),
+                    name: 'opis',
+                    maxLength: 100,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(100),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Opis je obavezan."),
+                      FormBuilderValidators.maxLength(100)
+                    ]),
+                  ),
+                  FormBuilderTextField(
+                    decoration: const InputDecoration(labelText: 'Detaljno'),
+                    name: 'detaljno',
+                    maxLines: 7,
+                    minLines: 1,
+                    maxLength: 10000,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(10000),
+                    ],
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Polje 'Detaljno' je obavezno polje."),
+                      FormBuilderValidators.maxLength(10000)
+                    ]),
+                  ),
+                ],
+              )),
+        ),
+      ),
+      actions: [
+        TextButton(
+          style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Colors.green)),
+          onPressed: () async {
+            if (_formKey.currentState == null ||
+                !_formKey.currentState!.saveAndValidate()) {
+              return;
+            }
+
+            bool shouldProceed = await showConfirmationDialog(
+                context,
+                'Potvrda',
+                'Da li ste sigurni da želite spremiti zaključak termina?');
+            if (!shouldProceed) return;
+
+            TerminZakljucak terminZakljucak = TerminZakljucak(
+              opis: _formKey.currentState?.value['opis'],
+              detaljno: _formKey.currentState?.value['detaljno'],
+              terminID: termin.terminID,
+            );
+
+            await _terminiProvider.terminDodavanjeZakljucka(terminZakljucak);
+
+            makeSuccessToast("Uspješno spremljen zaključak.");
+
+            fetchPage(currentPage);
+
+            Navigator.of(context).pop();
+          },
+          child: const Text(
+            'Spremi zaključak',
+            style: TextStyle(color: primaryWhiteTextColor),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<Widget> _buildRezultatDialog(
+      BuildContext context, Termin termin) async {
+    List<Usluga>? usluge =
+        await _uslugeProvider.getTestoviByTerminId(termin.terminID!);
+    List<Test>? testovi =
+        await _testoviProvider.getTestoviByTerminId(termin.terminID!);
+    List<Test> allTests = List.from(testovi);
+    for (var usluga in usluge) {
+      for (var i = 0; i < usluga.uslugaTestovi!.length; i++) {
+        if (!allTests.any(
+            (element) => element.testID == usluga.uslugaTestovi![i].testID)) {
+          allTests.add(usluga.uslugaTestovi![i]);
+        }
+      }
+    }
+    final _formKey = GlobalKey<FormBuilderState>();
+
+    return AlertDialog(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+                "Rezultati za termin: ${formatDateTime(termin.dtTermina!)}"),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
+      content: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          width: 800,
+          child: FormBuilder(
+            key: _formKey,
+            child: Column(
+              children: allTests.map(
+                (test) {
+                  return Wrap(
+                    children: [
+                      Text(test.naziv ?? 'Nepoznato'),
+                      FormBuilderTextField(
+                        decoration: const InputDecoration(
+                            labelText: 'Rezultat u broju'),
+                        name: 'rezFlo_${test.testID}',
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'^\d+\.?\d*')),
+                          LengthLimitingTextInputFormatter(10)
+                        ],
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.numeric(
+                              errorText: "Unesite ispravnu vrijednost."),
+                        ]),
+                      ),
+                      FormBuilderTextField(
+                        decoration:
+                            const InputDecoration(labelText: 'Rezultat'),
+                        name: 'rezStr_${test.testID}',
+                        maxLength: 60,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(60),
+                        ],
+                      ),
+                      FormBuilderTextField(
+                        decoration:
+                            const InputDecoration(labelText: 'Zaključak testa'),
+                        name: 'testZakljucak_${test.testID}',
+                        maxLines: 3,
+                        minLines: 1,
+                        maxLength: 1000,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(1000),
+                        ],
+                        validator: FormBuilderValidators.compose([
+                          FormBuilderValidators.required(
+                              errorText: "Zaključak je obavezan."),
+                          FormBuilderValidators.maxLength(1000)
+                        ]),
+                      ),
+                    ],
+                  );
+                },
+              ).toList(),
+            ),
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(Colors.green)),
+          onPressed: () async {
+            if (_formKey.currentState == null ||
+                !_formKey.currentState!.saveAndValidate()) {
+              return;
+            }
+
+            bool shouldProceed = await showConfirmationDialog(context,
+                'Potvrda', 'Da li ste sigurni da želite spremiti rezultate?');
+            if (!shouldProceed) return;
+
+            List<Rezultat> rezultati = [];
+            for (var test in allTests) {
+              var formData = _formKey.currentState!.value;
+
+              String? rezFloString = formData['rezFlo_${test.testID}'];
+              double? rezFloDouble;
+
+              if (rezFloString != null && rezFloString.isNotEmpty) {
+                rezFloDouble = parseStringToDouble(rezFloString);
+                if (rezFloDouble == null) {
+                  Navigator.of(context).pop();
+                  makeErrorToast("Greška pri provjeri rezultata u broju.");
+                  return;
+                }
+              }
+
+              Rezultat rezultat = Rezultat(
+                rezFlo: rezFloDouble,
+                rezStr: formData['rezStr_${test.testID}'],
+                testZakljucak: formData['testZakljucak_${test.testID}'],
+              );
+              rezultati.add(rezultat);
+            }
+
+            TerminTestRezultat terminTestRezultat = TerminTestRezultat(
+              terminID: termin.terminID,
+              testIDs: allTests.map((test) => test.testID!).toList(),
+              rezultati: rezultati,
+            );
+
+            await _terminiProvider.terminDodavanjeRezultata(terminTestRezultat);
+
+            makeSuccessToast("Uspješno spremljeni rezultati.");
+
+            fetchPage(currentPage);
+
+            Navigator.of(context).pop();
+          },
+          child: const Text(
+            'Spremi rezultate',
+            style: TextStyle(color: primaryWhiteTextColor),
+          ),
+        ),
+      ],
     );
   }
 }
