@@ -58,6 +58,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IAdministratorService, AdministratorService>();
 builder.Services.AddTransient<IMedicinskoOsobljeService, MedicinskoOsobljeService>();
+builder.Services.AddTransient<IPacijentService, PacijentService>();
 builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<ITestParametarService, TestParametarService>();
 builder.Services.AddTransient<IUslugaService, UslugaService>();
@@ -74,13 +75,15 @@ builder.Services.AddTransient<IService<MedLabO.Models.Administrator, Administrat
 
 builder.Services.AddTransient<IService<MedLabO.Models.MedicinskoOsoblje, MedicinskoOsobljeSearchObject>, MedicinskoOsobljeService>();
 
+builder.Services.AddTransient<IService<MedLabO.Models.Pacijent.PacijentWithoutTermini, PacijentSearchObject>, PacijentService>();
+
 builder.Services.AddTransient<IService<MedLabO.Models.Termin, TerminSearchObject>, TerminService>();
 
 builder.Services.AddTransient<IService<MedLabO.Models.Novost, NovostSearchObject>, NovostService>();
 
 builder.Services.AddTransient<IService<MedLabO.Models.Obavijest, ObavijestSearchObject>, ObavijestService>();
 
-builder.Services.AddTransient<IService<MedLabO.Models.Usluga, UslugaSearchObject>, UslugaService>();
+builder.Services.AddTransient<IService<MedLabO.Models.Usluga.Usluga, UslugaSearchObject>, UslugaService>();
 
 //Inject DbContext
 //NuGet Potrebno Microsoft.EntityFrameworkCore.SqlServer

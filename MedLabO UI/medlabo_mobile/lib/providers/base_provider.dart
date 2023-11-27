@@ -1,21 +1,28 @@
-/* import 'dart:convert';
+import 'dart:convert';
+import 'dart:io';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
-import 'package:medlabo_desktop/models/search_result.dart';
+import 'package:http/io_client.dart';
+import 'package:medlabo_mobile/models/search_result.dart';
 import '../utils/general/toast_utils.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
   static String? baseUrl;
   String endpoint = "";
   final storage = const FlutterSecureStorage();
+  HttpClient client = HttpClient()
+    ..badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+  late IOClient ioClient;
 
   BaseProvider(String endp) {
     endpoint = endp;
     baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7213/");
+        defaultValue:
+            "https://192.168.1.10:7213/" /*za emulator "https://10.0.2.2:7213/" */);
+    ioClient = IOClient(client);
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {
@@ -29,7 +36,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     var headers = await createHeaders();
 
-    var response = await http.get(uri, headers: headers);
+    var response = await ioClient.get(uri, headers: headers);
 
     if (isValidResponse(response)['isValid']) {
       var data = jsonDecode(response.body);
@@ -56,7 +63,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     var headers = await createHeaders();
 
-    var response = await http.get(uri, headers: headers);
+    var response = await ioClient.get(uri, headers: headers);
 
     if (isValidResponse(response)['isValid']) {
       var data = jsonDecode(response.body);
@@ -75,7 +82,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     var headers = await createHeaders();
     var jsonRequest = jsonEncode(request);
-    var response = await http.put(uri, headers: headers, body: jsonRequest);
+    var response = await ioClient.put(uri, headers: headers, body: jsonRequest);
 
     if (isValidResponse(response)['isValid']) {
       var data = jsonDecode(response.body);
@@ -92,7 +99,8 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var uri = Uri.parse(url);
     var headers = await createHeaders();
     var jsonRequest = jsonEncode(request);
-    var response = await http.post(uri, headers: headers, body: jsonRequest);
+    var response =
+        await ioClient.post(uri, headers: headers, body: jsonRequest);
 
     if (isValidResponse(response)['isValid']) {
       var data = jsonDecode(response.body);
@@ -108,7 +116,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var url = '$baseUrl$endpoint/$id';
     var uri = Uri.parse(url);
     var headers = await createHeaders();
-    var response = await http.delete(uri, headers: headers);
+    var response = await ioClient.delete(uri, headers: headers);
 
     if (isValidResponse(response)['isValid']) {
       return;
@@ -209,4 +217,3 @@ abstract class BaseProvider<T> with ChangeNotifier {
     return query;
   }
 }
- */

@@ -3,6 +3,7 @@ using MedLabO.Models.Pacijent;
 using MedLabO.Models.Requests;
 using MedLabO.Models.Requests.Termin;
 using MedLabO.Models.Test;
+using MedLabO.Models.Usluga;
 
 namespace MedLabO.Services
 {
@@ -18,12 +19,14 @@ namespace MedLabO.Services
             CreateMap<MedicinskoOsobljeUpdateRequest, Database.MedicinskoOsoblje>().ReverseMap();
             CreateMap<Database.Pacijent, Pacijent>().ReverseMap();
             CreateMap<Database.Pacijent, PacijentWithoutTermini>().ReverseMap();
+            CreateMap<PacijentRegistrationRequest, Database.Pacijent>().ReverseMap();
             CreateMap<Database.Spol, Models.Spol>().ReverseMap();
             CreateMap<Database.Zvanje, Models.Zvanje>().ReverseMap();
             CreateMap<TestInsertRequest, Database.Test>().ReverseMap();
             CreateMap<TestUpdateRequest, Database.Test>().ReverseMap();
             CreateMap<Database.Test, Test>().ReverseMap();
             CreateMap<Database.Test, TestWithoutTerminTestovi>().ReverseMap();
+            CreateMap<Database.Test, TestBasicData>().ReverseMap();
             CreateMap<TestParametarInsertRequest, Database.TestParametar>().ReverseMap();
             CreateMap<TestParametarUpdateRequest, Database.TestParametar>().ReverseMap();
             CreateMap<Database.TestParametar, Models.TestParametar>().ReverseMap();
@@ -42,7 +45,8 @@ namespace MedLabO.Services
             CreateMap<Database.Obavijest, Models.Obavijest>().ReverseMap();
             CreateMap<UslugaInsertRequest, Database.Usluga>().ReverseMap();
             CreateMap<UslugaUpdateRequest, Database.Usluga>().ReverseMap();
-            CreateMap<Database.Usluga, Models.Usluga>().ReverseMap();
+            CreateMap<Database.Usluga, Usluga>().ReverseMap();
+            CreateMap<Database.Usluga, UslugaBasicData>().ReverseMap();
         }
     }
 }

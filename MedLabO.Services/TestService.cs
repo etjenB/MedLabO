@@ -19,6 +19,12 @@ namespace MedLabO.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<ICollection<Models.Test.TestBasicData>?> GetTestoviBasicData()
+        {
+            List<Database.Test> testovi = await _db.Testovi.ToListAsync();
+            return _mapper.Map<List<Models.Test.TestBasicData>>(testovi);
+        }
+
         public async Task<ICollection<Models.Test.TestWithoutTerminTestovi>?> GetTestoviByTerminId(Guid terminId)
         {
             var terminTestovi = _db.TerminTest.Where(tt => tt.TerminID == terminId);
@@ -29,6 +35,14 @@ namespace MedLabO.Services
                 testovi.Add(await _db.Testovi.FirstOrDefaultAsync(t => t.TestID == tt.TestID));
             }
             return _mapper.Map<List<Models.Test.TestWithoutTerminTestovi>>(testovi);
+        }
+
+        public async Task<ICollection<Models.Test.TestWithoutTerminTestovi>?> GetTestoviByUslugaId(Guid uslugaId)
+        {
+            var usluga = await _db.Usluge.Include(u => u.UslugaTestovi).FirstOrDefaultAsync(u => u.UslugaID == uslugaId);
+            if (usluga == null) throw new EntityNotFoundException("Usluga nije pronađena.");
+            List<Database.Test> uslugaTestovi = usluga.UslugaTestovi.ToList();
+            return _mapper.Map<List<Models.Test.TestWithoutTerminTestovi>>(uslugaTestovi);
         }
 
         public override async Task BeforeInsert(Database.Test entity, TestInsertRequest insert)

@@ -34,5 +34,23 @@ namespace MedLabO.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("PacijentRegistration")]
+        public async Task<IActionResult> PacijentRegistration(PacijentRegistrationRequest request)
+        {
+            try
+            {
+                var token = await _authService.PacijentRegistration(request);
+                if (!string.IsNullOrEmpty(token))
+                {
+                    return Ok(new { Token = token });
+                }
+                return BadRequest("Invalid registration attempt.");
+            }
+            catch (UserException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

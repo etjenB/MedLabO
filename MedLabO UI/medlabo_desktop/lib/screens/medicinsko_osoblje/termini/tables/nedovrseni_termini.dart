@@ -422,7 +422,7 @@ class _NedovrseniTerminiWidgetState extends State<NedovrseniTerminiWidget>
   Future<Widget> _buildDialogForNedovrseniTerminiPreview(
       BuildContext context, Termin termin) async {
     List<Usluga>? usluge =
-        await _uslugeProvider.getTestoviByTerminId(termin.terminID!);
+        await _uslugeProvider.getUslugeByTerminId(termin.terminID!);
     List<Test>? testovi =
         await _testoviProvider.getTestoviByTerminId(termin.terminID!);
     final _formKey = GlobalKey<FormBuilderState>();
@@ -781,7 +781,7 @@ class _NedovrseniTerminiWidgetState extends State<NedovrseniTerminiWidget>
   Future<Widget> _buildRezultatDialog(
       BuildContext context, Termin termin) async {
     List<Usluga>? usluge =
-        await _uslugeProvider.getTestoviByTerminId(termin.terminID!);
+        await _uslugeProvider.getUslugeByTerminId(termin.terminID!);
     List<Test>? testovi =
         await _testoviProvider.getTestoviByTerminId(termin.terminID!);
     List<Test> allTests = List.from(testovi);

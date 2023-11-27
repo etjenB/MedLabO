@@ -6,6 +6,8 @@ namespace MedLabO.Services
 {
     public interface ITestService : ICRUDService<Test, TestSearchObject, TestInsertRequest, TestUpdateRequest>
     {
+        Task<ICollection<Models.Test.TestBasicData>?> GetTestoviBasicData();
         Task<ICollection<Models.Test.TestWithoutTerminTestovi>> GetTestoviByTerminId(Guid terminId);
+        Task<ICollection<Models.Test.TestWithoutTerminTestovi>?> GetTestoviByUslugaId(Guid uslugaId);
     }
 }

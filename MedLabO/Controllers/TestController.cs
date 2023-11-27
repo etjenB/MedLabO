@@ -17,10 +17,22 @@ namespace MedLabO.Controllers
             _testService = service;
         }
 
+        [HttpGet("GetTestoviBasicData")]
+        public async Task<ICollection<Models.Test.TestBasicData>?> GetTestoviBasicData()
+        {
+            return await _testService.GetTestoviBasicData();
+        }
+
         [HttpGet("GetTestoviByTerminId/{terminId}")]
         public async Task<ICollection<Models.Test.TestWithoutTerminTestovi>?> GetTestoviByTerminId(Guid terminId)
         {
             return await _testService.GetTestoviByTerminId(terminId);
+        }
+
+        [HttpGet("GetTestoviByUslugaId/{uslugaId}")]
+        public async Task<ICollection<Models.Test.TestWithoutTerminTestovi>?> GetTestoviByUslugaId(Guid uslugaId)
+        {
+            return await _testService.GetTestoviByUslugaId(uslugaId);
         }
     }
 }

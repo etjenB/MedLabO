@@ -303,7 +303,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
   Future<Widget> _buildDialogForTerminZahtjevPreview(
       BuildContext context, Termin termin) async {
     List<Usluga>? usluge =
-        await _uslugeProvider.getTestoviByTerminId(termin.terminID!);
+        await _uslugeProvider.getUslugeByTerminId(termin.terminID!);
     List<Test>? testovi =
         await _testoviProvider.getTestoviByTerminId(termin.terminID!);
     final _formKey = GlobalKey<FormBuilderState>();

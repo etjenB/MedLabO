@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MedLabO.Models;
 using MedLabO.Models.Exceptions;
 using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
@@ -11,7 +10,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MedLabO.Services
 {
-    public class UslugaService : CRUDService<Models.Usluga, Database.Usluga, UslugaSearchObject, UslugaInsertRequest, UslugaUpdateRequest>, IUslugaService
+    public class UslugaService : CRUDService<Models.Usluga.Usluga, Database.Usluga, UslugaSearchObject, UslugaInsertRequest, UslugaUpdateRequest>, IUslugaService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -20,7 +19,13 @@ namespace MedLabO.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ICollection<Models.Usluga>?> GetUslugeByTerminId(Guid terminId)
+        public async Task<ICollection<Models.Usluga.UslugaBasicData>?> GetUslugeBasicData()
+        {
+            List<Database.Usluga> usluge = await _db.Usluge.ToListAsync();
+            return _mapper.Map<List<Models.Usluga.UslugaBasicData>>(usluge);
+        }
+
+        public async Task<ICollection<Models.Usluga.Usluga>?> GetUslugeByTerminId(Guid terminId)
         {
             var termin = await _db.Termini.Include(t=>t.TerminUsluge).FirstOrDefaultAsync(t => t.TerminID == terminId);
             if (termin == null) throw new EntityNotFoundException("Termin nije pronađen.");
@@ -29,7 +34,7 @@ namespace MedLabO.Services
             {
                 usluge.Add(await _db.Usluge.Include(u=>u.UslugaTestovi).FirstOrDefaultAsync(u => u.UslugaID == tu.UslugaID));
             }
-            return _mapper.Map<List<Models.Usluga>>(usluge);
+            return _mapper.Map<List<Models.Usluga.Usluga>>(usluge);
         }
 
         public override async Task BeforeInsert(Database.Usluga entity, UslugaInsertRequest insert)

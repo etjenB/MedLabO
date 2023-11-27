@@ -133,12 +133,14 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                           fontSize: 24,
                           color: primaryBlackTextColor))),
               RichText(
-                  text: const TextSpan(
-                      text: 'Lista uposlenika',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                          color: primaryDarkTextColor))),
+                text: const TextSpan(
+                  text: 'Lista uposlenika',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                      color: primaryDarkTextColor),
+                ),
+              ),
             ],
           ),
         ),
@@ -150,39 +152,41 @@ class _UposleniciScreenState extends State<UposleniciScreen>
           ),
         ),
         Flexible(
-            flex: 2,
-            child: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) {
-                      return _buildDialogForUposlenikAdd(context);
-                    },
-                  );
+          flex: 2,
+          child: ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return _buildDialogForUposlenikAdd(context);
                 },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Flexible(
-                        flex: 1,
-                        child: Icon(Icons.add, color: primaryLightTextColor)),
-                    const Flexible(child: SizedBox(width: 8)),
-                    Flexible(
-                      flex: 9,
-                      child: RichText(
-                        text: const TextSpan(
-                          text: 'Registruj uposlenika',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
-                            color: primaryWhiteTextColor,
-                          ),
-                        ),
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Flexible(
+                    flex: 1,
+                    child: Icon(Icons.add, color: primaryLightTextColor)),
+                const Flexible(child: SizedBox(width: 8)),
+                Flexible(
+                  flex: 9,
+                  child: RichText(
+                    text: const TextSpan(
+                      text: 'Registruj uposlenika',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        color: primaryWhiteTextColor,
                       ),
                     ),
-                  ],
-                ))),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

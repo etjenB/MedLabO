@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MedLabO.Models.CustomAttributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace MedLabO.Models.Requests
         public bool IsActive { get; set; }
 
         [Required]
+        [GenderCheck]
         public int SpolID { get; set; }
 
         [Required]

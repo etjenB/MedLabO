@@ -26,7 +26,7 @@ namespace MedLabO.Models
         public bool Placeno { get; set; }
         public byte[]? RezultatTerminaPDF { get; set; }
 
-        public ICollection<Usluga> TerminUsluge { get; set; } = new List<Usluga>();
+        public ICollection<Usluga.Usluga> TerminUsluge { get; set; } = new List<Usluga.Usluga>();
         public ICollection<TerminTest> TerminTestovi { get; set; } = new List<TerminTest>();
 
         public string? PacijentID { get; set; }

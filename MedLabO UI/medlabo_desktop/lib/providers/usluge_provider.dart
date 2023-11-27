@@ -13,7 +13,7 @@ class UslugeProvider extends BaseProvider<Usluga> {
     return Usluga.fromJson(data);
   }
 
-  Future<List<Usluga>> getTestoviByTerminId(String terminId) async {
+  Future<List<Usluga>> getUslugeByTerminId(String terminId) async {
     var url = '${BaseProvider.baseUrl}$endpoint/GetUslugeByTerminId/$terminId';
 
     var uri = Uri.parse(url);

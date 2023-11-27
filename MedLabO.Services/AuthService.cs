@@ -9,6 +9,9 @@ using MedLabO.Services.Database;
 using Microsoft.Extensions.Configuration;
 using MedLabO.Models.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using MedLabO.Models.Requests;
+using System.Collections.Generic;
+using AutoMapper;
 
 namespace MedLabO.Services
 {
@@ -17,12 +20,14 @@ namespace MedLabO.Services
         private UserManager<Database.ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly MedLabOContext _db;
+        private IMapper _mapper;
 
-        public AuthService(UserManager<Database.ApplicationUser> userManager, IConfiguration configuration, MedLabOContext db)
+        public AuthService(UserManager<Database.ApplicationUser> userManager, IConfiguration configuration, MedLabOContext db, IMapper mapper)
         {
             _userManager = userManager;
             _configuration = configuration;
             _db = db;
+            _mapper = mapper;
         }
 
         public async Task<string> Login(string username, string password)
@@ -55,6 +60,49 @@ namespace MedLabO.Services
             return GenerateToken(user, role);
         }
 
+        public async Task<string> PacijentRegistration(PacijentRegistrationRequest request)
+        {
+            //Microsoft Identity kada traži usera u bazi po username-u je case insensitive
+            var existingUser = await _userManager.FindByNameAsync(request.UserName);
+            if (existingUser != null)
+            {
+                throw new UserException("Korisnicko ime vec postoji.");
+            }
+
+            var existingUserByEmail = await _userManager.FindByEmailAsync(request.Email);
+            if (existingUserByEmail != null)
+            {
+                throw new UserException("E-mail se vec koristi od strane drugog korisnika.");
+            }
+
+            try
+            {
+                var pacijent = _mapper.Map<Database.Pacijent>(request);
+                await _userManager.CreateAsync(pacijent, request.Password);
+                await _userManager.AddToRoleAsync(pacijent, RoleNames.Pacijent);
+            }
+            catch
+            {
+                throw new UserException("Unable to register Pacijent.");
+            }
+
+            var user = await _userManager.FindByNameAsync(request.UserName);
+            if (user == null)
+            {
+                throw new UserException("User registration failed.");
+            }
+
+            var role = await DetermineUserRole(user);
+
+            if (string.IsNullOrEmpty(role))
+            {
+                throw new UserException("User doesn't have a role.");
+            }
+
+            return GenerateToken(user, role);
+        }
+
+        #region private
         private async Task<string> DetermineUserRole(Database.ApplicationUser user)
         {
             var roles = await _userManager.GetRolesAsync(user);
@@ -132,5 +180,7 @@ namespace MedLabO.Services
 
         //    throw new UserException("Invalid login attempt.");
         //}
+
+        #endregion
     }
 }

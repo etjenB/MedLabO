@@ -400,7 +400,7 @@ class _TerminiDanasWidgetState extends State<TerminiDanasWidget>
   Future<Widget> _buildDialogForTerminiDanasPreview(
       BuildContext context, Termin termin) async {
     List<Usluga>? usluge =
-        await _uslugeProvider.getTestoviByTerminId(termin.terminID!);
+        await _uslugeProvider.getUslugeByTerminId(termin.terminID!);
     List<Test>? testovi =
         await _testoviProvider.getTestoviByTerminId(termin.terminID!);
     return AlertDialog(
@@ -690,7 +690,7 @@ class _TerminiDanasWidgetState extends State<TerminiDanasWidget>
   Future<Widget> _buildRezultatDialog(
       BuildContext context, Termin termin) async {
     List<Usluga>? usluge =
-        await _uslugeProvider.getTestoviByTerminId(termin.terminID!);
+        await _uslugeProvider.getUslugeByTerminId(termin.terminID!);
     List<Test>? testovi =
         await _testoviProvider.getTestoviByTerminId(termin.terminID!);
     List<Test> allTests = List.from(testovi);
