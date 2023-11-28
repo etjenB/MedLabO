@@ -10,6 +10,8 @@ class TerminiScreen extends StatefulWidget {
 class _TerminiScreenState extends State<TerminiScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Container());
+    return Container(
+      child: Text("Termini"),
+    );
   }
 }

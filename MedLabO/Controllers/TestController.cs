@@ -34,5 +34,11 @@ namespace MedLabO.Controllers
         {
             return await _testService.GetTestoviByUslugaId(uslugaId);
         }
+
+        [HttpGet("GetTestoviBasicDataByUslugaId/{uslugaId}")]
+        public async Task<ICollection<Models.Test.TestBasicData>?> GetTestoviBasicDataByUslugaId(Guid uslugaId)
+        {
+            return await _testService.GetTestoviBasicDataByUslugaId(uslugaId);
+        }
     }
 }

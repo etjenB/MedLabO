@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:medlabo_mobile/models/cart/cart.dart';
 import 'package:medlabo_mobile/models/pacijent/pacijent_registration_request.dart';
 import 'package:medlabo_mobile/providers/login_provider.dart';
 import 'package:medlabo_mobile/providers/novosti_provider.dart';
@@ -17,7 +18,7 @@ import 'package:medlabo_mobile/utils/constants/enums.dart';
 import 'package:medlabo_mobile/utils/constants/strings.dart';
 import 'package:medlabo_mobile/utils/general/auth_util.dart';
 import 'package:medlabo_mobile/utils/general/dialog_utils.dart';
-import 'package:medlabo_mobile/utils/general/toast_utils.dart';
+import 'package:medlabo_mobile/widgets/cart_fab_wiget.dart';
 import 'package:medlabo_mobile/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:oktoast/oktoast.dart';
@@ -26,27 +27,45 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => LoginProvider()),
+      ChangeNotifierProvider(create: (_) => Cart()),
       ChangeNotifierProvider(create: (_) => PacijentProvider()),
       ChangeNotifierProvider(create: (_) => NovostiProvider()),
       ChangeNotifierProvider(create: (_) => UslugeProvider()),
       ChangeNotifierProvider(create: (_) => TestoviProvider()),
       ChangeNotifierProvider(create: (_) => TestParametriProvider()),
     ],
-    child: const MyApp(),
+    child: MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: primaryMedLabOColor),
+        useMaterial3: true,
+      ),
+      home: OKToast(
+        child: Scaffold(
+          key: scaffoldKey,
+          body: const MyMaterialApp(),
+          floatingActionButton: Stack(
+            children: [
+              Positioned(
+                right: MediaQuery.of(context).size.width * 0.01,
+                bottom: MediaQuery.of(context).size.height * 0.08,
+                child: const CartFAB(),
+              ),
+            ],
+          ),
         ),
-        home: const OKToast(child: MyMaterialApp()));
+      ),
+    );
   }
 }
 
@@ -76,7 +95,6 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _obscureText = true;
   LoginProvider? _loginProvider;
-  PacijentProvider? _pacijentProvider;
   bool loginFailed = false;
   int _selectedTabIndex = 0;
   final _formKey = GlobalKey<FormBuilderState>();
@@ -85,7 +103,6 @@ class _LoginPageState extends State<LoginPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _loginProvider = Provider.of<LoginProvider>(context);
-    _pacijentProvider = Provider.of<PacijentProvider>(context);
   }
 
   @override

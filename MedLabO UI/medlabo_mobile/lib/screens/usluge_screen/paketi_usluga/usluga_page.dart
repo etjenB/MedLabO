@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:medlabo_mobile/models/cart/cart.dart';
 import 'package:medlabo_mobile/models/test/test.dart';
 import 'package:medlabo_mobile/models/usluga/usluga.dart';
 import 'package:medlabo_mobile/providers/testovi_provider.dart';
 import 'package:medlabo_mobile/screens/usluge_screen/pojedinacni_testovi/test_page.dart';
 import 'package:medlabo_mobile/utils/constants/design.dart';
+import 'package:medlabo_mobile/utils/general/toast_utils.dart';
 import 'package:medlabo_mobile/utils/general/util.dart';
 import 'package:provider/provider.dart';
 
@@ -151,7 +153,33 @@ class _UslugaPageState extends State<UslugaPage> {
                             }),
                             sizedBoxHeightM,
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                var cart =
+                                    Provider.of<Cart>(context, listen: false);
+
+                                CartItem? item = null;
+                                if (testovi != null) {
+                                  for (var i = 0; i < testovi!.length; i++) {
+                                    item = cart.getItem(testovi![i].testID!);
+                                    if (item != null) {
+                                      cart.removeItem(item.id);
+                                    }
+                                  }
+                                }
+
+                                cart.addItem(
+                                  widget.usluga.uslugaID!,
+                                  widget.usluga.cijena ?? 0,
+                                  widget.usluga.naziv ?? "Nepoznato",
+                                  CartItemType.usluga,
+                                );
+
+                                makeAlertToast(
+                                    "Usluga ${widget.usluga.naziv} uspješno dodana u vaš termin. ${item != null ? "Dodavanjem ove usluge uklonili ste sljedeći test iz korpe: ${item.title}" : ""}",
+                                    "success",
+                                    Alignment.center,
+                                    item != null ? 7 : 2);
+                              },
                               style: ElevatedButton.styleFrom(
                                 minimumSize: Size(double.infinity,
                                     MediaQuery.of(context).size.height * 0.07),

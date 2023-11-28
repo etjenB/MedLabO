@@ -66,7 +66,8 @@ void makeSuccessToast(String message) {
 }
 
 void makeAlertToast(String message, String status,
-    [AlignmentGeometry toastPosition = Alignment.bottomCenter]) {
+    [AlignmentGeometry toastPosition = Alignment.bottomCenter,
+    int duration = 2]) {
   Color? toastColor;
   switch (status) {
     case "error":
@@ -111,5 +112,6 @@ void makeAlertToast(String message, String status,
       ),
     ),
     position: ToastPosition(align: toastPosition),
+    duration: Duration(seconds: duration),
   );
 }

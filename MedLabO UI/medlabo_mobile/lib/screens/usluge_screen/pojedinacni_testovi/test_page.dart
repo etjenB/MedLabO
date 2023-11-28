@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:medlabo_mobile/models/cart/cart.dart';
 import 'package:medlabo_mobile/models/test/test.dart';
 import 'package:medlabo_mobile/models/test_parametar/test_parametar.dart';
 import 'package:medlabo_mobile/providers/test_parametri_provider.dart';
+import 'package:medlabo_mobile/providers/testovi_provider.dart';
 import 'package:medlabo_mobile/utils/constants/design.dart';
+import 'package:medlabo_mobile/utils/general/toast_utils.dart';
 import 'package:medlabo_mobile/utils/general/util.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +19,7 @@ class TestPage extends StatefulWidget {
 }
 
 class _TestPageState extends State<TestPage> {
+  late TestoviProvider _testoviProvider;
   late TestParametriProvider _testParametriProvider;
   TestParametar? testParametar;
 
@@ -23,6 +27,7 @@ class _TestPageState extends State<TestPage> {
   void initState() {
     super.initState();
     _testParametriProvider = context.read<TestParametriProvider>();
+    _testoviProvider = context.read<TestoviProvider>();
     initForm();
   }
 
@@ -103,7 +108,41 @@ class _TestPageState extends State<TestPage> {
                               ),
                             sizedBoxHeightM,
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                var cart =
+                                    Provider.of<Cart>(context, listen: false);
+
+                                var cartUsluge = cart.getAllUslugaItems();
+
+                                for (var i = 0; i < cartUsluge.length; i++) {
+                                  List<Test> testovi = await _testoviProvider
+                                      .getTestoviBasicDataByUslugaId(
+                                          cartUsluge[i].id);
+                                  if (testovi.isNotEmpty) {
+                                    for (var j = 0; j < testovi.length; j++) {
+                                      if (testovi[j].testID ==
+                                          widget.test.testID) {
+                                        makeAlertToast(
+                                            "Test nije dodan jer se već nalazi u usluzi: ${cartUsluge[i].title} koju ste dodali u termin.",
+                                            "warning",
+                                            Alignment.center,
+                                            7);
+                                        return;
+                                      }
+                                    }
+                                  }
+                                }
+
+                                cart.addItem(
+                                  widget.test.testID!,
+                                  widget.test.cijena ?? 0,
+                                  widget.test.naziv ?? "Nepoznato",
+                                  CartItemType.test,
+                                );
+
+                                makeSuccessToast(
+                                    "Test ${widget.test.naziv} uspješno dodan u vaš termin.");
+                              },
                               style: ElevatedButton.styleFrom(
                                 minimumSize: Size(double.infinity,
                                     MediaQuery.of(context).size.height * 0.07),

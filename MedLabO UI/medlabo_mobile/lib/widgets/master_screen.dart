@@ -49,13 +49,13 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.add_outlined),
         iconSize: 40,
-        title: ("Novi termin"),
+        title: ("Zakaži termin"),
         activeColorPrimary: secondaryMedLabOColor,
         activeColorSecondary: Colors.white,
         inactiveColorPrimary: Colors.white,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.calendar_month_outlined),
+        icon: const Icon(Icons.calendar_today_outlined),
         title: ("Termini"),
         activeColorPrimary: secondaryMedLabOColor,
         inactiveColorPrimary: Colors.white,
