@@ -158,14 +158,20 @@ class _UslugaPageState extends State<UslugaPage> {
                                     Provider.of<Cart>(context, listen: false);
 
                                 CartItem? item = null;
+                                var removedTests = [];
                                 if (testovi != null) {
                                   for (var i = 0; i < testovi!.length; i++) {
                                     item = cart.getItem(testovi![i].testID!);
                                     if (item != null) {
                                       cart.removeItem(item.id);
+                                      removedTests.add(item);
                                     }
                                   }
                                 }
+
+                                String removedTestTitles = removedTests
+                                    .map((item) => item.title)
+                                    .join(", ");
 
                                 cart.addItem(
                                   widget.usluga.uslugaID!,
@@ -175,7 +181,7 @@ class _UslugaPageState extends State<UslugaPage> {
                                 );
 
                                 makeAlertToast(
-                                    "Usluga ${widget.usluga.naziv} uspješno dodana u vaš termin. ${item != null ? "Dodavanjem ove usluge uklonili ste sljedeći test iz korpe: ${item.title}" : ""}",
+                                    "Usluga ${widget.usluga.naziv} uspješno dodana u vaš termin. ${removedTests.isNotEmpty ? "Dodavanjem ove usluge uklonili ste sljedeći/e test/ove iz korpe: $removedTestTitles" : ""}",
                                     "success",
                                     Alignment.center,
                                     item != null ? 7 : 2);

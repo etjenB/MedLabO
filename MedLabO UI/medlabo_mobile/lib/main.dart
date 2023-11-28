@@ -34,14 +34,12 @@ void main() {
       ChangeNotifierProvider(create: (_) => TestoviProvider()),
       ChangeNotifierProvider(create: (_) => TestParametriProvider()),
     ],
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,20 +48,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: primaryMedLabOColor),
         useMaterial3: true,
       ),
-      home: OKToast(
-        child: Scaffold(
-          key: scaffoldKey,
-          body: const MyMaterialApp(),
-          floatingActionButton: Stack(
-            children: [
-              Positioned(
-                right: MediaQuery.of(context).size.width * 0.01,
-                bottom: MediaQuery.of(context).size.height * 0.08,
-                child: const CartFAB(),
-              ),
-            ],
-          ),
-        ),
+      home: const OKToast(
+        child: MyMaterialApp(),
       ),
     );
   }
