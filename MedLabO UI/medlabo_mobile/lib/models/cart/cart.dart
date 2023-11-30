@@ -26,6 +26,10 @@ class Cart with ChangeNotifier {
         .toList();
   }
 
+  double getCartFullPrice() {
+    return _items.values.fold(0.0, (sum, item) => sum + item.price);
+  }
+
   void removeItem(String productId) {
     _items.remove(productId);
     notifyListeners();

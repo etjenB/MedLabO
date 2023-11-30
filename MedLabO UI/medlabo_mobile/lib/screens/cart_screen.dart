@@ -23,33 +23,35 @@ class CartScreen extends StatelessWidget {
                 itemBuilder: (ctx, i) => ListTile(
                   title: Text(cart.items.values.toList()[i].title),
                   trailing: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Text(
-                          formatNumberToPrice(
-                              cart.items.values.toList()[i].price),
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        formatNumberToPrice(
+                            cart.items.values.toList()[i].price),
+                      ),
+                      sizedBoxWidthM,
+                      SizedBox(
+                        width: 60,
+                        height: 30,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            var item = cart.items.values.toList()[i];
+                            if (await showConfirmationDialog(
+                                context,
+                                "Jeste li sigurni?",
+                                "Želite li ukloniti ${item.title} iz termina?")) {
+                              cart.removeItem(item.id);
+                            }
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.red[400]),
+                          ),
+                          child: const Icon(Icons.remove_circle_outline),
                         ),
-                        sizedBoxWidthM,
-                        SizedBox(
-                          width: 60,
-                          height: 30,
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                var item = cart.items.values.toList()[i];
-                                if (await showConfirmationDialog(
-                                    context,
-                                    "Jeste li sigurni?",
-                                    "Želite li ukloniti ${item.title} iz termina?")) {
-                                  cart.removeItem(item.id);
-                                }
-                              },
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll(Colors.red[400]),
-                              ),
-                              child: const Icon(Icons.remove_circle_outline)),
-                        ),
-                      ]),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
