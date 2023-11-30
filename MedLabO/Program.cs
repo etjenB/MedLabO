@@ -77,7 +77,7 @@ builder.Services.AddTransient<IService<MedLabO.Models.MedicinskoOsoblje, Medicin
 
 builder.Services.AddTransient<IService<MedLabO.Models.Pacijent.PacijentWithoutTermini, PacijentSearchObject>, PacijentService>();
 
-builder.Services.AddTransient<IService<MedLabO.Models.Termin, TerminSearchObject>, TerminService>();
+builder.Services.AddTransient<IService<MedLabO.Models.Termin.Termin, TerminSearchObject>, TerminService>();
 
 builder.Services.AddTransient<IService<MedLabO.Models.Novost, NovostSearchObject>, NovostService>();
 

@@ -1,6 +1,6 @@
-﻿using MedLabO.Models;
-using MedLabO.Models.Requests.Termin;
+﻿using MedLabO.Models.Requests.Termin;
 using MedLabO.Models.SearchObjects;
+using MedLabO.Models.Termin;
 using MedLabO.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,12 +8,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace MedLabO.Controllers
 {
     [ApiController]
-    public class TerminController : BaseCRUDController<Models.Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest>
+    public class TerminController : BaseCRUDController<Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest>
     {
         ITerminService _terminService;
         public TerminController(ILogger<BaseController<Termin, TerminSearchObject>> logger, ITerminService service) : base(logger, service)
         {
             _terminService = service;
+        }
+
+        [HttpGet("GetTerminiOfTheDay")]
+        public async Task<ICollection<TerminMinimal>> GetTerminiOfTheDay(DateTime request)
+        {
+            return await _terminService.GetTerminiOfTheDay(request);
         }
 
         [HttpPut("TerminOdobravanje")]

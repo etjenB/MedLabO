@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:medlabo_mobile/models/cart/cart.dart';
 import 'package:medlabo_mobile/models/termin/termin_insert_request.dart';
 import 'package:medlabo_mobile/providers/termini_provider.dart';
+import 'package:medlabo_mobile/screens/novi_termin_screen/novi_termin_screen.dart';
 import 'package:medlabo_mobile/utils/constants/design.dart';
 import 'package:medlabo_mobile/utils/general/dialog_utils.dart';
 import 'package:medlabo_mobile/utils/general/toast_utils.dart';
@@ -25,7 +26,7 @@ class _OdabirTerminaScreenState extends State<OdabirTerminaScreen> {
   String? _selectedTimeSlot;
   DateTime _focusedDay = DateTime.now().add(const Duration(days: 1));
   late TerminiProvider _terminiProvider;
-
+  List<String>? _availableTimeSlots = [];
   final List<String> _timeSlots = [
     "07:00",
     "07:20",
@@ -100,11 +101,21 @@ class _OdabirTerminaScreenState extends State<OdabirTerminaScreen> {
                     return day.weekday != DateTime.saturday &&
                         day.weekday != DateTime.sunday;
                   },
-                  onDaySelected: (selectedDay, focusedDay) {
+                  onDaySelected: (selectedDay, focusedDay) async {
+                    var terminiOfTheDay =
+                        await _terminiProvider.getTerminiOfTheDay(selectedDay);
+                    var availableTimeSlots = List<String>.from(_timeSlots);
+                    for (var termin in terminiOfTheDay) {
+                      String terminTime =
+                          DateFormat("HH:mm").format(termin.dtTermina!);
+                      availableTimeSlots
+                          .removeWhere((slot) => slot == terminTime);
+                    }
                     setState(() {
                       _selectedDay = selectedDay;
                       _selectedTimeSlot = null;
                       _focusedDay = focusedDay;
+                      _availableTimeSlots = availableTimeSlots;
                     });
                   },
                 ),
@@ -114,7 +125,7 @@ class _OdabirTerminaScreenState extends State<OdabirTerminaScreen> {
                       "Dostupni termini za ${formatDateTime(_selectedDay!.toLocal().toString(), format: 'dd.MM.yyyy')}"),
                   Wrap(
                     spacing: 10,
-                    children: _timeSlots
+                    children: _availableTimeSlots!
                         .map((slot) => ChoiceChip(
                               label: Text(slot),
                               selected: _selectedTimeSlot == slot,
@@ -292,6 +303,8 @@ class _OdabirTerminaScreenState extends State<OdabirTerminaScreen> {
                       await _terminiProvider.insert(terminInsertRequest);
 
                       makeSuccessToast("Termin uspješno zakazan.");
+                      cart.clearCart();
+                      Navigator.of(context).pop();
                     },
                     style: ButtonStyle(
                       backgroundColor:

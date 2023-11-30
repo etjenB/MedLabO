@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MedLabO.Models.Pacijent;
 
-namespace MedLabO.Models
+namespace MedLabO.Models.Termin
 {
     public class Termin : SoftDeleteEntity
     {

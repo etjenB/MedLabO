@@ -2,6 +2,7 @@
 using MedLabO.Models.Pacijent;
 using MedLabO.Models.Requests;
 using MedLabO.Models.Requests.Termin;
+using MedLabO.Models.Termin;
 using MedLabO.Models.Test;
 using MedLabO.Models.Usluga;
 
@@ -31,7 +32,8 @@ namespace MedLabO.Services
             CreateMap<TestParametarUpdateRequest, Database.TestParametar>().ReverseMap();
             CreateMap<Database.TestParametar, Models.TestParametar>().ReverseMap();
             CreateMap<Database.Rezultat, Models.Rezultat>().ReverseMap();
-            CreateMap<Database.Termin, Models.Termin>().ReverseMap();
+            CreateMap<Database.Termin, Termin>().ReverseMap();
+            CreateMap<Database.Termin, TerminMinimal>().ReverseMap();
             CreateMap<TerminInsertRequest, Database.Termin>().ReverseMap();
             CreateMap<TerminUpdateRequest, Database.Termin>().ReverseMap();
             CreateMap<Database.TerminTest, Models.TerminTest>().ReverseMap();

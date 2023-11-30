@@ -2,6 +2,7 @@
 using MedLabO.Models.Exceptions;
 using MedLabO.Models.Requests.Termin;
 using MedLabO.Models.SearchObjects;
+using MedLabO.Models.Termin;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.IIS.Core;
@@ -15,13 +16,21 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
-    public class TerminService : CRUDService<Models.Termin, Database.Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest>, ITerminService
+    public class TerminService : CRUDService<Models.Termin.Termin, Database.Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest>, ITerminService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public TerminService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(db, mapper)
         {
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        public async Task<ICollection<TerminMinimal>> GetTerminiOfTheDay(DateTime day)
+        {
+            List<Database.Termin> termini = await _db.Termini.Where(t => t.DTTermina.Date == day.Date).ToListAsync();
+            var tm = _mapper.Map<List<TerminMinimal>>(termini);
+
+            return tm;
         }
 
         public async Task TerminOdobravanje(TerminOdobravanjeRequest request)
@@ -193,7 +202,7 @@ namespace MedLabO.Services
             }
         }
 
-        public override IQueryable<Termin> AddFilter(IQueryable<Termin> query, TerminSearchObject? search = null)
+        public override IQueryable<Database.Termin> AddFilter(IQueryable<Database.Termin> query, TerminSearchObject? search = null)
         {
             if (search?.Obavljen == true)
             {
@@ -252,7 +261,7 @@ namespace MedLabO.Services
             return base.AddFilter(query, search);
         }
 
-        public override IQueryable<Termin> AddInclude(IQueryable<Termin> query, TerminSearchObject? search = null)
+        public override IQueryable<Database.Termin> AddInclude(IQueryable<Database.Termin> query, TerminSearchObject? search = null)
         {
 
             if (search?.IncludeTerminTestovi == true)
@@ -313,7 +322,7 @@ namespace MedLabO.Services
             return base.AddInclude(query, search);
         }
 
-        public override IQueryable<Termin> ApplyOrdering(IQueryable<Termin> query, TerminSearchObject? search = null)
+        public override IQueryable<Database.Termin> ApplyOrdering(IQueryable<Database.Termin> query, TerminSearchObject? search = null)
         {
             if (search?.OrderByDTTermina == true)
             {
