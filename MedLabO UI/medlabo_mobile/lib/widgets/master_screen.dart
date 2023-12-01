@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:medlabo_mobile/screens/home_screen/home_screen.dart';
 import 'package:medlabo_mobile/screens/novi_termin_screen/novi_termin_screen.dart';
 import 'package:medlabo_mobile/screens/profil_screen.dart';
-import 'package:medlabo_mobile/screens/termini_screen.dart';
+import 'package:medlabo_mobile/screens/termini_screen/termini_screen.dart';
 import 'package:medlabo_mobile/screens/usluge_screen/usluge_screen.dart';
 import 'package:medlabo_mobile/utils/constants/design.dart';
 import 'package:medlabo_mobile/utils/general/auth_util.dart';

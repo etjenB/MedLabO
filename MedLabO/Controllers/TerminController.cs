@@ -30,7 +30,6 @@ namespace MedLabO.Controllers
         }
 
         [HttpPut("TerminOtkazivanje")]
-        [Authorize(Roles = "MedicinskoOsoblje")]
         public async Task TerminOtkazivanje(TerminOtkazivanjeRequest request)
         {
             await _terminService.TerminOtkazivanje(request);

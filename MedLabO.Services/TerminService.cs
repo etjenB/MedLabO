@@ -28,10 +28,8 @@ namespace MedLabO.Services
 
         public async Task<ICollection<TerminMinimal>> GetTerminiOfTheDay(DateTime day)
         {
-            List<Database.Termin> termini = await _db.Termini.Where(t => t.DTTermina.Date == day.Date).ToListAsync();
-            var tm = _mapper.Map<List<TerminMinimal>>(termini);
-
-            return tm;
+            List<Database.Termin> termini = await _db.Termini.Where(t => t.DTTermina.Date == day.Date && t.isDeleted == false).ToListAsync();
+            return _mapper.Map<List<TerminMinimal>>(termini);
         }
 
         public async Task TerminOdobravanje(TerminOdobravanjeRequest request)
@@ -258,6 +256,11 @@ namespace MedLabO.Services
             if (!string.IsNullOrWhiteSpace(search?.FTS))
             {
                 query = query.Where(t => (t.Pacijent != null && t.Pacijent.Ime != null && t.Pacijent.Ime.StartsWith(search.FTS)) || (t.Pacijent != null && t.Pacijent.Prezime != null && t.Pacijent.Prezime.StartsWith(search.FTS)));
+            }
+
+            if (!string.IsNullOrWhiteSpace(search?.PacijentId))
+            {
+                query = query.Where(t => (t.Pacijent != null && t.Pacijent.Id.ToString() == search.PacijentId.ToUpper()));
             }
 
             return base.AddFilter(query, search);

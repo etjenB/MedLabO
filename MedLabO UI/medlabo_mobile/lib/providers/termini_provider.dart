@@ -53,4 +53,23 @@ class TerminiProvider extends BaseProvider<Termin> {
 
     throw Exception("Failed get request");
   }
+
+  Future terminOtkazivanje(dynamic request) async {
+    var url = '${BaseProvider.baseUrl}$endpoint/TerminOtkazivanje';
+
+    var uri = Uri.parse(url);
+
+    var headers = await createHeaders();
+    var jsonRequest = jsonEncode(request);
+    var response = await ioClient.put(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)['isValid']) {
+      notifyListeners();
+      return;
+    }
+
+    makeErrorToast(isValidResponse(response)['message'] ?? '');
+
+    throw Exception("Failed terminOtkazivanje request");
+  }
 }

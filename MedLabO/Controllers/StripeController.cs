@@ -21,7 +21,7 @@ namespace MedLabO.Controllers
                 {
                     Amount = request.Amount, // Amount in the smallest currency unit (e.g., 100 cents to charge $1.00)
                     Currency = "bam",
-                                      // Add other options as needed, like receipt email, metadata, etc.
+                    //ReceiptEmail = 
                 });
 
                 return Ok(new { ClientSecret = paymentIntent.ClientSecret });
