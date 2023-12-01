@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +12,7 @@ import 'package:medlabo_mobile/models/pacijent/pacijent_registration_request.dar
 import 'package:medlabo_mobile/providers/login_provider.dart';
 import 'package:medlabo_mobile/providers/novosti_provider.dart';
 import 'package:medlabo_mobile/providers/pacijenti_provider.dart';
+import 'package:medlabo_mobile/providers/stripe_provider.dart';
 import 'package:medlabo_mobile/providers/termini_provider.dart';
 import 'package:medlabo_mobile/providers/test_parametri_provider.dart';
 import 'package:medlabo_mobile/providers/testovi_provider.dart';
@@ -26,6 +28,9 @@ import 'package:provider/provider.dart';
 import 'package:oktoast/oktoast.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey =
+      'pk_test_51OIGGOJG8OBixHCfR2GNnnnUj3MPNwPEnTB5fc8zsdchnW2rWUqXAiehvb9SYef1PNkaHgFqwaeCy4TuSy0e2D9t0062UKZdh2';
   initializeDateFormatting().then((_) => runApp(MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => LoginProvider()),
@@ -36,6 +41,7 @@ void main() {
           ChangeNotifierProvider(create: (_) => TestoviProvider()),
           ChangeNotifierProvider(create: (_) => TestParametriProvider()),
           ChangeNotifierProvider(create: (_) => TerminiProvider()),
+          ChangeNotifierProvider(create: (_) => StripeProvider()),
         ],
         child: const MyApp(),
       )));

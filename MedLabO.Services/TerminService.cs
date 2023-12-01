@@ -7,6 +7,7 @@ using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -180,6 +181,7 @@ namespace MedLabO.Services
                     throw new UserException("User ID not found.");
                 }
                 entity.PacijentID = Guid.Parse(currentUserId);
+                entity.Placeno = true;
             }
             catch
             {

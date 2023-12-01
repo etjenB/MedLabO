@@ -1,5 +1,4 @@
 using MedLabO.Filters;
-using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services;
 using MedLabO.Services.Database;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,6 +97,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddDefaultIdentity<ApplicationUser>()
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<MedLabOContext>();
+
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:Key"];
 
 //Odrediti kakav password je potreban
 builder.Services.Configure<IdentityOptions>(options =>

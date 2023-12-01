@@ -50,6 +50,7 @@ dependencies:
   expandable: ^5.0.1
   table_calendar: ^3.0.9
   simple_gesture_detector: ^0.2.0
+  flutter_stripe: ^9.5.0+1
 
 dev_dependencies:
   flutter_test:

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
 import 'package:medlabo_mobile/models/cart/cart.dart';
+import 'package:medlabo_mobile/models/stripe/payment_intent_create_request.dart';
 import 'package:medlabo_mobile/models/termin/termin_insert_request.dart';
+import 'package:medlabo_mobile/providers/stripe_provider.dart';
 import 'package:medlabo_mobile/providers/termini_provider.dart';
 import 'package:medlabo_mobile/screens/novi_termin_screen/novi_termin_screen.dart';
 import 'package:medlabo_mobile/utils/constants/design.dart';
@@ -26,6 +29,7 @@ class _OdabirTerminaScreenState extends State<OdabirTerminaScreen> {
   String? _selectedTimeSlot;
   DateTime _focusedDay = DateTime.now().add(const Duration(days: 1));
   late TerminiProvider _terminiProvider;
+  late StripeProvider _stripeProvider;
   List<String>? _availableTimeSlots = [];
   final List<String> _timeSlots = [
     "07:00",
@@ -58,6 +62,7 @@ class _OdabirTerminaScreenState extends State<OdabirTerminaScreen> {
   @override
   void initState() {
     _terminiProvider = context.read<TerminiProvider>();
+    _stripeProvider = context.read<StripeProvider>();
     super.initState();
   }
 
@@ -284,6 +289,10 @@ class _OdabirTerminaScreenState extends State<OdabirTerminaScreen> {
                         return;
                       }
 
+                      int totalAmount = (cart.getCartFullPrice() * 100).toInt();
+                      await preparePaymentSheet(totalAmount);
+                      await Stripe.instance.presentPaymentSheet();
+
                       TerminInsertRequest terminInsertRequest =
                           TerminInsertRequest(
                         dtTermina:
@@ -329,5 +338,22 @@ class _OdabirTerminaScreenState extends State<OdabirTerminaScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> preparePaymentSheet(int amount) async {
+    try {
+      final paymentIntentData = await _stripeProvider
+          .createPaymentIntent(PaymentIntentCreateRequest(amount: amount));
+      final clientSecret = paymentIntentData['clientSecret'];
+
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: clientSecret,
+          merchantDisplayName: 'MedLabO',
+        ),
+      );
+    } catch (e) {
+      makeErrorToast("Greška prilikom plaćanja.");
+    }
   }
 }
