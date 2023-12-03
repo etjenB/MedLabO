@@ -158,11 +158,11 @@ namespace MedLabO.Services
             if (termin == null) throw new EntityNotFoundException("Termin nije pronađen.");
             try
             {
-                //var zakljucak = await _db.Zakljucci.AddAsync(new Zakljucak { TerminID = request.TerminID, Opis = request.Opis, Detaljno = request.Detaljno });
-                //termin.Zakljucak = zakljucak.Entity;
-                //termin.ZakljucakDodan = true;
-                //_db.Termini.Update(termin);
-                //await _db.SaveChangesAsync();
+                var zakljucak = await _db.Zakljucci.AddAsync(new Zakljucak { TerminID = request.TerminID, Opis = request.Opis, Detaljno = request.Detaljno });
+                termin.Zakljucak = zakljucak.Entity;
+                termin.ZakljucakDodan = true;
+                _db.Termini.Update(termin);
+                await _db.SaveChangesAsync();
             }
             catch (Exception e)
             {
