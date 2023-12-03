@@ -4,6 +4,7 @@ using MedLabO.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedLabO.Services.Migrations
 {
     [DbContext(typeof(MedLabOContext))]
-    partial class MedLabOContextModelSnapshot : ModelSnapshot
+    [Migration("20231201195615_015-racun-foreign-key-termin-id")]
+    partial class _015racunforeignkeyterminid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -300,7 +302,9 @@ namespace MedLabO.Services.Migrations
 
                     b.HasIndex("RacunID");
 
-                    b.HasIndex("ZakljucakID");
+                    b.HasIndex("ZakljucakID")
+                        .IsUnique()
+                        .HasFilter("[ZakljucakID] IS NOT NULL");
 
                     b.ToTable("Termini");
                 });
@@ -439,26 +443,19 @@ namespace MedLabO.Services.Migrations
 
             modelBuilder.Entity("MedLabO.Services.Database.Zakljucak", b =>
                 {
-                    b.Property<Guid>("ZakljucakID")
+                    b.Property<Guid>("TerminID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Detaljno")
                         .IsRequired()
-                        .HasMaxLength(10000)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Opis")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("TerminID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ZakljucakID");
-
-                    b.HasIndex("TerminID");
+                    b.HasKey("TerminID");
 
                     b.ToTable("Zakljucci");
                 });
@@ -776,8 +773,8 @@ namespace MedLabO.Services.Migrations
                         .HasForeignKey("RacunID");
 
                     b.HasOne("MedLabO.Services.Database.Zakljucak", "Zakljucak")
-                        .WithMany()
-                        .HasForeignKey("ZakljucakID");
+                        .WithOne("Termin")
+                        .HasForeignKey("MedLabO.Services.Database.Termin", "ZakljucakID");
 
                     b.Navigation("MedicinskoOsoblje");
 
@@ -833,15 +830,6 @@ namespace MedLabO.Services.Migrations
                     b.HasOne("MedLabO.Services.Database.Administrator", null)
                         .WithMany("KreiraneUsluge")
                         .HasForeignKey("AdministratorID");
-                });
-
-            modelBuilder.Entity("MedLabO.Services.Database.Zakljucak", b =>
-                {
-                    b.HasOne("MedLabO.Services.Database.Termin", "Termin")
-                        .WithMany()
-                        .HasForeignKey("TerminID");
-
-                    b.Navigation("Termin");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -957,6 +945,12 @@ namespace MedLabO.Services.Migrations
             modelBuilder.Entity("MedLabO.Services.Database.Test", b =>
                 {
                     b.Navigation("TerminTestovi");
+                });
+
+            modelBuilder.Entity("MedLabO.Services.Database.Zakljucak", b =>
+                {
+                    b.Navigation("Termin")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Zvanje", b =>

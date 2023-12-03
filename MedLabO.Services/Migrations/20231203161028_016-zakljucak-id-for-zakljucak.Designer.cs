@@ -4,6 +4,7 @@ using MedLabO.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedLabO.Services.Migrations
 {
     [DbContext(typeof(MedLabOContext))]
-    partial class MedLabOContextModelSnapshot : ModelSnapshot
+    [Migration("20231203161028_016-zakljucak-id-for-zakljucak")]
+    partial class _016zakljucakidforzakljucak
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -453,12 +455,7 @@ namespace MedLabO.Services.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<Guid?>("TerminID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("ZakljucakID");
-
-                    b.HasIndex("TerminID");
 
                     b.ToTable("Zakljucci");
                 });
@@ -833,15 +830,6 @@ namespace MedLabO.Services.Migrations
                     b.HasOne("MedLabO.Services.Database.Administrator", null)
                         .WithMany("KreiraneUsluge")
                         .HasForeignKey("AdministratorID");
-                });
-
-            modelBuilder.Entity("MedLabO.Services.Database.Zakljucak", b =>
-                {
-                    b.HasOne("MedLabO.Services.Database.Termin", "Termin")
-                        .WithMany()
-                        .HasForeignKey("TerminID");
-
-                    b.Navigation("Termin");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

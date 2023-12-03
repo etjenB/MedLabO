@@ -12,6 +12,5 @@ namespace MedLabO.Models
         public string? Opis { get; set; }
         public string? Detaljno { get; set; }
         public string? TerminID { get; set; }
-        public Termin.Termin? Termin { get; set; }
     }
 }

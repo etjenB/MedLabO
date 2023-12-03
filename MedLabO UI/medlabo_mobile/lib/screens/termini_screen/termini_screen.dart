@@ -4,7 +4,7 @@ import 'package:medlabo_mobile/models/termin/termin.dart';
 import 'package:medlabo_mobile/providers/termini_provider.dart';
 import 'package:medlabo_mobile/screens/termini_screen/arhiva_rezultata_screen.dart';
 import 'package:medlabo_mobile/screens/termini_screen/nadolazeci_termin_screen.dart';
-import 'package:medlabo_mobile/screens/termini_screen/prethodni_termin_screen.dart';
+import 'package:medlabo_mobile/screens/termini_screen/prethodni_termini_screen/prethodni_termin_screen.dart';
 import 'package:medlabo_mobile/utils/constants/design.dart';
 import 'package:medlabo_mobile/utils/general/auth_util.dart';
 import 'package:medlabo_mobile/utils/general/util.dart';

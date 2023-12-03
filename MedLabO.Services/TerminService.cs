@@ -3,6 +3,7 @@ using MedLabO.Models.Exceptions;
 using MedLabO.Models.Requests.Termin;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Models.Termin;
+using MedLabO.Models.Usluga;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.IIS.Core;
@@ -157,11 +158,11 @@ namespace MedLabO.Services
             if (termin == null) throw new EntityNotFoundException("Termin nije pronađen.");
             try
             {
-                var zakljucak = await _db.Zakljucci.AddAsync(new Zakljucak { TerminID = request.TerminID, Opis = request.Opis, Detaljno = request.Detaljno });
-                termin.Zakljucak = zakljucak.Entity;
-                termin.ZakljucakDodan = true;
-                _db.Termini.Update(termin);
-                await _db.SaveChangesAsync();
+                //var zakljucak = await _db.Zakljucci.AddAsync(new Zakljucak { TerminID = request.TerminID, Opis = request.Opis, Detaljno = request.Detaljno });
+                //termin.Zakljucak = zakljucak.Entity;
+                //termin.ZakljucakDodan = true;
+                //_db.Termini.Update(termin);
+                //await _db.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -199,6 +200,41 @@ namespace MedLabO.Services
                 if (test == null) throw new EntityNotFoundException("Test not found");
                 var terminTest = new TerminTest() { TestID = test.TestID, TerminID = entity.TerminID };
                 entity.TerminTestovi.Add(terminTest);
+            }
+        }
+
+        public override async Task AfterInsert(Database.Termin entity, TerminInsertRequest insert)
+        {
+            decimal ukupnaCijena = 0;
+
+            foreach (var uslugaID in insert.Usluge)
+            {
+                var usluga = await _db.Usluge.FirstOrDefaultAsync(t => t.UslugaID.ToString() == uslugaID);
+                if (usluga == null) throw new EntityNotFoundException("Usluga not found");
+                ukupnaCijena += usluga.Cijena;
+            }
+
+            foreach (var testID in insert.Testovi)
+            {
+                var test = await _db.Testovi.FirstOrDefaultAsync(t => t.TestID.ToString() == testID);
+                if (test == null) throw new EntityNotFoundException("Test not found");
+                var terminTest = new TerminTest() { TestID = test.TestID, TerminID = entity.TerminID };
+                ukupnaCijena += test.Cijena;
+            }
+
+            try
+            {
+                var racun = new Racun() { Cijena = ukupnaCijena, Placeno = true, TerminID = entity.TerminID };
+                await _db.Racuni.AddAsync(racun);
+
+                entity.Racun = racun;
+
+                await _db.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+
+                throw new UserException(e.Message);
             }
         }
 

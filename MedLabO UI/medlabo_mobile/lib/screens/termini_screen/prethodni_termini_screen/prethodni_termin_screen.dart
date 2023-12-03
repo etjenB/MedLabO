@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:medlabo_mobile/models/termin/termin.dart';
 import 'package:medlabo_mobile/models/test/test.dart';
 import 'package:medlabo_mobile/models/usluga/usluga.dart';
-import 'package:medlabo_mobile/providers/termini_provider.dart';
 import 'package:medlabo_mobile/providers/testovi_provider.dart';
 import 'package:medlabo_mobile/providers/usluge_provider.dart';
+import 'package:medlabo_mobile/screens/termini_screen/prethodni_termini_screen/pogledaj_racun_screen.dart';
+import 'package:medlabo_mobile/screens/termini_screen/prethodni_termini_screen/pogledaj_zakljucak_screen.dart';
 import 'package:medlabo_mobile/screens/usluge_screen/paketi_usluga/usluga_page.dart';
 import 'package:medlabo_mobile/screens/usluge_screen/pojedinacni_testovi/test_page.dart';
 import 'package:medlabo_mobile/utils/constants/design.dart';
@@ -242,7 +243,15 @@ class _PrethodniTerminScreenState extends State<PrethodniTerminScreen> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  if (widget.termin.terminID != null) {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                PogledajRacunScreen(
+                                                    widget.termin.terminID)));
+                                  }
+                                },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
                                   height:
@@ -266,10 +275,10 @@ class _PrethodniTerminScreenState extends State<PrethodniTerminScreen> {
                                       ),
                                     ],
                                   ),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "Pogledaj račun",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: primaryWhiteTextColor,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
@@ -307,10 +316,10 @@ class _PrethodniTerminScreenState extends State<PrethodniTerminScreen> {
                                       ),
                                     ],
                                   ),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "Pogledaj rezultat",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: primaryWhiteTextColor,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
@@ -324,7 +333,15 @@ class _PrethodniTerminScreenState extends State<PrethodniTerminScreen> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  if (widget.termin.terminID != null) {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                PogledajZakljucakScreen(
+                                                    widget.termin.terminID)));
+                                  }
+                                },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
                                   height:
@@ -348,10 +365,10 @@ class _PrethodniTerminScreenState extends State<PrethodniTerminScreen> {
                                       ),
                                     ],
                                   ),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "Pogledaj zaključak",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: primaryWhiteTextColor,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,

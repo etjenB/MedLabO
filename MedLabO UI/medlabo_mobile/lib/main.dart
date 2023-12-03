@@ -12,11 +12,13 @@ import 'package:medlabo_mobile/models/pacijent/pacijent_registration_request.dar
 import 'package:medlabo_mobile/providers/login_provider.dart';
 import 'package:medlabo_mobile/providers/novosti_provider.dart';
 import 'package:medlabo_mobile/providers/pacijenti_provider.dart';
+import 'package:medlabo_mobile/providers/racuni_provider.dart';
 import 'package:medlabo_mobile/providers/stripe_provider.dart';
 import 'package:medlabo_mobile/providers/termini_provider.dart';
 import 'package:medlabo_mobile/providers/test_parametri_provider.dart';
 import 'package:medlabo_mobile/providers/testovi_provider.dart';
 import 'package:medlabo_mobile/providers/usluge_provider.dart';
+import 'package:medlabo_mobile/providers/zakljucci_provider.dart';
 import 'package:medlabo_mobile/utils/constants/design.dart';
 import 'package:medlabo_mobile/utils/constants/enums.dart';
 import 'package:medlabo_mobile/utils/constants/strings.dart';
@@ -41,6 +43,8 @@ void main() {
           ChangeNotifierProvider(create: (_) => TestoviProvider()),
           ChangeNotifierProvider(create: (_) => TestParametriProvider()),
           ChangeNotifierProvider(create: (_) => TerminiProvider()),
+          ChangeNotifierProvider(create: (_) => RacuniProvider()),
+          ChangeNotifierProvider(create: (_) => ZakljucciProvider()),
           ChangeNotifierProvider(create: (_) => StripeProvider()),
         ],
         child: const MyApp(),

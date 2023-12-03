@@ -12,6 +12,5 @@ namespace MedLabO.Models
         public decimal? Cijena { get; set; }
         public bool? Placeno { get; set; }
         public string? TerminID { get; set; }
-        public Termin.Termin? Termin { get; set; }
     }
 }

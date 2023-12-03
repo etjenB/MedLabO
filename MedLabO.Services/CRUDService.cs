@@ -25,6 +25,11 @@ namespace MedLabO.Services
 
         }
 
+        public virtual async Task AfterInsert(TDb entity, TInsert insert)
+        {
+
+        }
+
         public virtual async Task BeforeUpdate(TDb entity, TUpdate update)
         {
 
@@ -47,6 +52,7 @@ namespace MedLabO.Services
                     throw new UserException(e.Message);
                 }
             }
+            await AfterInsert(entity, insert);
             return _mapper.Map<T>(entity);
         }
 

@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedLabO.Services.Database
 {
     public class Racun
     {
-        //[Key]
-        //public Guid RacunID { get; set; } = Guid.NewGuid();
+        [Key]
+        public Guid RacunID { get; set; } = Guid.NewGuid();
 
         [Required]
         [Range(0.01, double.MaxValue, ErrorMessage = "Cijena mora biti veca od nula.")]
@@ -14,9 +15,8 @@ namespace MedLabO.Services.Database
         [Required]
         public bool Placeno { get; set; } = false;
 
-        [Key]
-        public Guid TerminID { get; set; }
-
-        public virtual Termin Termin { get; set; } = null!;
+        [ForeignKey("Termin")]
+        public Guid? TerminID { get; set; }
+        public virtual Termin? Termin { get; set; }
     }
 }

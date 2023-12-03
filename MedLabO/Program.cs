@@ -65,6 +65,8 @@ builder.Services.AddTransient<IUslugaService, UslugaService>();
 builder.Services.AddTransient<ITerminService, TerminService>();
 builder.Services.AddTransient<INovostService, NovostService>();
 builder.Services.AddTransient<IObavijestService, ObavijestService>();
+builder.Services.AddTransient<IRacunService, RacunService>();
+builder.Services.AddTransient<IZakljucakService, ZakljucakService>();
 
 //builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<IService<MedLabO.Models.Test.Test, TestSearchObject>, TestService>();
@@ -84,6 +86,10 @@ builder.Services.AddTransient<IService<MedLabO.Models.Novost, NovostSearchObject
 builder.Services.AddTransient<IService<MedLabO.Models.Obavijest, ObavijestSearchObject>, ObavijestService>();
 
 builder.Services.AddTransient<IService<MedLabO.Models.Usluga.Usluga, UslugaSearchObject>, UslugaService>();
+
+builder.Services.AddTransient<IService<MedLabO.Models.Racun, RacunSearchObject>, RacunService>();
+
+builder.Services.AddTransient<IService<MedLabO.Models.Zakljucak, ZakljucakSearchObject>, ZakljucakService>();
 
 //Inject DbContext
 //NuGet Potrebno Microsoft.EntityFrameworkCore.SqlServer

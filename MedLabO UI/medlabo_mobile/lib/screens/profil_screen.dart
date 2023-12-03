@@ -10,6 +10,6 @@ class ProfilScreen extends StatefulWidget {
 class _ProfilScreenState extends State<ProfilScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Container());
+    return Container();
   }
 }
