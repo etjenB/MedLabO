@@ -49,5 +49,29 @@ namespace MedLabO.Services
                 throw new UserException("Unable to register Pacijent.");
             }
         }
+
+        public override async Task BeforeUpdate(Database.Pacijent entity, PacijentUpdateRequest insert)
+        {
+            var existingUser = await _userManager.FindByNameAsync(insert.UserName);
+            if (existingUser != null && existingUser.Id != insert.Id)
+            {
+                throw new UserException("Korisnicko ime vec postoji.");
+            }
+
+            var existingUserByEmail = await _userManager.FindByEmailAsync(insert.Email);
+            if (existingUserByEmail != null && existingUserByEmail.Id != insert.Id)
+            {
+                throw new UserException("E-mail se vec koristi od strane drugog korisnika.");
+            }
+
+            try
+            {
+                await _userManager.UpdateAsync(entity);
+            }
+            catch
+            {
+                throw new UserException("Unable to update Pacijent.");
+            }
+        }
     }
 }

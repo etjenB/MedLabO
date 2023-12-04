@@ -1,34 +1,32 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:medlabo_mobile/models/spol/spol.dart';
 
-part 'pacijent.g.dart';
+part 'pacijent_update_request.g.dart';
 
 @JsonSerializable()
-class Pacijent {
+class PacijentUpdateRequest {
+  String? id;
   String? ime;
   String? prezime;
   DateTime? datumRodjenja;
   String? adresa;
   int? spolID;
-  Spol? spol;
-  String? id;
   String? userName;
   String? email;
   String? phoneNumber;
 
-  Pacijent(
-      {this.ime,
+  PacijentUpdateRequest(
+      {this.id,
+      this.ime,
       this.prezime,
       this.datumRodjenja,
       this.adresa,
-      this.spol,
-      this.id,
+      this.spolID,
       this.userName,
       this.email,
       this.phoneNumber});
 
-  factory Pacijent.fromJson(Map<String, dynamic> json) =>
-      _$PacijentFromJson(json);
+  factory PacijentUpdateRequest.fromJson(Map<String, dynamic> json) =>
+      _$PacijentUpdateRequestFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PacijentToJson(this);
+  Map<String, dynamic> toJson() => _$PacijentUpdateRequestToJson(this);
 }

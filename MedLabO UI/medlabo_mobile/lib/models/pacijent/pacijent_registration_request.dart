@@ -6,7 +6,7 @@ part 'pacijent_registration_request.g.dart';
 class PacijentRegistrationRequest {
   String? ime;
   String? prezime;
-  String? datumRodjena;
+  String? datumRodjenja;
   String? adresa;
   int? spolID;
   String? userName;
@@ -17,7 +17,7 @@ class PacijentRegistrationRequest {
   PacijentRegistrationRequest(
       {this.ime,
       this.prezime,
-      this.datumRodjena,
+      this.datumRodjenja,
       this.adresa,
       this.spolID,
       this.userName,

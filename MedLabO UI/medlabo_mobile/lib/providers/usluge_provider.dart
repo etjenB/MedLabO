@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:http/io_client.dart';
 import 'package:medlabo_mobile/models/usluga/usluga.dart';
 import 'package:medlabo_mobile/providers/base_provider.dart';
-import 'package:http/http.dart' as http;
 import 'package:medlabo_mobile/utils/general/toast_utils.dart';
 
 class UslugeProvider extends BaseProvider<Usluga> {

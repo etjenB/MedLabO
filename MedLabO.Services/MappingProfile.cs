@@ -21,6 +21,7 @@ namespace MedLabO.Services
             CreateMap<Database.Pacijent, Pacijent>().ReverseMap();
             CreateMap<Database.Pacijent, PacijentWithoutTermini>().ReverseMap();
             CreateMap<PacijentRegistrationRequest, Database.Pacijent>().ReverseMap();
+            CreateMap<PacijentUpdateRequest, Database.Pacijent>().ReverseMap();
             CreateMap<Database.Spol, Models.Spol>().ReverseMap();
             CreateMap<Database.Zvanje, Models.Zvanje>().ReverseMap();
             CreateMap<TestInsertRequest, Database.Test>().ReverseMap();

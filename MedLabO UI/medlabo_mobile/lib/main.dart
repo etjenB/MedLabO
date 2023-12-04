@@ -663,8 +663,8 @@ class _LoginPageState extends State<LoginPage> {
                         PacijentRegistrationRequest(
                       ime: _formKey.currentState?.value['ime'],
                       prezime: _formKey.currentState?.value['prezime'],
-                      datumRodjena:
-                          _formKey.currentState?.value['datumRodjena'],
+                      datumRodjenja:
+                          _formKey.currentState?.value['datumRodjenja'],
                       adresa: _formKey.currentState?.value['adresa'],
                       spolID:
                           (_formKey.currentState?.value['spolID'] as SpolEnum)
