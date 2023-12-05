@@ -271,6 +271,4 @@ class _UredjivanjeProfilaScreenState extends State<UredjivanjeProfilaScreen> {
       ),
     );
   }
-
-  _buildMedicinskoOsobljeChangePasswordForm() {}
 }

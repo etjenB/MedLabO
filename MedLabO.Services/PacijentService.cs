@@ -25,6 +25,21 @@ namespace MedLabO.Services
             _dbContext = db;
         }
 
+        public async Task ChangePassword(ChangePasswordRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+            if (user == null)
+            {
+                throw new EntityNotFoundException("Korisnik nije pronađen.");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                throw new UserException("Lozinka nije tačna.");
+            }
+        }
+
         public override async Task BeforeInsert(Pacijent entity, PacijentRegistrationRequest insert)
         {
             var existingUser = await _userManager.FindByNameAsync(entity.UserName);

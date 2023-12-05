@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:medlabo_mobile/models/cart/cart.dart';
 import 'package:medlabo_mobile/models/pacijent/pacijent_registration_request.dart';
+import 'package:medlabo_mobile/providers/administratori_provider.dart';
 import 'package:medlabo_mobile/providers/login_provider.dart';
 import 'package:medlabo_mobile/providers/novosti_provider.dart';
 import 'package:medlabo_mobile/providers/pacijenti_provider.dart';
@@ -24,7 +25,6 @@ import 'package:medlabo_mobile/utils/constants/enums.dart';
 import 'package:medlabo_mobile/utils/constants/strings.dart';
 import 'package:medlabo_mobile/utils/general/auth_util.dart';
 import 'package:medlabo_mobile/utils/general/dialog_utils.dart';
-import 'package:medlabo_mobile/widgets/cart_fab_wiget.dart';
 import 'package:medlabo_mobile/widgets/master_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:oktoast/oktoast.dart';
@@ -38,6 +38,7 @@ void main() {
           ChangeNotifierProvider(create: (_) => LoginProvider()),
           ChangeNotifierProvider(create: (_) => Cart()),
           ChangeNotifierProvider(create: (_) => PacijentProvider()),
+          ChangeNotifierProvider(create: (_) => AdministratoriProvider()),
           ChangeNotifierProvider(create: (_) => NovostiProvider()),
           ChangeNotifierProvider(create: (_) => UslugeProvider()),
           ChangeNotifierProvider(create: (_) => TestoviProvider()),
@@ -50,6 +51,8 @@ void main() {
         child: const MyApp(),
       )));
 }
+
+final GlobalKey<NavigatorState> mainNavigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -74,6 +77,7 @@ class MyMaterialApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: mainNavigatorKey,
       title: appTitle,
       theme: ThemeData(primarySwatch: Colors.indigo),
       home: const LoginPage(),

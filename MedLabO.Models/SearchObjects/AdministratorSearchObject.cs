@@ -2,6 +2,6 @@
 {
     public class AdministratorSearchObject : SearchObject
     {
-        //TODO
+        public bool? GetContacts { get; set; } = false;
     }
 }

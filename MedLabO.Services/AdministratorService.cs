@@ -36,6 +36,16 @@ namespace MedLabO.Services
             }
         }
 
+        public override IQueryable<Database.Administrator> AddFilter(IQueryable<Database.Administrator> query, AdministratorSearchObject? search = null)
+        {
+            if (search?.GetContacts == true)
+            {
+                query = query.Where(a => a.IsKontakt == true);
+            }
+
+            return base.AddFilter(query, search);
+        }
+
         public override async Task BeforeInsert(Administrator entity, AdministratorInsertRequest insert)
         {
             try

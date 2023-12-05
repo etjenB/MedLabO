@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:medlabo_mobile/main.dart';
 import 'package:medlabo_mobile/models/pacijent/pacijent.dart';
 import 'package:medlabo_mobile/providers/pacijenti_provider.dart';
+import 'package:medlabo_mobile/screens/profil_screen/pomoc_screen.dart';
 import 'package:medlabo_mobile/screens/profil_screen/sigurnost_screen.dart';
 import 'package:medlabo_mobile/screens/profil_screen/uredjivanje_profila_screen.dart';
 import 'package:medlabo_mobile/utils/constants/design.dart';
@@ -97,7 +99,8 @@ class _ProfilScreenState extends State<ProfilScreen> {
                 ),
                 sizedBoxHeightS,
                 ListTile(
-                  onTap: () => SigurnostScreen(user),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => SigurnostScreen(user))),
                   leading: const Icon(Icons.lock_person_outlined),
                   title: const Text("Sigurnost"),
                   trailing: const Icon(Icons.arrow_forward_ios_outlined),
@@ -105,13 +108,8 @@ class _ProfilScreenState extends State<ProfilScreen> {
                 ),
                 sizedBoxHeightS,
                 ListTile(
-                  leading: const Icon(Icons.contact_mail_outlined),
-                  title: const Text("Kontaktirajte nas"),
-                  trailing: const Icon(Icons.arrow_forward_ios_outlined),
-                  tileColor: Colors.grey[200],
-                ),
-                sizedBoxHeightS,
-                ListTile(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const PomocScreen())),
                   leading: const Icon(Icons.question_mark_outlined),
                   title: const Text("Pomoć"),
                   trailing: const Icon(Icons.arrow_forward_ios_outlined),
@@ -125,9 +123,12 @@ class _ProfilScreenState extends State<ProfilScreen> {
                     onPressed: () async {
                       if (await showConfirmationDialog(context, "Odjava",
                           "Jeste li sigurni da se želite odjaviti?")) {
-                        storage.delete(key: 'jwt_token');
-                        // ignore: use_build_context_synchronously
-                        Navigator.of(context).pop();
+                        await storage.delete(key: 'jwt_token');
+                        mainNavigatorKey.currentState?.pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => const LoginPage()),
+                          (Route<dynamic> route) => false,
+                        );
                       }
                     },
                     style: const ButtonStyle(

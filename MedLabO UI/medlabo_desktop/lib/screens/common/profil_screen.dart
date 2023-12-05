@@ -858,9 +858,10 @@ class _MedicinskoOsobljeProfilScreenState
 
   FormBuilder _buildMedicinskoOsobljeChangePasswordForm() {
     return FormBuilder(
-        key: _changePasswordFormKey,
-        child: SingleChildScrollView(
-          child: Column(children: [
+      key: _changePasswordFormKey,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
             FormBuilderTextField(
               decoration: InputDecoration(
                 labelText: 'Stara lozinka',
@@ -1023,8 +1024,10 @@ class _MedicinskoOsobljeProfilScreenState
                 ),
               ),
             ),
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 
   bool _passwordsMatch() {
