@@ -51,6 +51,9 @@ dependencies:
   table_calendar: ^3.0.9
   simple_gesture_detector: ^0.2.0
   flutter_stripe: ^9.5.0+1
+  syncfusion_flutter_pdfviewer: ^23.2.7
+  path_provider: ^2.1.1
+  file_picker: ^6.1.1
 
 dev_dependencies:
   flutter_test:

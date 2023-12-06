@@ -1,20 +1,15 @@
 ﻿using AutoMapper;
+using iText.Kernel.Pdf;
+using iText.Layout.Element;
 using MedLabO.Models.Exceptions;
 using MedLabO.Models.Requests.Termin;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Models.Termin;
-using MedLabO.Models.Usluga;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.EntityFrameworkCore;
-using Stripe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+using iText.Layout;
 
 namespace MedLabO.Services
 {
@@ -97,53 +92,69 @@ namespace MedLabO.Services
 
         public async Task TerminDodavanjeRezultata(TerminTestRezultatRequest request)
         {
-            if (request == null || request.TestIDs == null || request.Rezultati == null)
+            using (var transaction = await _db.Database.BeginTransactionAsync())
             {
-                throw new UserException("Dodavanje rezultata nije moguće.");
-            }
-
-            var termin = await _db.Termini.FirstOrDefaultAsync(t => t.TerminID == request.TerminID);
-
-            if (termin == null)
-            {
-                throw new EntityNotFoundException("Termin ne postoji.");
-            }
-
-            var counter = 0;
-            foreach (var testID in request.TestIDs)
-            {
-                var terminTest = await _db.TerminTest.FirstOrDefaultAsync(tt => tt.TestID.ToString() == testID && tt.TerminID == request.TerminID);
-                var test = await _db.Testovi.Include(t=>t.TestParametar).FirstOrDefaultAsync(t => t.TestID.ToString() == testID);
-                if (test == null) throw new EntityNotFoundException("Test ne postoji.");
-                if (test.TestParametar == null) throw new UserException("Test parametar za dati test ne postoji.");
-
-                var rezultat = request.Rezultati[counter];
-                rezultat.DTRezultata = DateTime.Now;
-                if (rezultat.RezFlo != null && 
-                    test.TestParametar.MinVrijednost != null && 
-                    rezultat.RezFlo < test.TestParametar.MinVrijednost)
+                try
                 {
-                    rezultat.RazlikaOdNormalne = rezultat.RezFlo - test.TestParametar.MinVrijednost;
-                    rezultat.Obiljezen = true;
-                }else if (rezultat.RezFlo != null &&
-                    test.TestParametar.MaxVrijednost != null &&
-                    rezultat.RezFlo > test.TestParametar.MaxVrijednost)
-                {
-                    rezultat.RazlikaOdNormalne = rezultat.RezFlo - test.TestParametar.MaxVrijednost;
-                    rezultat.Obiljezen = true;
+                    if (request == null || request.TestIDs == null || request.Rezultati == null)
+                    {
+                        throw new UserException("Dodavanje rezultata nije moguće.");
+                    }
+
+                    var termin = await _db.Termini.FirstOrDefaultAsync(t => t.TerminID == request.TerminID);
+
+                    if (termin == null)
+                    {
+                        throw new EntityNotFoundException("Termin ne postoji.");
+                    }
+
+                    var counter = 0;
+                    foreach (var testID in request.TestIDs)
+                    {
+                        var terminTest = await _db.TerminTest.FirstOrDefaultAsync(tt => tt.TestID.ToString() == testID && tt.TerminID == request.TerminID);
+                        var test = await _db.Testovi.Include(t => t.TestParametar).FirstOrDefaultAsync(t => t.TestID.ToString() == testID);
+                        if (test == null) throw new EntityNotFoundException("Test ne postoji.");
+                        if (test.TestParametar == null) throw new UserException("Test parametar za dati test ne postoji.");
+
+                        var rezultat = request.Rezultati[counter];
+                        rezultat.DTRezultata = DateTime.Now;
+                        if (rezultat.RezFlo != null &&
+                            test.TestParametar.MinVrijednost != null &&
+                            rezultat.RezFlo < test.TestParametar.MinVrijednost)
+                        {
+                            rezultat.RazlikaOdNormalne = rezultat.RezFlo - test.TestParametar.MinVrijednost;
+                            rezultat.Obiljezen = true;
+                        }
+                        else if (rezultat.RezFlo != null &&
+                            test.TestParametar.MaxVrijednost != null &&
+                            rezultat.RezFlo > test.TestParametar.MaxVrijednost)
+                        {
+                            rezultat.RazlikaOdNormalne = rezultat.RezFlo - test.TestParametar.MaxVrijednost;
+                            rezultat.Obiljezen = true;
+                        }
+
+                        if (terminTest != null)
+                        {
+                            terminTest.Rezultat = _mapper.Map<Database.Rezultat>(rezultat);
+                        }
+                        else
+                        {
+                            await _db.TerminTest.AddAsync(new TerminTest() { TerminID = request.TerminID, TestID = Guid.Parse(testID), Rezultat = _mapper.Map<Database.Rezultat>(rezultat) });
+                        }
+                        termin.RezultatDodan = true;
+                        await _db.SaveChangesAsync();
+                        counter++;
+                    }
+
+                    await StorePdfInDatabase(request.TerminID);
+
+                    await transaction.CommitAsync();
                 }
-
-                if (terminTest != null)
+                catch
                 {
-                    terminTest.Rezultat = _mapper.Map<Database.Rezultat>(rezultat);
+                    await transaction.RollbackAsync();
+                    throw new UserException("Rezultati nisu dodani zbog greške.");
                 }
-                else
-                {
-                    await _db.TerminTest.AddAsync(new TerminTest() { TerminID = request.TerminID, TestID = Guid.Parse(testID), Rezultat = _mapper.Map<Database.Rezultat>(rezultat) });
-                }
-                termin.RezultatDodan = true;
-                await _db.SaveChangesAsync();
-                counter++;
             }
         }
 
@@ -372,5 +383,90 @@ namespace MedLabO.Services
 
             return base.AddFilter(query, search);
         }
+
+        #region Private
+        private async Task<byte[]> GeneratePdf(Guid terminId)
+        {
+            var termin = await _db.Termini
+                .Include(t => t.TerminTestovi)
+                .ThenInclude(tt => tt.Test)
+                .ThenInclude(t => t.TestParametar)
+                .Include(t => t.TerminTestovi)
+                .ThenInclude(tt => tt.Rezultat)
+                .FirstOrDefaultAsync(t => t.TerminID == terminId);
+
+            if (termin == null)
+            {
+                throw new EntityNotFoundException("Termin not found.");
+            }
+
+            try
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    using (var pdfWriter = new PdfWriter(memoryStream))
+                    {
+                        using (var pdfDocument = new PdfDocument(pdfWriter))
+                        {
+                            var document = new Document(pdfDocument);
+
+                            document.Add(new Paragraph($"MedLabO Rezultati termina {termin.DTTermina:dd.MM.yyyy. HH:mm}")
+                                .SetFontSize(14));
+
+                            Table table = new Table(3, true);
+
+                            table.AddCell(new Cell().Add(new Paragraph("Naziv testa")));
+                            table.AddCell(new Cell().Add(new Paragraph("Rezultat")));
+                            table.AddCell(new Cell().Add(new Paragraph("Referentne vrijednosti")));
+
+                            foreach (var terminTest in termin.TerminTestovi)
+                            {
+                                var test = terminTest.Test;
+                                var rezultat = terminTest.Rezultat;
+                                var testParametar = test.TestParametar;
+
+                                string resultValue = rezultat.RezFlo.HasValue ? rezultat.RezFlo.Value.ToString() :
+                                                     rezultat.RezStr ?? string.Empty;
+                                if (rezultat.Obiljezen)
+                                {
+                                    resultValue += "*";
+                                }
+
+                                string referenceValue = testParametar.MinVrijednost.HasValue && testParametar.MaxVrijednost.HasValue ?
+                                                        $"{testParametar.MinVrijednost} - {testParametar.MaxVrijednost} {testParametar.Jedinica}" :
+                                                        $"{testParametar.NormalnaVrijednost} {testParametar.Jedinica}";
+
+                                table.AddCell(new Cell().Add(new Paragraph(test.Naziv)));
+                                table.AddCell(new Cell().Add(new Paragraph(resultValue)));
+                                table.AddCell(new Cell().Add(new Paragraph(referenceValue)));
+                            }
+
+                            document.Add(table);
+                            document.Close();
+                        }
+                    }
+
+                    return memoryStream.ToArray();
+                }
+            }
+            catch
+            {
+                throw new UserException("Greška pri kreiranju dokumenta.");
+            }
+            
+        }
+
+        private async Task StorePdfInDatabase(Guid terminId)
+        {
+            var pdfData = await GeneratePdf(terminId);
+            var termin = await _db.Termini.FirstOrDefaultAsync(t => t.TerminID == terminId);
+
+            if (termin != null)
+            {
+                termin.RezultatTerminaPDF = pdfData;
+                await _db.SaveChangesAsync();
+            }
+        }
+        #endregion
     }
 }

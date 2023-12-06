@@ -5,6 +5,7 @@ import 'package:medlabo_mobile/models/usluga/usluga.dart';
 import 'package:medlabo_mobile/providers/testovi_provider.dart';
 import 'package:medlabo_mobile/providers/usluge_provider.dart';
 import 'package:medlabo_mobile/screens/termini_screen/prethodni_termini_screen/pogledaj_racun_screen.dart';
+import 'package:medlabo_mobile/screens/termini_screen/prethodni_termini_screen/pogledaj_rezultat_screen.dart';
 import 'package:medlabo_mobile/screens/termini_screen/prethodni_termini_screen/pogledaj_zakljucak_screen.dart';
 import 'package:medlabo_mobile/screens/usluge_screen/paketi_usluga/usluga_page.dart';
 import 'package:medlabo_mobile/screens/usluge_screen/pojedinacni_testovi/test_page.dart';
@@ -292,7 +293,19 @@ class _PrethodniTerminScreenState extends State<PrethodniTerminScreen> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  if (widget.termin.rezultatDodan == true &&
+                                      widget.termin.rezultatTerminaPDF !=
+                                          null &&
+                                      widget.termin.rezultatTerminaPDF != "") {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                PogledajRezultatScreen(widget
+                                                    .termin
+                                                    .rezultatTerminaPDF)));
+                                  }
+                                },
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
                                   height:

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +8,14 @@ import 'package:medlabo_desktop/utils/general/toast_utils.dart';
 
 Image imageFromBase64String(String base64Image) {
   return Image.memory(base64Decode(base64Image));
+}
+
+Future<String> createTemporaryFileFromBase64(String base64Str) async {
+  final decodedBytes = base64Decode(base64Str);
+  final directory = await getTemporaryDirectory();
+  final file = File('${directory.path}/mypdf.pdf');
+  await file.writeAsBytes(decodedBytes);
+  return file.path;
 }
 
 String formatNumberToPrice(dynamic) {

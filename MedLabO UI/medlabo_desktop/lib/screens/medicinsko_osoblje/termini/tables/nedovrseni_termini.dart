@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -20,6 +22,7 @@ import 'package:medlabo_desktop/utils/general/toast_utils.dart';
 import 'package:medlabo_desktop/utils/general/util.dart';
 import 'package:medlabo_desktop/widgets/pagination_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class NedovrseniTerminiWidget extends StatefulWidget {
   const NedovrseniTerminiWidget({super.key});
@@ -215,47 +218,94 @@ class _NedovrseniTerminiWidgetState extends State<NedovrseniTerminiWidget>
                                                     Colors.orange[300]),
                                           ),
                                           onPressed: () async {
-                                            termini!.result[index]
-                                                        .rezultatDodan !=
-                                                    true
-                                                ? showDialog(
-                                                    context: context,
-                                                    barrierDismissible: false,
-                                                    builder: (context) {
-                                                      return FutureBuilder<
-                                                          Widget>(
-                                                        future:
-                                                            _buildRezultatDialog(
-                                                                context,
-                                                                termini!.result[
-                                                                    index]),
-                                                        builder: (BuildContext
-                                                                context,
-                                                            AsyncSnapshot<
-                                                                    Widget>
-                                                                snapshot) {
-                                                          if (snapshot
-                                                                  .connectionState ==
-                                                              ConnectionState
-                                                                  .waiting) {
-                                                            return const Center(
-                                                                child:
-                                                                    CircularProgressIndicator(
-                                                              strokeWidth: 8,
-                                                            ));
-                                                          } else if (snapshot
-                                                              .hasError) {
-                                                            return Text(
-                                                                'Error: ${snapshot.error}');
-                                                          } else {
-                                                            return snapshot
-                                                                .data!;
-                                                          }
-                                                        },
-                                                      );
+                                            if (termini!.result[index]
+                                                    .rezultatDodan ==
+                                                true) {
+                                              if (termini!.result[index]
+                                                          .rezultatTerminaPDF ==
+                                                      null ||
+                                                  termini!.result[index]
+                                                          .rezultatTerminaPDF ==
+                                                      "") {
+                                                return;
+                                              }
+
+                                              String base64Pdf = termini!
+                                                  .result[index]
+                                                  .rezultatTerminaPDF!;
+
+                                              String pdfFilePath =
+                                                  await createTemporaryFileFromBase64(
+                                                      base64Pdf);
+
+                                              // ignore: use_build_context_synchronously
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    AlertDialog(
+                                                  content: SizedBox(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.8,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
+                                                    child: SfPdfViewer.file(
+                                                      File(pdfFilePath),
+                                                    ),
+                                                  ),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      child:
+                                                          const Text('Zatvori'),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            } else {
+                                              showDialog(
+                                                context: context,
+                                                barrierDismissible: false,
+                                                builder: (context) {
+                                                  return FutureBuilder<Widget>(
+                                                    future:
+                                                        _buildRezultatDialog(
+                                                            context,
+                                                            termini!
+                                                                .result[index]),
+                                                    builder: (BuildContext
+                                                            context,
+                                                        AsyncSnapshot<Widget>
+                                                            snapshot) {
+                                                      if (snapshot
+                                                              .connectionState ==
+                                                          ConnectionState
+                                                              .waiting) {
+                                                        return const Center(
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                          strokeWidth: 8,
+                                                        ));
+                                                      } else if (snapshot
+                                                          .hasError) {
+                                                        return Text(
+                                                            'Error: ${snapshot.error}');
+                                                      } else {
+                                                        return snapshot.data!;
+                                                      }
                                                     },
-                                                  )
-                                                : null;
+                                                  );
+                                                },
+                                              );
+                                            }
                                           },
                                           child: const Icon(
                                               Icons.add_chart_rounded),
