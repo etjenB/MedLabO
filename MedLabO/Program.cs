@@ -68,7 +68,6 @@ builder.Services.AddTransient<IObavijestService, ObavijestService>();
 builder.Services.AddTransient<IRacunService, RacunService>();
 builder.Services.AddTransient<IZakljucakService, ZakljucakService>();
 
-//builder.Services.AddTransient<ITestService, TestService>();
 builder.Services.AddTransient<IService<MedLabO.Models.Test.Test, TestSearchObject>, TestService>();
 
 builder.Services.AddTransient<IService<MedLabO.Models.TestParametar, TestParametarSearchObject>, TestParametarService>();

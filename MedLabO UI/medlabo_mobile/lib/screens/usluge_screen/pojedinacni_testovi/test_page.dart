@@ -91,19 +91,19 @@ class _TestPageState extends State<TestPage> {
                             sizedBoxHeightM,
                             if (testParametar?.minVrijednost != null)
                               Text(
-                                "Minimalna normala vrijednost: ${testParametar!.minVrijednost} ${testParametar!.jedinica}",
+                                "Minimalna normalna vrijednost: ${testParametar!.minVrijednost} ${testParametar!.jedinica}",
                                 style: articleTextMedium,
                               ),
                             sizedBoxHeightM,
                             if (testParametar?.maxVrijednost != null)
                               Text(
-                                "Maksimalna normala vrijednost: ${testParametar!.maxVrijednost} ${testParametar!.jedinica}",
+                                "Maksimalna normalna vrijednost: ${testParametar!.maxVrijednost} ${testParametar!.jedinica}",
                                 style: articleTextMedium,
                               ),
                             sizedBoxHeightM,
                             if (testParametar?.normalnaVrijednost != null)
                               Text(
-                                "Maksimalna normala vrijednost: ${testParametar!.normalnaVrijednost}",
+                                "Normalna vrijednost: ${testParametar!.normalnaVrijednost}",
                                 style: articleTextMedium,
                               ),
                             sizedBoxHeightM,

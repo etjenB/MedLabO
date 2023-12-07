@@ -13,7 +13,7 @@ Image imageFromBase64String(String base64Image) {
 Future<String> createTemporaryFileFromBase64(String base64Str) async {
   final decodedBytes = base64Decode(base64Str);
   final directory = await getTemporaryDirectory();
-  final file = File('${directory.path}/mypdf.pdf');
+  final file = File('${directory.path}/terminRezultati.pdf');
   await file.writeAsBytes(decodedBytes);
   return file.path;
 }

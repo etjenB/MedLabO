@@ -155,6 +155,7 @@ class _UredjivanjeProfilaScreenState extends State<UredjivanjeProfilaScreen> {
                 labelText: 'Adresa',
               ),
               name: 'adresa',
+              initialValue: widget.user!.adresa,
               inputFormatters: [
                 LengthLimitingTextInputFormatter(70),
               ],

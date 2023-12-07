@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:medlabo_mobile/models/termin/termin.dart';
 import 'package:medlabo_mobile/providers/termini_provider.dart';
-import 'package:medlabo_mobile/screens/termini_screen/arhiva_rezultata_screen.dart';
 import 'package:medlabo_mobile/screens/termini_screen/nadolazeci_termin_screen.dart';
 import 'package:medlabo_mobile/screens/termini_screen/prethodni_termini_screen/prethodni_termin_screen.dart';
 import 'package:medlabo_mobile/utils/constants/design.dart';
@@ -112,7 +111,7 @@ class _TerminiScreenState extends State<TerminiScreen> {
             sizedBoxHeightL,
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.3,
+              height: MediaQuery.of(context).size.height * 0.34,
               margin: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -183,7 +182,7 @@ class _TerminiScreenState extends State<TerminiScreen> {
             sizedBoxHeightM,
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.3,
+              height: MediaQuery.of(context).size.height * 0.34,
               margin: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -248,41 +247,6 @@ class _TerminiScreenState extends State<TerminiScreen> {
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
-            sizedBoxHeightM,
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.07,
-              margin: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: ElevatedButton(
-                onPressed: () async {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => const ArhivaRezultataScreen()),
-                  );
-                },
-                style: ButtonStyle(
-                  backgroundColor: const MaterialStatePropertyAll(Colors.white),
-                  side: MaterialStateProperty.all(
-                    const BorderSide(color: primaryMedLabOColor, width: 2.0),
-                  ),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Arhiva rezulata",
-                    style: TextStyle(
-                      color: primaryMedLabOColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
                 ),
               ),
             ),
