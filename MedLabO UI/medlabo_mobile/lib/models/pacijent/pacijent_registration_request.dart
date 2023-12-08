@@ -6,7 +6,7 @@ part 'pacijent_registration_request.g.dart';
 class PacijentRegistrationRequest {
   String? ime;
   String? prezime;
-  String? datumRodjenja;
+  DateTime? datumRodjenja;
   String? adresa;
   int? spolID;
   String? userName;

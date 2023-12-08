@@ -11,7 +11,9 @@ PacijentRegistrationRequest _$PacijentRegistrationRequestFromJson(
     PacijentRegistrationRequest(
       ime: json['ime'] as String?,
       prezime: json['prezime'] as String?,
-      datumRodjenja: json['datumRodjenja'] as String?,
+      datumRodjenja: json['datumRodjenja'] == null
+          ? null
+          : DateTime.parse(json['datumRodjenja'] as String),
       adresa: json['adresa'] as String?,
       spolID: json['spolID'] as int?,
       userName: json['userName'] as String?,
@@ -25,7 +27,7 @@ Map<String, dynamic> _$PacijentRegistrationRequestToJson(
     <String, dynamic>{
       'ime': instance.ime,
       'prezime': instance.prezime,
-      'datumRodjenja': instance.datumRodjenja,
+      'datumRodjenja': instance.datumRodjenja?.toIso8601String(),
       'adresa': instance.adresa,
       'spolID': instance.spolID,
       'userName': instance.userName,
