@@ -88,5 +88,30 @@ namespace MedLabO.Services
                 throw new UserException("Unable to update Pacijent.");
             }
         }
+
+        public override IQueryable<Database.Pacijent> AddFilter(IQueryable<Database.Pacijent> query, PacijentSearchObject? search = null)
+        {
+            if (search?.IncludeSoftDeleted == false)
+            {
+                query = query.Where(t => !t.isDeleted);
+            }
+
+            if (!string.IsNullOrWhiteSpace(search?.ImePrezime))
+            {
+                query = query.Where(t => t.Ime.StartsWith(search.ImePrezime) || t.Prezime.StartsWith(search.ImePrezime));
+            }
+
+            return base.AddFilter(query, search);
+        }
+
+        public override IQueryable<Database.Pacijent> AddInclude(IQueryable<Database.Pacijent> query, PacijentSearchObject? search = null)
+        {
+            if (search?.IncludeSpol == true)
+            {
+                query = query.Include("Spol");
+            }
+
+            return base.AddInclude(query, search);
+        }
     }
 }

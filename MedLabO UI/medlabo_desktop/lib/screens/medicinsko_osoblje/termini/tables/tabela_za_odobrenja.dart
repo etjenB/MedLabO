@@ -356,7 +356,7 @@ class _TabelaZaOdobrenjaWidgetState extends State<TabelaZaOdobrenjaWidget>
                         Text(
                             "Spol: ${termin.pacijent?.spol?.naziv ?? 'Nepoznato'}"),
                         Text(
-                            "Datum rođenja: ${termin.pacijent?.datumRodjenja == null ? 'Nepoznato' : formatDateTime(termin.pacijent!.datumRodjenja!)}"),
+                            "Datum rođenja: ${termin.pacijent?.datumRodjenja == null ? 'Nepoznato' : formatDateTime(termin.pacijent!.datumRodjenja.toString())}"),
                         Text(
                             "Adresa: ${termin.pacijent?.adresa ?? 'Nepoznato'}"),
                       ],

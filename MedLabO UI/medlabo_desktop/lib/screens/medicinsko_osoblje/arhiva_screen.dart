@@ -428,7 +428,7 @@ class ArhivaWidgetState extends State<ArhivaWidget>
                         Text(
                             "Spol: ${termin.pacijent?.spol?.naziv ?? 'Nepoznato'}"),
                         Text(
-                            "Datum rođenja: ${termin.pacijent?.datumRodjenja == null ? 'Nepoznato' : formatDateTime(termin.pacijent!.datumRodjenja!)}"),
+                            "Datum rođenja: ${termin.pacijent?.datumRodjenja == null ? 'Nepoznato' : formatDateTime(termin.pacijent!.datumRodjenja.toString())}"),
                         Text(
                             "Adresa: ${termin.pacijent?.adresa ?? 'Nepoznato'}"),
                       ],
@@ -874,7 +874,7 @@ class ObrisaniTerminiWidgetState extends State<ObrisaniTerminiWidget>
                         Text(
                             "Spol: ${termin.pacijent?.spol?.naziv ?? 'Nepoznato'}"),
                         Text(
-                            "Datum rođenja: ${termin.pacijent?.datumRodjenja == null ? 'Nepoznato' : formatDateTime(termin.pacijent!.datumRodjenja!)}"),
+                            "Datum rođenja: ${termin.pacijent?.datumRodjenja == null ? 'Nepoznato' : formatDateTime(termin.pacijent!.datumRodjenja.toString())}"),
                         Text(
                             "Adresa: ${termin.pacijent?.adresa ?? 'Nepoznato'}"),
                       ],

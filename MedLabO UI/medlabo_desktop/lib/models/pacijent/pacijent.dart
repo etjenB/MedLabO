@@ -8,10 +8,12 @@ part 'pacijent.g.dart';
 class Pacijent {
   String? ime;
   String? prezime;
-  String? datumRodjenja;
+  DateTime? datumRodjenja;
   String? adresa;
   List<Termin>? termini;
+  int? spolID;
   Spol? spol;
+  String? id;
   String? userName;
   String? email;
   String? phoneNumber;
@@ -23,6 +25,7 @@ class Pacijent {
     this.adresa,
     this.termini,
     this.spol,
+    this.id,
     this.userName,
     this.email,
     this.phoneNumber,
