@@ -8,7 +8,7 @@ namespace MedLabO.Services
     {
         Task<ICollection<Models.Test.TestBasicData>?> GetTestoviBasicData();
         Task<ICollection<Models.Test.TestWithoutTerminTestovi>> GetTestoviByTerminId(Guid terminId);
-        Task<ICollection<Models.Test.TestWithoutTerminTestovi>?> GetTestoviByUslugaId(Guid uslugaId);
-        Task<ICollection<Models.Test.TestBasicData>?> GetTestoviBasicDataByUslugaId(Guid uslugaId);
+        Task<ICollection<Models.Test.TestWithoutTerminTestovi>?> GetTestoviByUslugaId(int uslugaId);
+        Task<ICollection<Models.Test.TestBasicData>?> GetTestoviBasicDataByUslugaId(int uslugaId);
     }
 }

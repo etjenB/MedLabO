@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Cart with ChangeNotifier {
-  Map<String, CartItem> _items = {};
+  Map<dynamic, CartItem> _items = {};
 
-  Map<String, CartItem> get items => _items;
+  Map<dynamic, CartItem> get items => _items;
 
   void addItem(
-      String productId, double price, String title, CartItemType type) {
+      dynamic productId, double price, String title, CartItemType type) {
     _items[productId] = CartItem(
       id: productId,
       title: title,
@@ -16,7 +16,7 @@ class Cart with ChangeNotifier {
     notifyListeners();
   }
 
-  CartItem? getItem(String productId) {
+  CartItem? getItem(dynamic productId) {
     return _items[productId];
   }
 
@@ -30,7 +30,7 @@ class Cart with ChangeNotifier {
     return _items.values.fold(0.0, (sum, item) => sum + item.price);
   }
 
-  void removeItem(String productId) {
+  void removeItem(dynamic productId) {
     _items.remove(productId);
     notifyListeners();
   }
@@ -44,7 +44,7 @@ class Cart with ChangeNotifier {
 enum CartItemType { test, usluga }
 
 class CartItem {
-  final String id;
+  final dynamic id;
   final String title;
   final double price;
   final CartItemType type;

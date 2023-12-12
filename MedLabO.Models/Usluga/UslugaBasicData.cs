@@ -8,7 +8,7 @@ namespace MedLabO.Models.Usluga
 {
     public class UslugaBasicData
     {
-        public string UslugaID { get; set; }
+        public int UslugaID { get; set; }
         public string Naziv { get; set; }
         public string Opis { get; set; }
         public decimal Cijena { get; set; }

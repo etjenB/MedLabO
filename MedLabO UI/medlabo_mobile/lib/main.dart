@@ -139,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                 duration: const Duration(milliseconds: 300),
                 height: _selectedTabIndex == 1
                     ? MediaQuery.of(context).size.height * 0.9
-                    : MediaQuery.of(context).size.height * 0.5,
+                    : MediaQuery.of(context).size.height * 0.6,
                 child: Column(
                   children: [
                     Container(
@@ -214,104 +214,106 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildLoginForm() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: TextField(
-              autofocus: true,
-              autocorrect: false,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                labelText: 'Korisničko ime',
-                prefixIcon: Icon(Icons.account_circle_outlined),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
               ),
-              controller: _usernameController,
+              child: TextField(
+                autofocus: true,
+                autocorrect: false,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  labelText: 'Korisničko ime',
+                  prefixIcon: Icon(Icons.account_circle_outlined),
+                ),
+                controller: _usernameController,
+              ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: TextField(
-              autocorrect: false,
-              obscureText: _obscureText,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                labelText: 'Lozinka',
-                prefixIcon: const Icon(Icons.password_outlined),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility : Icons.visibility_off,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: TextField(
+                autocorrect: false,
+                obscureText: _obscureText,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  labelText: 'Lozinka',
+                  prefixIcon: const Icon(Icons.password_outlined),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
                 ),
+                controller: _passwordController,
               ),
-              controller: _passwordController,
             ),
           ),
-        ),
-        loginFailed == true
-            ? const Padding(
-                padding: EdgeInsets.only(bottom: 20),
-                child: Text(
-                  'Neispravni kredencijali.',
-                  style: TextStyle(color: Colors.red),
+          loginFailed == true
+              ? const Padding(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: Text(
+                    'Neispravni kredencijali.',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                )
+              : const Padding(
+                  padding: EdgeInsets.only(bottom: 20),
+                  child: SizedBox(
+                    height: 20,
+                  ),
                 ),
-              )
-            : const Padding(
-                padding: EdgeInsets.only(bottom: 20),
-                child: SizedBox(
-                  height: 20,
-                ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.6,
+            height: MediaQuery.of(context).size.height * 0.06,
+            child: ElevatedButton(
+              style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.white),
               ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.6,
-          height: MediaQuery.of(context).size.height * 0.06,
-          child: ElevatedButton(
-            style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Colors.white),
-            ),
-            onPressed: () async {
-              var username = _usernameController.text;
-              var password = _passwordController.text;
-              var isLoged = await _loginProvider!.login(username, password);
-              if (isLoged) {
-                final user = await AuthUtil.create();
-                setState(() {
-                  loginFailed = false;
-                  _usernameController.text = "";
-                  _passwordController.text = "";
-                });
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => MasterScreenWidget(user: user)));
-              } else {
-                setState(() {
-                  loginFailed = true;
-                });
-              }
-            },
-            child: const Text(
-              'Prijavi se',
-              style: TextStyle(color: primaryMedLabOColor),
+              onPressed: () async {
+                var username = _usernameController.text;
+                var password = _passwordController.text;
+                var isLoged = await _loginProvider!.login(username, password);
+                if (isLoged) {
+                  final user = await AuthUtil.create();
+                  setState(() {
+                    loginFailed = false;
+                    _usernameController.text = "";
+                    _passwordController.text = "";
+                  });
+                  // ignore: use_build_context_synchronously
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => MasterScreenWidget(user: user)));
+                } else {
+                  setState(() {
+                    loginFailed = true;
+                  });
+                }
+              },
+              child: const Text(
+                'Prijavi se',
+                style: TextStyle(color: primaryMedLabOColor),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

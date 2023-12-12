@@ -7,7 +7,7 @@ part of 'usluga.dart';
 // **************************************************************************
 
 Usluga _$UslugaFromJson(Map<String, dynamic> json) => Usluga(
-      uslugaID: json['uslugaID'] as String?,
+      uslugaID: json['uslugaID'] as int?,
       naziv: json['naziv'] as String?,
       opis: json['opis'] as String?,
       cijena: (json['cijena'] as num?)?.toDouble(),

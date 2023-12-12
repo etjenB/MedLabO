@@ -73,7 +73,7 @@ class TestoviProvider extends BaseProvider<Test> {
     throw Exception("Failed get request");
   }
 
-  Future<List<Test>> getTestoviByUslugaId(String uslugaId) async {
+  Future<List<Test>> getTestoviByUslugaId(int uslugaId) async {
     var url = '${BaseProvider.baseUrl}$endpoint/GetTestoviByUslugaId/$uslugaId';
 
     var uri = Uri.parse(url);
@@ -99,7 +99,7 @@ class TestoviProvider extends BaseProvider<Test> {
     throw Exception("Failed get request");
   }
 
-  Future<List<Test>> getTestoviBasicDataByUslugaId(String uslugaId) async {
+  Future<List<Test>> getTestoviBasicDataByUslugaId(int uslugaId) async {
     var url =
         '${BaseProvider.baseUrl}$endpoint/GetTestoviBasicDataByUslugaId/$uslugaId';
 

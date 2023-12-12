@@ -6,8 +6,8 @@ part 'termin_insert_request.g.dart';
 class TerminInsertRequest {
   String? dtTermina;
   String? napomena;
-  List<String>? usluge;
-  List<String>? testovi;
+  List<dynamic>? usluge;
+  List<dynamic>? testovi;
 
   TerminInsertRequest(
       {this.dtTermina, this.napomena, this.usluge, this.testovi});

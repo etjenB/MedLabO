@@ -5,6 +5,9 @@ using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML;
+using Microsoft.ML.Data;
+using Microsoft.ML.Trainers;
 using System.Security.Claims;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -35,6 +38,23 @@ namespace MedLabO.Services
                 usluge.Add(await _db.Usluge.Include(u=>u.UslugaTestovi).FirstOrDefaultAsync(u => u.UslugaID == tu.UslugaID));
             }
             return _mapper.Map<List<Models.Usluga.Usluga>>(usluge);
+        }
+
+        public async Task<int?> GetPacijentLastChosenUsluga()
+        {
+            var userId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UserException("User ID not found.");
+            }
+            foreach (var t in _db.Termini.Where(t=>t.PacijentID.ToString() == userId && t.DTTermina > DateTime.Now).OrderBy(t => t.DTTermina).Include(t=>t.TerminUsluge))
+            {
+                if (t.TerminUsluge!=null && t.TerminUsluge.Count > 0)
+                {
+                    return t.TerminUsluge.First().UslugaID;
+                }
+            }
+            return null;
         }
 
         public override async Task BeforeInsert(Database.Usluga entity, UslugaInsertRequest insert)
@@ -117,6 +137,11 @@ namespace MedLabO.Services
                 query = query.Where(t => t.Naziv.StartsWith(search.Naziv));
             }
 
+            if (search?.IncludeTestovi == true)
+            {
+                query = query.Include("UslugaTestovi");
+            }
+
             return base.AddFilter(query, search);
         }
 
@@ -134,5 +159,89 @@ namespace MedLabO.Services
 
             return base.AddInclude(query, search);
         }
+
+        static MLContext mlContext = null;
+        static object isLocked = new object();
+        static ITransformer model = null;
+
+        public async Task<List<Models.Usluga.Usluga>> Recommend(int? uslugaId)
+        {
+            lock (isLocked)
+            {
+                if (mlContext == null)
+                {
+                    mlContext = new MLContext();
+                    var tmpData = _db.Termini.Include(t => t.TerminUsluge).ToList();
+
+                    var data = new List<ProductEntry>();
+
+                    foreach (var t in tmpData)
+                    {
+                        if (t.TerminUsluge.Count > 1)
+                        {
+                            var distinctItemId = t.TerminUsluge.Select(tu => tu.UslugaID).ToList();
+
+                            distinctItemId.ForEach(u =>
+                            {
+                                var relatedItems = t.TerminUsluge.Where(ou => ou.UslugaID != u);
+
+                                foreach (var ri in relatedItems)
+                                {
+                                    data.Add(new ProductEntry() { ProductID = (uint)u, CoPurchaseProductID = (uint)ri.UslugaID});
+                                }
+                            });
+                        }
+                    }
+
+                    var traindata = mlContext.Data.LoadFromEnumerable(data);
+
+                    MatrixFactorizationTrainer.Options options = new MatrixFactorizationTrainer.Options();
+                    options.MatrixColumnIndexColumnName = nameof(ProductEntry.ProductID);
+                    options.MatrixRowIndexColumnName = nameof(ProductEntry.CoPurchaseProductID);
+                    options.LabelColumnName = "Label";
+                    options.LossFunction = MatrixFactorizationTrainer.LossFunctionType.SquareLossOneClass;
+                    options.Alpha = 0.01;
+                    options.Lambda = 0.025;
+
+                    options.NumberOfIterations = 100;
+                    options.C = 0.00001;
+
+                    var est = mlContext.Recommendation().Trainers.MatrixFactorization(options);
+
+                    model = est.Fit(traindata);
+                }
+            }
+
+            var usluge = _db.Usluge.Where(u => u.UslugaID != uslugaId);
+
+            var predictionResult = new List<Tuple<Database.Usluga, float>>();
+
+            foreach (var u in usluge)
+            {
+                var predictionengine = mlContext.Model.CreatePredictionEngine<ProductEntry, Copurchase_prediction>(model);
+                var prediction = predictionengine.Predict(new ProductEntry() { ProductID = (uint)uslugaId, CoPurchaseProductID = (uint)u.UslugaID });
+
+                predictionResult.Add(new Tuple<Database.Usluga, float>(u, prediction.Score));
+            }
+
+            var finalResult = predictionResult.OrderByDescending(u=>u.Item2).Take(3).Select(u=>u.Item1).ToList();
+
+            return _mapper.Map<List<Models.Usluga.Usluga>>(finalResult);
+        }
     }
+}
+
+public class Copurchase_prediction
+{
+    public float Score { get; set; }
+}
+
+public class ProductEntry
+{
+    [KeyType(count: 20)]
+    public uint ProductID { get; set; }
+    [KeyType(count: 20)]
+    public uint CoPurchaseProductID { get; set; }
+
+    public float Label { get; set; }
 }

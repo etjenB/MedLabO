@@ -26,5 +26,17 @@ namespace MedLabO.Controllers
         {
             return await _uslugaService.GetUslugeByTerminId(terminId);
         }
+
+        [HttpGet("GetPacijentLastChosenUsluga")]
+        public async Task<int?> GetPacijentLastChosenUsluga()
+        {
+            return await _uslugaService.GetPacijentLastChosenUsluga();
+        }
+
+        [HttpGet("Recommend/{uslugaId}")]
+        public async Task<ICollection<Models.Usluga.Usluga>> Recommend(int uslugaId)
+        {
+            return await _uslugaService.Recommend(uslugaId);
+        }
     }
 }

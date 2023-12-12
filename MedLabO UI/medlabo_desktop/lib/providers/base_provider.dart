@@ -49,7 +49,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     throw Exception("Failed get request");
   }
 
-  Future<T> getById(String id) async {
+  Future<T> getById(dynamic id) async {
     var url = '$baseUrl$endpoint/$id';
 
     var uri = Uri.parse(url);
@@ -68,7 +68,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     throw Exception("Failed get request");
   }
 
-  Future<T> update(String id, [dynamic request]) async {
+  Future<T> update(dynamic id, [dynamic request]) async {
     var url = '$baseUrl$endpoint/$id';
 
     var uri = Uri.parse(url);
@@ -104,7 +104,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     throw Exception("Failed insert request");
   }
 
-  Future delete(String id) async {
+  Future delete(dynamic id) async {
     var url = '$baseUrl$endpoint/$id';
     var uri = Uri.parse(url);
     var headers = await createHeaders();

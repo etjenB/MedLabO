@@ -5,7 +5,7 @@ part 'usluga.g.dart';
 
 @JsonSerializable()
 class Usluga {
-  String? uslugaID;
+  int? uslugaID;
   String? naziv;
   String? opis;
   double? cijena;

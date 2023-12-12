@@ -16,7 +16,7 @@ namespace MedLabO.Models.Requests.Termin
         public string? Napomena { get; set; }
 
 
-        public List<string>? Usluge { get; set; } = new List<string>();
+        public List<int>? Usluge { get; set; } = new List<int>();
         public List<string>? Testovi { get; set; } = new List<string>();
     }
 }

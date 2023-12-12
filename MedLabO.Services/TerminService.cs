@@ -200,7 +200,7 @@ namespace MedLabO.Services
 
             foreach (var uslugaID in insert.Usluge)
             {
-                var usluga = await _db.Usluge.FirstOrDefaultAsync(t => t.UslugaID.ToString() == uslugaID);
+                var usluga = await _db.Usluge.FirstOrDefaultAsync(t => t.UslugaID == uslugaID);
                 if (usluga == null) throw new EntityNotFoundException("Usluga not found");
                 entity.TerminUsluge.Add(usluga);
             }
@@ -220,7 +220,7 @@ namespace MedLabO.Services
 
             foreach (var uslugaID in insert.Usluge)
             {
-                var usluga = await _db.Usluge.FirstOrDefaultAsync(t => t.UslugaID.ToString() == uslugaID);
+                var usluga = await _db.Usluge.FirstOrDefaultAsync(t => t.UslugaID == uslugaID);
                 if (usluga == null) throw new EntityNotFoundException("Usluga not found");
                 ukupnaCijena += usluga.Cijena;
             }

@@ -4,6 +4,7 @@ import 'package:medlabo_mobile/models/novost/novost.dart';
 import 'package:medlabo_mobile/providers/novosti_provider.dart';
 import 'package:medlabo_mobile/screens/home_screen/novost_page.dart';
 import 'package:medlabo_mobile/screens/home_screen/novosti_page.dart';
+import 'package:medlabo_mobile/screens/home_screen/preporucene_usluge_screen.dart';
 import 'package:medlabo_mobile/utils/general/util.dart';
 import 'package:provider/provider.dart';
 
@@ -49,37 +50,47 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.02,
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.15,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 3,
-                      blurRadius: 5,
-                      offset: const Offset(0, 0),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PreporuceneUslugeScreen(),
                     ),
-                  ],
-                  border: Border.all(
-                    color: Colors.white,
+                  );
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 3,
+                        blurRadius: 5,
+                        offset: const Offset(0, 0),
+                      ),
+                    ],
+                    border: Border.all(
+                      color: Colors.white,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    image: const DecorationImage(
+                      image: AssetImage("assets/images/usluge.png"),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  image: const DecorationImage(
-                    image: AssetImage("assets/images/usluge.png"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text(
-                      "Preporučene usluge",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text(
+                        "Preporučene usluge",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
                     ),
                   ),
                 ),

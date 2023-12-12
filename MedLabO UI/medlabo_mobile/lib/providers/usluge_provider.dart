@@ -72,4 +72,50 @@ class UslugeProvider extends BaseProvider<Usluga> {
 
     throw Exception("Failed get request");
   }
+
+  Future<int?> getPacijentLastChosenUsluga() async {
+    var url = '${BaseProvider.baseUrl}$endpoint/GetPacijentLastChosenUsluga';
+
+    var uri = Uri.parse(url);
+
+    var headers = await createHeaders();
+
+    var response = await ioClient.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else if (response.statusCode == 204) {
+      return null;
+    }
+
+    makeErrorToast('Greška prilikom pribavljanja id-a usluge pacijenta.');
+
+    throw Exception("Failed get request");
+  }
+
+  Future<List<Usluga>> recommend(int uslugaId) async {
+    var url = '${BaseProvider.baseUrl}$endpoint/Recommend/$uslugaId';
+
+    var uri = Uri.parse(url);
+
+    var headers = await createHeaders();
+
+    var response = await ioClient.get(uri, headers: headers);
+
+    if (isValidResponse(response)['isValid']) {
+      var data = jsonDecode(response.body);
+
+      List<Usluga> result = [];
+
+      for (var usluga in data) {
+        result.add(fromJson(usluga));
+      }
+
+      return result;
+    }
+
+    makeErrorToast(isValidResponse(response)['message'] ?? '');
+
+    throw Exception("Failed get request");
+  }
 }

@@ -6,6 +6,7 @@ using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML;
 using System.Security.Claims;
 
 namespace MedLabO.Services
@@ -37,7 +38,7 @@ namespace MedLabO.Services
             return _mapper.Map<List<Models.Test.TestWithoutTerminTestovi>>(testovi);
         }
 
-        public async Task<ICollection<Models.Test.TestWithoutTerminTestovi>?> GetTestoviByUslugaId(Guid uslugaId)
+        public async Task<ICollection<Models.Test.TestWithoutTerminTestovi>?> GetTestoviByUslugaId(int uslugaId)
         {
             var usluga = await _db.Usluge.Include(u => u.UslugaTestovi).FirstOrDefaultAsync(u => u.UslugaID == uslugaId);
             if (usluga == null) throw new EntityNotFoundException("Usluga nije pronađena.");
@@ -45,13 +46,28 @@ namespace MedLabO.Services
             return _mapper.Map<List<Models.Test.TestWithoutTerminTestovi>>(uslugaTestovi);
         }
 
-        public async Task<ICollection<Models.Test.TestBasicData>?> GetTestoviBasicDataByUslugaId(Guid uslugaId)
+        public async Task<ICollection<Models.Test.TestBasicData>?> GetTestoviBasicDataByUslugaId(int uslugaId)
         {
             var usluga = await _db.Usluge.Include(u => u.UslugaTestovi).FirstOrDefaultAsync(u => u.UslugaID == uslugaId);
             if (usluga == null) throw new EntityNotFoundException("Usluga nije pronađena.");
             List<Database.Test> uslugaTestovi = usluga.UslugaTestovi.ToList();
             return _mapper.Map<List<Models.Test.TestBasicData>>(uslugaTestovi);
         }
+
+        //static MLContext mlContext = null;
+        //static object isLocked = new object();
+
+        //public async Task<Models.Test.TestBasicData> Recommend(Guid? testId)
+        //{
+        //    lock (isLocked)
+        //    {
+        //        if (mlContext == null)
+        //        {
+        //            mlContext = new MLContext();
+        //            var tmpData = _db.Termini.Include(t=>t.TerminTestovi).ToList();
+        //        }
+        //    }
+        //}
 
         public override async Task BeforeInsert(Database.Test entity, TestInsertRequest insert)
         {
