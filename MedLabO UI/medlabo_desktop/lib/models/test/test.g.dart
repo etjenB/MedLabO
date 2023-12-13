@@ -17,6 +17,7 @@ Test _$TestFromJson(Map<String, dynamic> json) => Test(
       dtKreiranja: json['dtKreiranja'] as String?,
       administratorID: json['administratorID'] as String?,
       testParametarID: json['testParametarID'] as String?,
+      occurrenceCount: json['occurrenceCount'] as int?,
     );
 
 Map<String, dynamic> _$TestToJson(Test instance) => <String, dynamic>{
@@ -30,4 +31,5 @@ Map<String, dynamic> _$TestToJson(Test instance) => <String, dynamic>{
       'dtKreiranja': instance.dtKreiranja,
       'administratorID': instance.administratorID,
       'testParametarID': instance.testParametarID,
+      'occurrenceCount': instance.occurrenceCount,
     };

@@ -38,4 +38,30 @@ class TestoviProvider extends BaseProvider<Test> {
 
     throw Exception("Failed get request");
   }
+
+  Future<List<Test>> getMostPopularTests() async {
+    var url = '${BaseProvider.baseUrl}$endpoint/GetMostPopularTests';
+
+    var uri = Uri.parse(url);
+
+    var headers = await createHeaders();
+
+    var response = await http.get(uri, headers: headers);
+
+    if (isValidResponse(response)['isValid']) {
+      var data = jsonDecode(response.body);
+
+      List<Test> result = [];
+
+      for (var test in data) {
+        result.add(fromJson(test));
+      }
+
+      return result;
+    }
+
+    makeErrorToast(isValidResponse(response)['message'] ?? '');
+
+    throw Exception("Failed get request");
+  }
 }

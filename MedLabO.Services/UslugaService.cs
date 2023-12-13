@@ -2,6 +2,7 @@
 using MedLabO.Models.Exceptions;
 using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
+using MedLabO.Models.Usluga;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -55,6 +56,29 @@ namespace MedLabO.Services
                 }
             }
             return null;
+        }
+
+        public async Task<ICollection<Models.Usluga.UslugaBasicData>?> GetMostPopularUslugas()
+        {
+            var popularUslugas = await _db.Termini
+                              .SelectMany(t => t.TerminUsluge)
+                              .GroupBy(u => u.UslugaID)
+                              .Select(group => new
+                              {
+                                  Usluga = group.FirstOrDefault(),
+                                  Count = group.Count()
+                              })
+                              .OrderByDescending(x => x.Count)
+                              .ToListAsync();
+
+            var result = popularUslugas.Select(x =>
+            {
+                var mapped = _mapper.Map<UslugaBasicData>(x.Usluga);
+                mapped.OccurrenceCount = x.Count;
+                return mapped;
+            }).ToList();
+
+            return result;
         }
 
         public override async Task BeforeInsert(Database.Usluga entity, UslugaInsertRequest insert)

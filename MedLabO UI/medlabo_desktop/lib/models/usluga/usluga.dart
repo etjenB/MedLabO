@@ -17,6 +17,7 @@ class Usluga {
   String? slika;
   List<Test>? uslugaTestovi;
   String? administratorID;
+  int? occurrenceCount;
 
   Usluga(
       {this.uslugaID,
@@ -30,7 +31,8 @@ class Usluga {
       this.dtZadnjeModifikacije,
       this.slika,
       this.uslugaTestovi,
-      this.administratorID});
+      this.administratorID,
+      this.occurrenceCount});
 
   factory Usluga.fromJson(Map<String, dynamic> json) => _$UslugaFromJson(json);
 

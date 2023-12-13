@@ -14,6 +14,7 @@ class Test {
   String? dtKreiranja;
   String? administratorID;
   String? testParametarID;
+  int? occurrenceCount;
 
   Test(
       {this.testID,
@@ -25,7 +26,8 @@ class Test {
       this.tipUzorka,
       this.dtKreiranja,
       this.administratorID,
-      this.testParametarID});
+      this.testParametarID,
+      this.occurrenceCount});
 
   factory Test.fromJson(Map<String, dynamic> json) => _$TestFromJson(json);
 

@@ -38,4 +38,30 @@ class UslugeProvider extends BaseProvider<Usluga> {
 
     throw Exception("Failed get request");
   }
+
+  Future<List<Usluga>> getMostPopularUslugas() async {
+    var url = '${BaseProvider.baseUrl}$endpoint/GetMostPopularUslugas';
+
+    var uri = Uri.parse(url);
+
+    var headers = await createHeaders();
+
+    var response = await http.get(uri, headers: headers);
+
+    if (isValidResponse(response)['isValid']) {
+      var data = jsonDecode(response.body);
+
+      List<Usluga> result = [];
+
+      for (var test in data) {
+        result.add(fromJson(test));
+      }
+
+      return result;
+    }
+
+    makeErrorToast(isValidResponse(response)['message'] ?? '');
+
+    throw Exception("Failed get request");
+  }
 }

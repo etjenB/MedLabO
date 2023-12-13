@@ -40,5 +40,11 @@ namespace MedLabO.Controllers
         {
             return await _testService.GetTestoviBasicDataByUslugaId(uslugaId);
         }
+
+        [HttpGet("GetMostPopularTests")]
+        public async Task<ICollection<Models.Test.TestBasicData>?> GetMostPopularTests()
+        {
+            return await _testService.GetMostPopularTests();
+        }
     }
 }

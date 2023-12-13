@@ -21,6 +21,7 @@ Usluga _$UslugaFromJson(Map<String, dynamic> json) => Usluga(
           ?.map((e) => Test.fromJson(e as Map<String, dynamic>))
           .toList(),
       administratorID: json['administratorID'] as String?,
+      occurrenceCount: json['occurrenceCount'] as int?,
     );
 
 Map<String, dynamic> _$UslugaToJson(Usluga instance) => <String, dynamic>{
@@ -36,4 +37,5 @@ Map<String, dynamic> _$UslugaToJson(Usluga instance) => <String, dynamic>{
       'slika': instance.slika,
       'uslugaTestovi': instance.uslugaTestovi,
       'administratorID': instance.administratorID,
+      'occurrenceCount': instance.occurrenceCount,
     };

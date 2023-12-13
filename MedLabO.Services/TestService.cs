@@ -54,20 +54,30 @@ namespace MedLabO.Services
             return _mapper.Map<List<Models.Test.TestBasicData>>(uslugaTestovi);
         }
 
-        //static MLContext mlContext = null;
-        //static object isLocked = new object();
+        public async Task<ICollection<Models.Test.TestBasicData>?> GetMostPopularTests()
+        {
+            var popularTestsQuery = _db.TerminTest
+                                       .Include(tt => tt.Test)
+                                       .Where(tt => tt.TestID != null)
+                                       .GroupBy(tt => tt.TestID)
+                                       .Select(group => new
+                                       {
+                                           Test = group.First().Test,
+                                           Count = group.Count()
+                                       })
+                                       .OrderByDescending(x => x.Count);
 
-        //public async Task<Models.Test.TestBasicData> Recommend(Guid? testId)
-        //{
-        //    lock (isLocked)
-        //    {
-        //        if (mlContext == null)
-        //        {
-        //            mlContext = new MLContext();
-        //            var tmpData = _db.Termini.Include(t=>t.TerminTestovi).ToList();
-        //        }
-        //    }
-        //}
+            var popularTests = await popularTestsQuery.ToListAsync();
+
+            var result = popularTests.Select(x =>
+            {
+                var mapped = _mapper.Map<Models.Test.TestBasicData>(x.Test);
+                mapped.OccurrenceCount = x.Count;
+                return mapped;
+            }).ToList();
+
+            return result;
+        }
 
         public override async Task BeforeInsert(Database.Test entity, TestInsertRequest insert)
         {

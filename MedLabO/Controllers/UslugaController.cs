@@ -33,6 +33,12 @@ namespace MedLabO.Controllers
             return await _uslugaService.GetPacijentLastChosenUsluga();
         }
 
+        [HttpGet("GetMostPopularUslugas")]
+        public async Task<ICollection<Models.Usluga.UslugaBasicData>?> GetMostPopularUslugas()
+        {
+            return await _uslugaService.GetMostPopularUslugas();
+        }
+
         [HttpGet("Recommend/{uslugaId}")]
         public async Task<ICollection<Models.Usluga.Usluga>> Recommend(int uslugaId)
         {

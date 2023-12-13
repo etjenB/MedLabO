@@ -18,5 +18,7 @@ namespace MedLabO.Models.Usluga
         public DateTime DTKreiranja { get; set; }
         public DateTime? DTZadnjeModifikacije { get; set; }
         public string? AdministratorID { get; set; }
+
+        public int? OccurrenceCount { get; set; }
     }
 }

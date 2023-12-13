@@ -14,6 +14,7 @@ namespace MedLabO.Services
         Task<ICollection<Models.Usluga.UslugaBasicData>?> GetUslugeBasicData();
         Task<ICollection<Models.Usluga.Usluga>?> GetUslugeByTerminId(Guid terminId);
         Task<int?> GetPacijentLastChosenUsluga();
+        Task<ICollection<Models.Usluga.UslugaBasicData>?> GetMostPopularUslugas();
         Task<List<Models.Usluga.Usluga>> Recommend(int? uslugaId);
     }
 }

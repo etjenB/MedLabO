@@ -17,5 +17,7 @@ namespace MedLabO.Models.Test
         public DateTime DTKreiranja { get; set; }
         public string? AdministratorID { get; set; }
         public string? TestParametarID { get; set; }
+
+        public int? OccurrenceCount { get; set; }
     }
 }
