@@ -151,32 +151,35 @@ class _IzvjestajiScreenState extends State<IzvjestajiScreen> {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16),
                           ),
-                          SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                sizedBoxHeightM,
-                                ...testovi!.map(
-                                  (test) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    color: Colors.grey[500]!))),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("${test.naziv}"),
-                                            Text("${test.occurrenceCount}"),
-                                          ],
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  sizedBoxHeightM,
+                                  ...testovi!.map(
+                                    (test) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color:
+                                                          Colors.grey[500]!))),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("${test.naziv}"),
+                                              Text("${test.occurrenceCount}"),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -218,32 +221,35 @@ class _IzvjestajiScreenState extends State<IzvjestajiScreen> {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16),
                           ),
-                          SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                sizedBoxHeightM,
-                                ...usluge!.map(
-                                  (usluga) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                                    color: Colors.grey[500]!))),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("${usluga.naziv}"),
-                                            Text("${usluga.occurrenceCount}"),
-                                          ],
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  sizedBoxHeightM,
+                                  ...usluge!.map(
+                                    (usluga) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color:
+                                                          Colors.grey[500]!))),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("${usluga.naziv}"),
+                                              Text("${usluga.occurrenceCount}"),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
