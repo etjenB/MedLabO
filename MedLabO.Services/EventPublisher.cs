@@ -1,0 +1,37 @@
+﻿using EasyNetQ;
+using RabbitMQ.Client;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MedLabO.Services
+{
+    public class EventPublisher : IEventPublisher
+    {
+        private readonly string _host = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost";
+        private readonly string _username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "guest";
+        private readonly string _password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "guest";
+        private readonly string _virtualhost = Environment.GetEnvironmentVariable("RABBITMQ_VIRTUALHOST") ?? "/";
+
+        public void PublishObject<T>(T obj)
+        {
+            try
+            {
+                var host = _host;
+                var username = _username;
+                var password = _password;
+                var virtualhost = _virtualhost;
+
+                using var bus = RabbitHutch.CreateBus($"host={host};virtualHost={virtualhost};username={username};password={password}");
+                bus.PubSub.Publish(obj);
+                Console.WriteLine("Message published successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in publishing message: {ex.Message}");
+            }
+        }
+    }
+}

@@ -10,16 +10,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using iText.Layout;
+using MedLabO.Models.PublishingObjects;
+using System.Globalization;
 
 namespace MedLabO.Services
 {
     public class TerminService : CRUDService<Models.Termin.Termin, Database.Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest>, ITerminService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private IEventPublisher _eventPublisher;
 
-        public TerminService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(db, mapper)
+        public TerminService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor, IEventPublisher eventPublisher) : base(db, mapper)
         {
             _httpContextAccessor = httpContextAccessor;
+            _eventPublisher = eventPublisher;
         }
 
         public async Task<ICollection<TerminMinimal>> GetTerminiOfTheDay(DateTime day)
@@ -246,6 +250,25 @@ namespace MedLabO.Services
             {
 
                 throw new UserException(e.Message);
+            }
+
+            string? currentUserId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
+            if (currentUserId != null)
+            {
+                var korisnik = await _db.Pacijenti
+                                     .Where(k => k.Id.ToString() == currentUserId)
+                                     .FirstOrDefaultAsync();
+                if (korisnik != null && korisnik.Email != null && korisnik.Ime != null && korisnik.Prezime != null)
+                {
+                    TerminMail terminMail = new TerminMail
+                    {
+                        DTTermina = entity.DTTermina.ToString("U", new CultureInfo("bs-BA")),
+                        ImeKorisnika = korisnik.Ime,
+                        PrezimeKorisnika = korisnik.Prezime,
+                        MailKorisnika = korisnik.Email
+                    };
+                    _eventPublisher.PublishObject(terminMail);
+                }
             }
         }
 

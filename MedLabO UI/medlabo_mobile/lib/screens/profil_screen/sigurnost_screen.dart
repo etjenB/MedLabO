@@ -51,30 +51,32 @@ class _SigurnostScreenState extends State<SigurnostScreen> {
                 child: Column(
                   children: [
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.1,
+                      height: MediaQuery.of(context).size.height * 0.11,
                       decoration:
                           const BoxDecoration(color: primaryMedLabOColor),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Center(
-                                child: Text(
-                              "${widget.user!.ime} ${widget.user!.prezime}",
-                              style: const TextStyle(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Center(
+                                  child: Text(
+                                "${widget.user!.ime} ${widget.user!.prezime}",
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold),
+                              )),
+                              Center(
+                                  child: Text(
+                                "${widget.user!.email}",
+                                style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold),
-                            )),
-                            Center(
-                                child: Text(
-                              "${widget.user!.email}",
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            )),
-                          ],
+                                  fontSize: 20,
+                                ),
+                              )),
+                            ],
+                          ),
                         ),
                       ),
                     ),

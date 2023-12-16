@@ -20,7 +20,7 @@ services:
         build:
             context: .
         environment:
-            - ConnectionStrings:MedLabOContextConnectionString=Server=medlabo-sql,1433;Database=MedLabO;User Id=sa;Password=medlabo123;TrustServerCertificate=True;MultipleActiveResultSets=True
+            - ConnectionStrings:MedLabOContextConnectionString=Server=medlabo-sql,1433;Database=200204;User Id=sa;Password=medlabo123;TrustServerCertificate=True;MultipleActiveResultSets=True
             - ASPNETCORE_ENVIRONMENT=Development
         ports:
             - 7213:7213

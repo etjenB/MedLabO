@@ -90,6 +90,8 @@ builder.Services.AddTransient<IService<MedLabO.Models.Racun, RacunSearchObject>,
 
 builder.Services.AddTransient<IService<MedLabO.Models.Zakljucak, ZakljucakSearchObject>, ZakljucakService>();
 
+builder.Services.AddScoped<IEventPublisher, EventPublisher>();
+
 //Inject DbContext
 //NuGet Potrebno Microsoft.EntityFrameworkCore.SqlServer
 builder.Services.AddDbContext<MedLabOContext>(options =>
