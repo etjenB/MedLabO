@@ -16,7 +16,7 @@ class StripeProvider with ChangeNotifier {
   StripeProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue:
-            /* "https://192.168.1.10:7213/" */ /*za emulator "https://10.0.2.2:7213/" */ "http://10.0.2.2:7213/");
+            /* "https://192.168.1.10:7213/" */ /*za emulator "https://10.0.2.2:7213/" */ "https://10.0.2.2:7213/");
   }
 
   Future<Map<String, dynamic>> createPaymentIntent(
