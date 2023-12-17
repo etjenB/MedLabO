@@ -2,6 +2,7 @@
 Software for medical laboratory
 
 Credentials---------------------
+
 Credentials are based on roles, there are three roles: Administrator, MedicinskoOsoblje and Pacijent
 
 -Mobile
@@ -10,6 +11,7 @@ Username: pacijent
 Password: test
 
 -Desktop
+
 Username: administrator
 Password: test
 
