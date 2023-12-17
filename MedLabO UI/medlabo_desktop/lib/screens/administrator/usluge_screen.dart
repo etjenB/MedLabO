@@ -771,8 +771,6 @@ class _UslugeScreenState extends State<UslugeScreen>
       tooltip: 'Više opcija',
       onSelected: (value) async {
         switch (value) {
-          case 'more_info':
-            break;
           case 'edit':
             // ignore: use_build_context_synchronously
             showDialog(
@@ -791,13 +789,6 @@ class _UslugeScreenState extends State<UslugeScreen>
         }
       },
       itemBuilder: (context) => [
-        const PopupMenuItem(
-          value: 'more_info',
-          child: Tooltip(
-            message: 'Pregled usluge',
-            child: Icon(Icons.remove_red_eye_outlined),
-          ),
-        ),
         const PopupMenuItem(
           value: 'edit',
           child: Tooltip(

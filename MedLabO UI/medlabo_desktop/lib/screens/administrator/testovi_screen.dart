@@ -293,8 +293,6 @@ class _TestoviScreenState extends State<TestoviScreen>
         var testParametar =
             await _testParametriProvider.getById(test.testParametarID!);
         switch (value) {
-          case 'more_info':
-            break;
           case 'edit':
             // ignore: use_build_context_synchronously
             showDialog(
@@ -313,13 +311,6 @@ class _TestoviScreenState extends State<TestoviScreen>
         }
       },
       itemBuilder: (context) => [
-        const PopupMenuItem(
-          value: 'more_info',
-          child: Tooltip(
-            message: 'Pregled testa',
-            child: Icon(Icons.remove_red_eye_outlined),
-          ),
-        ),
         const PopupMenuItem(
           value: 'edit',
           child: Tooltip(

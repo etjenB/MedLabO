@@ -611,8 +611,6 @@ class _NovostWidgetState extends State<NovostWidget>
       tooltip: 'Više opcija',
       onSelected: (value) async {
         switch (value) {
-          case 'more_info':
-            break;
           case 'edit':
             // ignore: use_build_context_synchronously
             showDialog(
@@ -631,13 +629,6 @@ class _NovostWidgetState extends State<NovostWidget>
         }
       },
       itemBuilder: (context) => [
-        const PopupMenuItem(
-          value: 'more_info',
-          child: Tooltip(
-            message: 'Pregled novosti',
-            child: Icon(Icons.remove_red_eye_outlined),
-          ),
-        ),
         const PopupMenuItem(
           value: 'edit',
           child: Tooltip(
@@ -1384,8 +1375,6 @@ class _ObavijestWidgetState extends State<ObavijestWidget>
       tooltip: 'Više opcija',
       onSelected: (value) async {
         switch (value) {
-          case 'more_info':
-            break;
           case 'edit':
             // ignore: use_build_context_synchronously
             showDialog(
@@ -1404,13 +1393,6 @@ class _ObavijestWidgetState extends State<ObavijestWidget>
         }
       },
       itemBuilder: (context) => [
-        const PopupMenuItem(
-          value: 'more_info',
-          child: Tooltip(
-            message: 'Pregled obavijesti',
-            child: Icon(Icons.remove_red_eye_outlined),
-          ),
-        ),
         const PopupMenuItem(
           value: 'edit',
           child: Tooltip(
