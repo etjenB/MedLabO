@@ -219,6 +219,11 @@ namespace MedLabO.Services
                         }
                     }
 
+                    if (data.Count < 1)
+                    {
+                        throw new UserException("Nema usluga za preporučiti");
+                    }
+
                     var traindata = mlContext.Data.LoadFromEnumerable(data);
 
                     MatrixFactorizationTrainer.Options options = new MatrixFactorizationTrainer.Options();
@@ -242,17 +247,25 @@ namespace MedLabO.Services
 
             var predictionResult = new List<Tuple<Database.Usluga, float>>();
 
-            foreach (var u in usluge)
+            try
             {
-                var predictionengine = mlContext.Model.CreatePredictionEngine<ProductEntry, Copurchase_prediction>(model);
-                var prediction = predictionengine.Predict(new ProductEntry() { ProductID = (uint)uslugaId, CoPurchaseProductID = (uint)u.UslugaID });
+                foreach (var u in usluge)
+                {
+                    var predictionengine = mlContext.Model.CreatePredictionEngine<ProductEntry, Copurchase_prediction>(model);
+                    var prediction = predictionengine.Predict(new ProductEntry() { ProductID = (uint)uslugaId, CoPurchaseProductID = (uint)u.UslugaID });
 
-                predictionResult.Add(new Tuple<Database.Usluga, float>(u, prediction.Score));
+                    predictionResult.Add(new Tuple<Database.Usluga, float>(u, prediction.Score));
+                }
+
+                var finalResult = predictionResult.OrderByDescending(u => u.Item2).Take(3).Select(u => u.Item1).ToList();
+
+                return _mapper.Map<List<Models.Usluga.Usluga>>(finalResult);
             }
-
-            var finalResult = predictionResult.OrderByDescending(u=>u.Item2).Take(3).Select(u=>u.Item1).ToList();
-
-            return _mapper.Map<List<Models.Usluga.Usluga>>(finalResult);
+            catch
+            {
+                throw new UserException("Nema usluga za preporučiti");
+            }
+           
         }
     }
 }
