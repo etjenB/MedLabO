@@ -82,7 +82,11 @@ class _ObavijestiScreenState extends State<ObavijestiScreen> {
                         child: ClipRect(
                           child: FittedBox(
                             fit: BoxFit.cover,
-                            child: imageFromBase64String(item.slika!),
+                            child: item.slika == null || item.slika == ""
+                                ? const Center(
+                                    child: Text("Nema slike"),
+                                  )
+                                : imageFromBase64String(item.slika!),
                           ),
                         ),
                       ),
