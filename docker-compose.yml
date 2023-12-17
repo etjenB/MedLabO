@@ -35,12 +35,12 @@ services:
             context: .
             dockerfile: Dockerfile.emailnotifier
         environment:
-            - RABBITMQ_HOSTNAME=rabbitmq
-            - RABBITMQ_VIRTUALHOST=/
-            - RABBITMQ_USERNAME=guest
-            - RABBITMQ_PASSWORD=guest
-            - OUTLOOK_EMAIL=medlabonline@outlook.com
-            - OUTLOOK_PASSWORD=MedLabO100123
+            - RabbitMQ:HostName=rabbitmq
+            - RabbitMQ:VirtualHost=/
+            - RabbitMQ:UserName=guest
+            - RabbitMQ:Password=guest
+            - Outlook:Email=medlabonline@outlook.com
+            - Outlook:Password=MedLabO100123
         depends_on:
             - rabbitmq
             - medlabo-api

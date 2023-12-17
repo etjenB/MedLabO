@@ -1,11 +1,11 @@
 ﻿# Build stage
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["./RabbitMQEmailNotifier/RabbitMQEmailNotifier.csproj", "./RabbitMQEmailNotifier/"]
+COPY ["./RabbitMQSubscriber/RabbitMQEmailNotifier.csproj", "./RabbitMQSubscriber/"]
 COPY ["./MedLabO.Models/MedLabO.Models.csproj", "./MedLabO.Models/"]
-RUN dotnet restore "./RabbitMQEmailNotifier/RabbitMQEmailNotifier.csproj"
+RUN dotnet restore "./RabbitMQSubscriber/RabbitMQEmailNotifier.csproj"
 COPY . .
-RUN dotnet publish "./RabbitMQEmailNotifier/RabbitMQEmailNotifier.csproj" -c Release -o /app/publish
+RUN dotnet publish "./RabbitMQSubscriber/RabbitMQEmailNotifier.csproj" -c Release -o /app/publish
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
