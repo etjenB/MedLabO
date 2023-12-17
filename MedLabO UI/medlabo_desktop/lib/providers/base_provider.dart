@@ -15,7 +15,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   BaseProvider(String endp) {
     endpoint = endp;
     baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7213/");
+        defaultValue: "http://localhost:7213/" /* "https://localhost:7213/" */);
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {
@@ -197,7 +197,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
         }
         query += '$prefix$key=$encoded';
       } else if (value is DateTime) {
-        query += '$prefix$key=${(value as DateTime).toIso8601String()}';
+        query += '$prefix$key=${(value).toIso8601String()}';
       } else if (value is List || value is Map) {
         if (value is List) value = value.asMap();
         value.forEach((k, v) {
