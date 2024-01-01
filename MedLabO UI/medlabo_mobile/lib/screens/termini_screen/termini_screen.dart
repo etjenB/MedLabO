@@ -192,6 +192,13 @@ class _TerminiScreenState extends State<TerminiScreen> {
                               ),
                             ),
                           ),
+                          noItemsFoundIndicatorBuilder: (context) =>
+                              const Center(
+                            child: Text(
+                              "Lista nadolazećih termina je prazna",
+                              style: TextStyle(color: primaryBlackTextColor),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -281,6 +288,13 @@ class _TerminiScreenState extends State<TerminiScreen> {
                                   ),
                                 ),
                               ),
+                            ),
+                          ),
+                          noItemsFoundIndicatorBuilder: (context) =>
+                              const Center(
+                            child: Text(
+                              "Lista prethodnih termina je prazna",
+                              style: TextStyle(color: primaryBlackTextColor),
                             ),
                           ),
                         ),
