@@ -707,6 +707,267 @@ namespace MedLabO.Services.Database
                    AdministratorID = Guid.Parse("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58")
                }
            );
+
+           modelBuilder.Entity<Termin>().HasData(
+                new Termin
+                {
+                    TerminID = new Guid("26954381-1F85-4776-A5D4-39068D8ADD3A"),
+                    DTTermina = new DateTime(2024, 1, 19, 12, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("595C85F2-F1B1-4176-94A7-411BD46570CC"),
+                    DTTermina = new DateTime(2024, 1, 26, 7, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("34C710C6-EC80-483B-AA25-42C0229941EC"),
+                    DTTermina = new DateTime(2024, 1, 18, 8, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("7AD39C1E-7D14-4127-BBAC-459888F300E6"),
+                    DTTermina = new DateTime(2024, 1, 22, 15, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("FCBFE84D-B6FD-4B36-A31D-773EB669C123"),
+                    DTTermina = new DateTime(2024, 1, 10, 13, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("4253753F-DB13-4D93-B0A8-7D4CF6B46013"),
+                    DTTermina = new DateTime(2024, 1, 23, 7, 40, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("5C5E0879-6019-4B0D-81FB-804B73273D03"),
+                    DTTermina = new DateTime(2024, 1, 25, 11, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("66F5142B-DCBC-4330-81A6-8BADE0950F44"),
+                    DTTermina = new DateTime(2024, 1, 29, 11, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("D2539F37-0E15-44B6-AF31-8CC93C03DCD1"),
+                    DTTermina = new DateTime(2024, 1, 12, 11, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("1137E44A-6E88-41AB-965F-8EA5A936FF24"),
+                    DTTermina = new DateTime(2024, 1, 24, 8, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("7C262D54-D6F6-4461-B4C9-A0E9266F2D50"),
+                    DTTermina = new DateTime(2024, 1, 11, 9, 40, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("DC433820-5129-44A9-BB1E-A3B87C1BC398"),
+                    DTTermina = new DateTime(2024, 1, 16, 10, 40, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("10254F8E-15DD-4673-AA54-B4DA76946D1D"),
+                    DTTermina = new DateTime(2024, 1, 15, 10, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("FB3BF003-4DDA-4228-A1B6-D488644F90A8"),
+                    DTTermina = new DateTime(2024, 1, 17, 8, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("42A4749B-7F8C-464D-A54A-E857E45D62A7"),
+                    DTTermina = new DateTime(2024, 1, 31, 7, 0, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("DC0261CE-322D-45A1-851D-E88863031C84"),
+                    DTTermina = new DateTime(2024, 1, 30, 10, 40, 0),
+                    Obavljen = false,
+                    RezultatDodan = false,
+                    ZakljucakDodan = false,
+                    Placeno = true,
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                }
+            );
+            modelBuilder.Entity<Racun>().HasData(
+                new Racun
+                {
+                    RacunID = new Guid("3C19770E-223D-43FE-8D15-3BA1FE7151FE"),
+                    Cijena = 10,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("ECA7C955-9CE4-42AB-A33A-0F2C08F1E38C"),
+                    Cijena = 14,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("0BDC8864-0879-4401-8879-A5BE3496CF6D"),
+                    Cijena = 9,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("5461CE30-AD9C-49CB-9371-C5FD231FBF63"),
+                    Cijena = 11,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("C6781A23-2C71-4DFE-A934-8597C0688812"),
+                    Cijena = 36,
+                    Placeno = true,
+                },
+                new Racun
+                {
+                    RacunID = new Guid("1186F71A-E2D2-4DB2-BF14-2B7727859C74"),
+                    Cijena = 4,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("903AB20A-1AEA-493E-8E3C-05564353BC54"),
+                    Cijena = 20,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("2057CDBF-4BD4-4071-A2BC-5E19C0183C40"),
+                    Cijena = 10,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("18356CDD-FBA4-4D5B-A33C-E1D09894A145"),
+                    Cijena = 11,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("58F643CF-1079-4177-950E-A97162657093"),
+                    Cijena = 11,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("6B746E04-31AC-46F5-AD2E-33BDEA321D63"),
+                    Cijena = 10,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("8D166154-FD43-485A-8263-93EFDB69AC4C"),
+                    Cijena = 11,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("0FB113DB-16AF-4675-BCBF-C18709429E2A"),
+                    Cijena = 21,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("E8F45C95-F42A-4220-841D-1EC3E4998F48"),
+                    Cijena = 14,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("B36B8AAF-2C31-47DF-88C8-E76D96E41C56"),
+                    Cijena = 11,
+                    Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("B35CEF5E-0471-4FF2-99F0-6ECBD1D390F5"),
+                    Cijena = 21,
+                    Placeno = true
+                }
+            );
         }
     }
 }
