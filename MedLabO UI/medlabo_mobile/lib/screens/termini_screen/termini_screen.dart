@@ -134,13 +134,33 @@ class _TerminiScreenState extends State<TerminiScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    const Center(
-                      child: Text(
-                        "Lista nadolazećih termina",
-                        style: TextStyle(
-                          color: primaryMedLabOColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const Text(
+                            "Lista nadolazećih termina",
+                            style: TextStyle(
+                              color: primaryMedLabOColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              _terminiInFuturePagingController.itemList = [];
+                              _terminiInFuturePagingController.refresh();
+                              await _fetchPageTerminiInFuture(1);
+                            },
+                            style: const ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.green),
+                            ),
+                            child: const Text(
+                              "Osvježi",
+                              style: TextStyle(color: primaryWhiteTextColor),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     sizedBoxHeightM,
@@ -205,13 +225,33 @@ class _TerminiScreenState extends State<TerminiScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    const Center(
-                      child: Text(
-                        "Lista prethodnih termina",
-                        style: TextStyle(
-                          color: primaryMedLabOColor,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const Text(
+                            "Lista prethodnih termina",
+                            style: TextStyle(
+                              color: primaryMedLabOColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              _terminiBeforePagingController.itemList = [];
+                              _terminiBeforePagingController.refresh();
+                              await _fetchPageTerminiBefore(1);
+                            },
+                            style: const ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.green),
+                            ),
+                            child: const Text(
+                              "Osvježi",
+                              style: TextStyle(color: primaryWhiteTextColor),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     sizedBoxHeightM,
