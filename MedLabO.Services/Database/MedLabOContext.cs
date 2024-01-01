@@ -868,6 +868,19 @@ namespace MedLabO.Services.Database
                     ZakljucakDodan = false,
                     Placeno = true,
                     PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28")
+                },
+                new Termin
+                {
+                    TerminID = new Guid("3C8F2E71-BB3C-456C-9914-CB98E7E165A9"),
+                    DTTermina = new DateTime(2024, 1, 1, 15, 0, 0),
+                    Status = true,
+                    Obavljen = false,
+                    RezultatDodan = true,
+                    ZakljucakDodan = true,
+                    Placeno = true,
+                    RezultatTerminaPDF = Convert.FromBase64String("JVBERi0xLjcKJeLjz9MKNSAwIG9iago8PC9GaWx0ZXIvRmxhdGVEZWNvZGUvTGVuZ3RoIDQ4MD4+c3RyZWFtCnicjZTLctsgFIb3eoqzTDNTDIiL1F2bSbpJerH1AiQmLh5JTizZnfHTFyRhlIkDHWnzz/BxPuDAa/atyhZ3BAiD6jnLBchCIkqhWmdXD3p9rx5/wlKfDnWvegO93jemVYAJsj/FlCEg/AvGn6ptdltlv7PX84R0mLBAHKQgqODDlD/UyRztNF2vPkIooUjIOeTrf1xEoCJ/SzzrvW77VsNxb7Z63e663sQl8xLlcqBvlr9ScmEwodcprzAYw2fg0GwW93EXYsFyIFZ6bRq7EvVktsktCxhPOYWhzinH0DSLP1EpUTLEpkPsVN0aeNybDk4KHparrwm1Gaw3tpOO7S5heIGANtS6grisJKgcu/jG9Lt6t7HbB93LoT80qW2csf8tewFxto2qzcY2oW331jzpd+IY3Lf8nmHr/NdeP0Tt6UuJMIVmikIwRAjU2eoSQglGjAZmynEoLxjixazQmOMQ5wWSM7spJyrZB0UKJOWk5rp0zJH1EBkgp+b6NQq5QXkeIM7LFGG9OEO0nHmNOeHlIe8VhbyXhwavOGG9cvuMkZnXmBNeHvJeUch7eWjwihPWC5cOCl5jTnh5yHtFIe/locErTggQ7gqy4DXluNcZmrzi0OR1hpzXG+IfCC6UGQplbmRzdHJlYW0KZW5kb2JqCjQgMCBvYmoKPDwvQ29udGVudHMgNSAwIFIvTWVkaWFCb3hbMCAwIDU5NSA4NDJdL1BhcmVudCAyIDAgUi9SZXNvdXJjZXM8PC9Gb250PDwvRjEgNiAwIFI+Pj4+L1RyaW1Cb3hbMCAwIDU5NSA4NDJdL1R5cGUvUGFnZT4+CmVuZG9iagozIDAgb2JqCjw8L0NyZWF0aW9uRGF0ZShEOjIwMjQwMTAxMTMzOTAxKzAxJzAwJykvTW9kRGF0ZShEOjIwMjQwMTAxMTMzOTAxKzAxJzAwJykvUHJvZHVjZXIoaVRleHSuIENvcmUgOC4wLjIgXChBR1BMIHZlcnNpb25cKSCpMjAwMC0yMDIzIEFwcnlzZSBHcm91cCBOVik+PgplbmRvYmoKMSAwIG9iago8PC9QYWdlcyAyIDAgUi9UeXBlL0NhdGFsb2c+PgplbmRvYmoKNiAwIG9iago8PC9CYXNlRm9udC9IZWx2ZXRpY2EvRW5jb2RpbmcvV2luQW5zaUVuY29kaW5nL1N1YnR5cGUvVHlwZTEvVHlwZS9Gb250Pj4KZW5kb2JqCjIgMCBvYmoKPDwvQ291bnQgMS9LaWRzWzQgMCBSXS9UeXBlL1BhZ2VzPj4KZW5kb2JqCnhyZWYKMCA3CjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDg1OCAwMDAwMCBuIAowMDAwMDAwOTkxIDAwMDAwIG4gCjAwMDAwMDA2OTUgMDAwMDAgbiAKMDAwMDAwMDU2MiAwMDAwMCBuIAowMDAwMDAwMDE1IDAwMDAwIG4gCjAwMDAwMDA5MDMgMDAwMDAgbiAKdHJhaWxlcgo8PC9JRCBbPGZmMjFmMjgyZDI0NGFmYWRlYzBhMTM5ZGZkMzAyZjVjNGU2OWE2OGQwOGY3NTY0MDBlZmQwZTgxZGRmNDg1NzEwMWEwY2VjZmQ0NmJkYzJlOGFmYzc0M2U2NjhkODIxN2ZkODgxNWU0YTlhY2ExNjNmNGQ3YTJkMWFiYWEwZTExPjxmZjIxZjI4MmQyNDRhZmFkZWMwYTEzOWRmZDMwMmY1YzRlNjlhNjhkMDhmNzU2NDAwZWZkMGU4MWRkZjQ4NTcxMDFhMGNlY2ZkNDZiZGMyZThhZmM3NDNlNjY4ZDgyMTdmZDg4MTVlNGE5YWNhMTYzZjRkN2EyZDFhYmFhMGUxMT5dL0luZm8gMyAwIFIvUm9vdCAxIDAgUi9TaXplIDc+PgolaVRleHQtQ29yZS04LjAuMgpzdGFydHhyZWYKMTA0MgolJUVPRgo="),
+                    PacijentID = new Guid("140FB21B-43C9-4DA2-86E9-8F99D08D8D28"),
+                    MedicinskoOsobljeID = new Guid("09098D7D-1BE0-4D0B-926D-9EB493D81DCC")
                 }
             );
             modelBuilder.Entity<Racun>().HasData(
@@ -966,6 +979,57 @@ namespace MedLabO.Services.Database
                     RacunID = new Guid("B35CEF5E-0471-4FF2-99F0-6ECBD1D390F5"),
                     Cijena = 21,
                     Placeno = true
+                },
+                new Racun
+                {
+                    RacunID = new Guid("CC379F98-3F7E-4F69-A7A3-4654B15E9954"),
+                    Cijena = 14,
+                    Placeno = true
+                }
+            );
+
+            modelBuilder.Entity<Zakljucak>().HasData(
+                new Zakljucak 
+                { 
+                    ZakljucakID = new Guid("CF32FF76-7659-4C4F-B73E-D9DBC841F409"),
+                    Opis = "Povećan CRP",
+                    Detaljno = "Povećan CRP ukazuje potencijalno postojeću upalu ili period poslije upale, te u tom slučaju bi se CRP u narednom periodu trebo vraćati u normalne okvire."
+                }    
+            );
+
+            modelBuilder.Entity<Rezultat>().HasData(
+                new Rezultat 
+                { 
+                    RezultatID = new Guid("D4E7DF29-A213-4C94-9C5D-08DC0AC6A180"),
+                    DTRezultata = new DateTime(2024, 1, 1, 16, 0, 0),
+                    TestZakljucak = "povišen",
+                    Obiljezen = true,
+                    RezFlo = 12,
+                    RazlikaOdNormalne = 7
+                },
+                new Rezultat 
+                { 
+                    RezultatID = new Guid("AB949483-D2EC-4F94-9C5E-08DC0AC6A180"),
+                    DTRezultata = new DateTime(2024, 1, 1, 16, 0, 0),
+                    TestZakljucak = "nor",
+                    Obiljezen = false,
+                    RezFlo = 5
+                },
+                new Rezultat 
+                { 
+                    RezultatID = new Guid("D4395013-E4A1-4C9B-9C5F-08DC0AC6A180"),
+                    DTRezultata = new DateTime(2024, 1, 1, 16, 0, 0),
+                    TestZakljucak = "nor",
+                    Obiljezen = false,
+                    RezStr = "Negativno"
+                },
+                new Rezultat 
+                { 
+                    RezultatID = new Guid("F86EE7F0-C7BB-49E7-9C60-08DC0AC6A180"),
+                    DTRezultata = new DateTime(2024, 1, 1, 16, 0, 0),
+                    TestZakljucak = "nor",
+                    Obiljezen = false,
+                    RezStr = "Negativno"
                 }
             );
         }

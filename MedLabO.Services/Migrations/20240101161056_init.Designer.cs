@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedLabO.Services.Migrations
 {
     [DbContext(typeof(MedLabOContext))]
-    [Migration("20240101122846_init")]
+    [Migration("20240101161056_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -137,7 +137,7 @@ namespace MedLabO.Services.Migrations
                         {
                             NovostID = new Guid("fc31fac7-27e4-41bd-95f4-da76a956bd23"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3559),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8462),
                             Naslov = "Novi Testovi Dostupni u Našem Laboratoriju",
                             Sadrzaj = "Dragi pacijenti, s ponosom vas obavještavamo da smo proširili našu ponudu testova. Novi testovi uključuju napredne genetske analize, testove intolerancije na hranu, i detaljne hormonalne profile. Ovi testovi su dizajnirani da vam pruže dublji uvid u vaše zdravstveno stanje i omoguće personalizirani pristup liječenju. Naš tim stručnjaka je na raspolaganju da odgovori na sva vaša pitanja i pomogne vam odabrati najprikladnije testove za vaše potrebe. Posjetite nas i saznajte više o novim mogućnostima koje vam nudimo za očuvanje i unapređenje vašeg zdravlja.",
                             Slika = new byte[0]
@@ -146,7 +146,7 @@ namespace MedLabO.Services.Migrations
                         {
                             NovostID = new Guid("be49f5ad-6d18-435e-97a5-13600af6b4e5"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3581),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8486),
                             Naslov = "Dan Otvorenih Vrata u Laboratoriju",
                             Sadrzaj = "Pozivamo vas na Dan otvorenih vrata koji će se održati 15.04.2023. u našem laboratoriju. Ovo je izvrsna prilika da se upoznate s našim radom, tehnologijama koje koristimo i timom stručnjaka koji brinu o vašem zdravlju. Tijekom ovog dana, moći ćete besplatno izvršiti osnovne zdravstvene preglede, sudjelovati u edukativnim radionicama i dobiti individualne savjete o zdravlju. Također, pripremili smo posebne popuste na odabrane testove i usluge. Ne propustite ovu priliku da saznate više o važnosti preventivnih pregleda i kako možete aktivno doprinijeti očuvanju svog zdravlja.",
                             Slika = new byte[0]
@@ -155,7 +155,7 @@ namespace MedLabO.Services.Migrations
                         {
                             NovostID = new Guid("465a1478-3027-498f-aa82-b46b9a0ec4ee"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3604),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8504),
                             Naslov = "Obavijest o Radnom Vremenu za Praznike",
                             Sadrzaj = "Obavještavamo naše cijenjene pacijente da će tijekom nadolazećih praznika doći do promjena u radnom vremenu našeg laboratorija. Na Badnjak i Staru godinu laboratorij će raditi skraćeno, do 12:00 sati, dok će na Božić i Novu godinu laboratorij biti zatvoren. Molimo vas da planirate svoje posjete i testiranja sukladno ovom rasporedu. Također, želimo iskoristiti ovu priliku da vam zaželimo sretne i mirne praznike. Neka ovo vrijeme bude ispunjeno zdravljem, srećom i radosti. U novoj godini nastavljamo s našom misijom pružanja vrhunske zdravstvene skrbi i usluga. Hvala vam što ste dio naše zajednice i što nam vjerujete brigu o vašem zdravlju.",
                             Slika = new byte[0]
@@ -164,7 +164,7 @@ namespace MedLabO.Services.Migrations
                         {
                             NovostID = new Guid("325d2b08-9822-4ef1-acbd-2d4528bbeebc"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3621),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8534),
                             Naslov = "Uvođenje Online Rezervacija Termina",
                             Sadrzaj = "S ciljem poboljšanja naših usluga i olakšavanja pristupa zdravstvenoj skrbi, uvodimo novi sustav online rezervacija termina putem naše web stranice. Od sada, možete jednostavno i brzo rezervirati svoj termin za testiranje također putem naše web stranice. Ovaj sustav omogućava vam da izaberete datum i vrijeme koje vam najviše odgovara, bez potrebe za čekanjem u redu ili telefonskim pozivima. Također, putem sustava možete pratiti svoje rezervacije, dobiti podsjetnike za nadolazeće termine i pristupiti rezultatima testiranja. Naš cilj je učiniti proces testiranja što jednostavnijim i ugodnijim za vas, te vam pružiti brz i efikasan pristup informacijama o vašem zdravlju. Pozivamo vas da isprobate naš novi sustav rezervacija i podijelite s nama svoje dojmove.",
                             Slika = new byte[0]
@@ -173,7 +173,7 @@ namespace MedLabO.Services.Migrations
                         {
                             NovostID = new Guid("7fa51a3e-501c-4466-90e2-1eba0a549d23"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3636),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8553),
                             Naslov = "Modernizacija Laboratorijske Opreme",
                             Sadrzaj = "S ponosom vas obavještavamo o nedavnoj modernizaciji naše laboratorijske opreme. Ulaganjem u najnovije tehnologije, osigurali smo da naši pacijenti imaju pristup najpreciznijim i najbržim dijagnostičkim testovima. Nova oprema omogućava nam da proširimo spektar testova, smanjimo vrijeme čekanja na rezultate i povećamo tačnost dijagnostike. Ovo je važan korak u našem nastojanju da pružimo vrhunsku medicinsku skrb i podršku našim pacijentima. Vjerujemo da će ove promjene značajno doprinijeti kvaliteti i efikasnosti naših usluga, te vam omogućiti bolje upravljanje vašim zdravljem. Zahvaljujemo vam na povjerenju i radujemo se što ćemo vam pružiti još bolju uslugu uz pomoć ove napredne tehnologije.",
                             Slika = new byte[0]
@@ -218,7 +218,7 @@ namespace MedLabO.Services.Migrations
                         {
                             ObavijestID = new Guid("0e322352-b209-4dce-8369-9d7d67f38daf"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3472),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8359),
                             Naslov = "Neradni Dan - 18.02.2023.",
                             Sadrzaj = "Poštovani kolege, obavještavamo vas da će laboratorij biti zatvoren 18.02.2023. zbog redovnog godišnjeg održavanja opreme i prostorija. Ovo je idealna prilika da se posvetite svom zdravlju i porodici, te da napunite baterije za nove radne izazove. Molimo vas da sve planirane aktivnosti prilagodite ovom datumu. Također, podsjećamo vas da je važno redovno pratiti stanje i održavanje opreme, kako bismo osigurali najviši standard naših usluga. Hvala vam na razumijevanju i suradnji.",
                             Slika = new byte[0]
@@ -227,7 +227,7 @@ namespace MedLabO.Services.Migrations
                         {
                             ObavijestID = new Guid("55d8e97e-4379-4978-940a-d342158c5ce5"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3489),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8381),
                             Naslov = "Edukacijski Seminar za Zaposlenike",
                             Sadrzaj = "Drage kolege, s velikim zadovoljstvom vas obavještavamo da ćemo 25.03.2023. organizirati edukacijski seminar na temu \"Najnovije tehnike u laboratorijskim ispitivanjima\". Seminar će voditi priznati stručnjaci u našem području rada. Ovo je izvrsna prilika za usavršavanje i razmjenu iskustava s kolegama iz struke. Seminar će se održati u konferencijskoj sali našeg laboratorija, s početkom u 10:00 sati. Molimo sve zainteresirane da potvrde svoje sudjelovanje najkasnije do 15.03.2023.",
                             Slika = new byte[0]
@@ -236,7 +236,7 @@ namespace MedLabO.Services.Migrations
                         {
                             ObavijestID = new Guid("04cf6396-4405-43b0-87bc-fee864a88e2e"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3504),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8400),
                             Naslov = "Promjena Protokola za Obradu Uzoraka",
                             Sadrzaj = "Obavještavamo sve zaposlenike da od 01.04.2023. stupaju na snagu novi protokoli za obradu uzoraka. Novi protokoli uključuju ažurirane postupke za rukovanje, analizu i pohranu uzoraka, s ciljem povećanja efikasnosti i tačnosti naših testova. Detaljne upute i obuke bit će organizirane u narednim sedmicama. Molimo sve zaposlenike da se upoznaju s novim protokolima i prate upute za obuku. Vaša suradnja i pridržavanje novih protokola su ključni za uspjeh ove promjene.",
                             Slika = new byte[0]
@@ -245,7 +245,7 @@ namespace MedLabO.Services.Migrations
                         {
                             ObavijestID = new Guid("af32cfec-6818-44f2-9efa-053d24bebd9d"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3519),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8419),
                             Naslov = "Godišnji Plan Odmora",
                             Sadrzaj = "Kako bismo osigurali kontinuirani rad laboratorija i zadovoljili potrebe naših pacijenata, molimo sve zaposlenike da do 15.04.2023. dostave svoje planove godišnjih odmora. Važno je da planiramo i koordiniramo odmore kako bismo izbjegli preklapanja i osigurali adekvatno osoblje u svakom trenutku. Molimo vas da razmotrite potrebe vašeg tima i laboratorija prilikom planiranja odmora. U slučaju bilo kakvih pitanja ili nedoumica, slobodno se obratite odjelu ljudskih resursa.",
                             Slika = new byte[0]
@@ -254,7 +254,7 @@ namespace MedLabO.Services.Migrations
                         {
                             ObavijestID = new Guid("6cb8671d-2034-4bed-9a8b-1cf5a2f4d917"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3535),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8437),
                             Naslov = "Sigurnosne Mjere u Laboratoriju",
                             Sadrzaj = "Sigurnost na radnom mjestu je naš prioritet. Stoga vas podsjećamo na važnost pridržavanja svih sigurnosnih protokola i procedura u laboratoriju. Ovo uključuje pravilno nošenje zaštitne opreme, pažljivo rukovanje uzorcima i hemikalijama, te održavanje čistoće i urednosti radnog prostora. Redovite provjere i obuke o sigurnosti bit će organizirane kako bismo osigurali da su svi upoznati s najboljim praksama i procedurama. Vaša sigurnost i zdravlje su od izuzetne važnosti, stoga vas molimo da ozbiljno shvatite ove mjere.",
                             Slika = new byte[0]
@@ -378,6 +378,12 @@ namespace MedLabO.Services.Migrations
                             RacunID = new Guid("b35cef5e-0471-4ff2-99f0-6ecbd1d390f5"),
                             Cijena = 21m,
                             Placeno = true
+                        },
+                        new
+                        {
+                            RacunID = new Guid("cc379f98-3f7e-4f69-a7a3-4654b15e9954"),
+                            Cijena = 14m,
+                            Placeno = true
                         });
                 });
 
@@ -409,6 +415,41 @@ namespace MedLabO.Services.Migrations
                     b.HasKey("RezultatID");
 
                     b.ToTable("Rezultati");
+
+                    b.HasData(
+                        new
+                        {
+                            RezultatID = new Guid("d4e7df29-a213-4c94-9c5d-08dc0ac6a180"),
+                            DTRezultata = new DateTime(2024, 1, 1, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            Obiljezen = true,
+                            RazlikaOdNormalne = 7f,
+                            RezFlo = 12f,
+                            TestZakljucak = "povišen"
+                        },
+                        new
+                        {
+                            RezultatID = new Guid("ab949483-d2ec-4f94-9c5e-08dc0ac6a180"),
+                            DTRezultata = new DateTime(2024, 1, 1, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            Obiljezen = false,
+                            RezFlo = 5f,
+                            TestZakljucak = "nor"
+                        },
+                        new
+                        {
+                            RezultatID = new Guid("d4395013-e4a1-4c9b-9c5f-08dc0ac6a180"),
+                            DTRezultata = new DateTime(2024, 1, 1, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            Obiljezen = false,
+                            RezStr = "Negativno",
+                            TestZakljucak = "nor"
+                        },
+                        new
+                        {
+                            RezultatID = new Guid("f86ee7f0-c7bb-49e7-9c60-08dc0ac6a180"),
+                            DTRezultata = new DateTime(2024, 1, 1, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            Obiljezen = false,
+                            RezStr = "Negativno",
+                            TestZakljucak = "nor"
+                        });
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Spol", b =>
@@ -694,6 +735,20 @@ namespace MedLabO.Services.Migrations
                             RezultatDodan = false,
                             ZakljucakDodan = false,
                             isDeleted = false
+                        },
+                        new
+                        {
+                            TerminID = new Guid("3c8f2e71-bb3c-456c-9914-cb98e7e165a9"),
+                            DTTermina = new DateTime(2024, 1, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            MedicinskoOsobljeID = new Guid("09098d7d-1be0-4d0b-926d-9eb493d81dcc"),
+                            Obavljen = false,
+                            PacijentID = new Guid("140fb21b-43c9-4da2-86e9-8f99d08d8d28"),
+                            Placeno = true,
+                            RezultatDodan = true,
+                            RezultatTerminaPDF = new byte[] { 37, 80, 68, 70, 45, 49, 46, 55, 10, 37, 226, 227, 207, 211, 10, 53, 32, 48, 32, 111, 98, 106, 10, 60, 60, 47, 70, 105, 108, 116, 101, 114, 47, 70, 108, 97, 116, 101, 68, 101, 99, 111, 100, 101, 47, 76, 101, 110, 103, 116, 104, 32, 52, 56, 48, 62, 62, 115, 116, 114, 101, 97, 109, 10, 120, 156, 141, 148, 203, 114, 219, 32, 20, 134, 247, 122, 138, 179, 76, 51, 83, 12, 136, 139, 212, 93, 155, 73, 186, 73, 122, 177, 245, 2, 36, 38, 46, 30, 73, 78, 44, 217, 157, 241, 211, 23, 36, 97, 148, 137, 3, 29, 105, 243, 207, 240, 113, 62, 224, 192, 107, 246, 173, 202, 22, 119, 4, 8, 131, 234, 57, 203, 5, 200, 66, 34, 74, 161, 90, 103, 87, 15, 122, 125, 175, 30, 127, 194, 82, 159, 14, 117, 175, 122, 3, 189, 222, 55, 166, 85, 128, 9, 178, 63, 197, 148, 33, 32, 252, 11, 198, 159, 170, 109, 118, 91, 101, 191, 179, 215, 243, 132, 116, 152, 176, 64, 28, 164, 32, 168, 224, 195, 148, 63, 212, 201, 28, 237, 52, 93, 175, 62, 66, 40, 161, 72, 200, 57, 228, 235, 127, 92, 68, 160, 34, 127, 75, 60, 235, 189, 110, 251, 86, 195, 113, 111, 182, 122, 221, 238, 186, 222, 196, 37, 243, 18, 229, 114, 160, 111, 150, 191, 82, 114, 97, 48, 161, 215, 41, 175, 48, 24, 195, 103, 224, 208, 108, 22, 247, 113, 23, 98, 193, 114, 32, 86, 122, 109, 26, 187, 18, 245, 100, 182, 201, 45, 11, 24, 79, 57, 133, 161, 206, 41, 199, 208, 52, 139, 63, 81, 41, 81, 50, 196, 166, 67, 236, 84, 221, 26, 120, 220, 155, 14, 78, 10, 30, 150, 171, 175, 9, 181, 25, 172, 55, 182, 147, 142, 237, 46, 97, 120, 129, 128, 54, 212, 186, 130, 184, 172, 36, 168, 28, 187, 248, 198, 244, 187, 122, 183, 177, 219, 7, 221, 203, 161, 63, 52, 169, 109, 156, 177, 255, 45, 123, 1, 113, 182, 141, 170, 205, 198, 54, 161, 109, 247, 214, 60, 233, 119, 226, 24, 220, 183, 252, 158, 97, 235, 252, 215, 94, 63, 68, 237, 233, 75, 137, 48, 133, 102, 138, 66, 48, 68, 8, 212, 217, 234, 18, 66, 9, 70, 140, 6, 102, 202, 113, 40, 47, 24, 226, 197, 172, 208, 152, 227, 16, 231, 5, 146, 51, 187, 41, 39, 42, 217, 7, 69, 10, 36, 229, 164, 230, 186, 116, 204, 145, 245, 16, 25, 32, 167, 230, 250, 53, 10, 185, 65, 121, 30, 32, 206, 203, 20, 97, 189, 56, 67, 180, 156, 121, 141, 57, 225, 229, 33, 239, 21, 133, 188, 151, 135, 6, 175, 56, 97, 189, 114, 251, 140, 145, 153, 215, 152, 19, 94, 30, 242, 94, 81, 200, 123, 121, 104, 240, 138, 19, 214, 11, 151, 14, 10, 94, 99, 78, 120, 121, 200, 123, 69, 33, 239, 229, 161, 193, 43, 78, 8, 16, 238, 10, 178, 224, 53, 229, 184, 215, 25, 154, 188, 226, 208, 228, 117, 134, 156, 215, 27, 226, 31, 8, 46, 148, 25, 10, 101, 110, 100, 115, 116, 114, 101, 97, 109, 10, 101, 110, 100, 111, 98, 106, 10, 52, 32, 48, 32, 111, 98, 106, 10, 60, 60, 47, 67, 111, 110, 116, 101, 110, 116, 115, 32, 53, 32, 48, 32, 82, 47, 77, 101, 100, 105, 97, 66, 111, 120, 91, 48, 32, 48, 32, 53, 57, 53, 32, 56, 52, 50, 93, 47, 80, 97, 114, 101, 110, 116, 32, 50, 32, 48, 32, 82, 47, 82, 101, 115, 111, 117, 114, 99, 101, 115, 60, 60, 47, 70, 111, 110, 116, 60, 60, 47, 70, 49, 32, 54, 32, 48, 32, 82, 62, 62, 62, 62, 47, 84, 114, 105, 109, 66, 111, 120, 91, 48, 32, 48, 32, 53, 57, 53, 32, 56, 52, 50, 93, 47, 84, 121, 112, 101, 47, 80, 97, 103, 101, 62, 62, 10, 101, 110, 100, 111, 98, 106, 10, 51, 32, 48, 32, 111, 98, 106, 10, 60, 60, 47, 67, 114, 101, 97, 116, 105, 111, 110, 68, 97, 116, 101, 40, 68, 58, 50, 48, 50, 52, 48, 49, 48, 49, 49, 51, 51, 57, 48, 49, 43, 48, 49, 39, 48, 48, 39, 41, 47, 77, 111, 100, 68, 97, 116, 101, 40, 68, 58, 50, 48, 50, 52, 48, 49, 48, 49, 49, 51, 51, 57, 48, 49, 43, 48, 49, 39, 48, 48, 39, 41, 47, 80, 114, 111, 100, 117, 99, 101, 114, 40, 105, 84, 101, 120, 116, 174, 32, 67, 111, 114, 101, 32, 56, 46, 48, 46, 50, 32, 92, 40, 65, 71, 80, 76, 32, 118, 101, 114, 115, 105, 111, 110, 92, 41, 32, 169, 50, 48, 48, 48, 45, 50, 48, 50, 51, 32, 65, 112, 114, 121, 115, 101, 32, 71, 114, 111, 117, 112, 32, 78, 86, 41, 62, 62, 10, 101, 110, 100, 111, 98, 106, 10, 49, 32, 48, 32, 111, 98, 106, 10, 60, 60, 47, 80, 97, 103, 101, 115, 32, 50, 32, 48, 32, 82, 47, 84, 121, 112, 101, 47, 67, 97, 116, 97, 108, 111, 103, 62, 62, 10, 101, 110, 100, 111, 98, 106, 10, 54, 32, 48, 32, 111, 98, 106, 10, 60, 60, 47, 66, 97, 115, 101, 70, 111, 110, 116, 47, 72, 101, 108, 118, 101, 116, 105, 99, 97, 47, 69, 110, 99, 111, 100, 105, 110, 103, 47, 87, 105, 110, 65, 110, 115, 105, 69, 110, 99, 111, 100, 105, 110, 103, 47, 83, 117, 98, 116, 121, 112, 101, 47, 84, 121, 112, 101, 49, 47, 84, 121, 112, 101, 47, 70, 111, 110, 116, 62, 62, 10, 101, 110, 100, 111, 98, 106, 10, 50, 32, 48, 32, 111, 98, 106, 10, 60, 60, 47, 67, 111, 117, 110, 116, 32, 49, 47, 75, 105, 100, 115, 91, 52, 32, 48, 32, 82, 93, 47, 84, 121, 112, 101, 47, 80, 97, 103, 101, 115, 62, 62, 10, 101, 110, 100, 111, 98, 106, 10, 120, 114, 101, 102, 10, 48, 32, 55, 10, 48, 48, 48, 48, 48, 48, 48, 48, 48, 48, 32, 54, 53, 53, 51, 53, 32, 102, 32, 10, 48, 48, 48, 48, 48, 48, 48, 56, 53, 56, 32, 48, 48, 48, 48, 48, 32, 110, 32, 10, 48, 48, 48, 48, 48, 48, 48, 57, 57, 49, 32, 48, 48, 48, 48, 48, 32, 110, 32, 10, 48, 48, 48, 48, 48, 48, 48, 54, 57, 53, 32, 48, 48, 48, 48, 48, 32, 110, 32, 10, 48, 48, 48, 48, 48, 48, 48, 53, 54, 50, 32, 48, 48, 48, 48, 48, 32, 110, 32, 10, 48, 48, 48, 48, 48, 48, 48, 48, 49, 53, 32, 48, 48, 48, 48, 48, 32, 110, 32, 10, 48, 48, 48, 48, 48, 48, 48, 57, 48, 51, 32, 48, 48, 48, 48, 48, 32, 110, 32, 10, 116, 114, 97, 105, 108, 101, 114, 10, 60, 60, 47, 73, 68, 32, 91, 60, 102, 102, 50, 49, 102, 50, 56, 50, 100, 50, 52, 52, 97, 102, 97, 100, 101, 99, 48, 97, 49, 51, 57, 100, 102, 100, 51, 48, 50, 102, 53, 99, 52, 101, 54, 57, 97, 54, 56, 100, 48, 56, 102, 55, 53, 54, 52, 48, 48, 101, 102, 100, 48, 101, 56, 49, 100, 100, 102, 52, 56, 53, 55, 49, 48, 49, 97, 48, 99, 101, 99, 102, 100, 52, 54, 98, 100, 99, 50, 101, 56, 97, 102, 99, 55, 52, 51, 101, 54, 54, 56, 100, 56, 50, 49, 55, 102, 100, 56, 56, 49, 53, 101, 52, 97, 57, 97, 99, 97, 49, 54, 51, 102, 52, 100, 55, 97, 50, 100, 49, 97, 98, 97, 97, 48, 101, 49, 49, 62, 60, 102, 102, 50, 49, 102, 50, 56, 50, 100, 50, 52, 52, 97, 102, 97, 100, 101, 99, 48, 97, 49, 51, 57, 100, 102, 100, 51, 48, 50, 102, 53, 99, 52, 101, 54, 57, 97, 54, 56, 100, 48, 56, 102, 55, 53, 54, 52, 48, 48, 101, 102, 100, 48, 101, 56, 49, 100, 100, 102, 52, 56, 53, 55, 49, 48, 49, 97, 48, 99, 101, 99, 102, 100, 52, 54, 98, 100, 99, 50, 101, 56, 97, 102, 99, 55, 52, 51, 101, 54, 54, 56, 100, 56, 50, 49, 55, 102, 100, 56, 56, 49, 53, 101, 52, 97, 57, 97, 99, 97, 49, 54, 51, 102, 52, 100, 55, 97, 50, 100, 49, 97, 98, 97, 97, 48, 101, 49, 49, 62, 93, 47, 73, 110, 102, 111, 32, 51, 32, 48, 32, 82, 47, 82, 111, 111, 116, 32, 49, 32, 48, 32, 82, 47, 83, 105, 122, 101, 32, 55, 62, 62, 10, 37, 105, 84, 101, 120, 116, 45, 67, 111, 114, 101, 45, 56, 46, 48, 46, 50, 10, 115, 116, 97, 114, 116, 120, 114, 101, 102, 10, 49, 48, 52, 50, 10, 37, 37, 69, 79, 70, 10 },
+                            Status = true,
+                            ZakljucakDodan = true,
+                            isDeleted = false
                         });
                 });
 
@@ -766,7 +821,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("d687ff9d-1ec4-4aa9-a4f3-2eb5149d2212"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 2m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(2971),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(7759),
                             NapomenaZaPripremu = "Post od 8 sati prije testa.",
                             Naziv = "Glukoza",
                             Opis = "Mjerenje glukoze u krvi, važno za dijagnozu i praćenje dijabetesa.",
@@ -779,7 +834,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("8fff236b-4a25-4ed3-a138-f252ee4770eb"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 2.5m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3008),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(7807),
                             NapomenaZaPripremu = "Nema posebnih uputa.",
                             Naziv = "Leukociti",
                             Opis = "Broj leukocita, važan za otkrivanje infekcija ili upalnih procesa.",
@@ -792,7 +847,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("54d120fc-224a-4710-9046-162d9b61c2d7"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 2.5m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3037),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(7841),
                             NapomenaZaPripremu = "Nema posebnih uputa.",
                             Naziv = "Eritrociti",
                             Opis = "Broj eritrocita, važan za dijagnozu anemije i drugih poremećaja.",
@@ -805,7 +860,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("ef16a7e3-3117-4246-ae58-fc54d2307c77"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 3m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3070),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(7874),
                             NapomenaZaPripremu = "Nema posebnih uputa.",
                             Naziv = "MCHC",
                             Opis = "Prosječna koncentracija hemoglobina u eritrocitu.",
@@ -818,7 +873,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("ad25cc31-2b01-4ad3-bf2e-1fe4b53a3f25"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 3m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3105),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(7912),
                             NapomenaZaPripremu = "Nema posebnih uputa.",
                             Naziv = "AST",
                             Opis = "Enzim važan za otkrivanje oštećenja jetre.",
@@ -831,7 +886,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("a4a12d1c-b174-4938-8557-cb6281ccb2a6"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 2m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3139),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(7954),
                             NapomenaZaPripremu = "Nema posebnih uputa.",
                             Naziv = "Sedimentacija",
                             Opis = "Brzina sedimentacije eritrocita, indikator upalnih procesa.",
@@ -844,7 +899,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("0c1a4613-be50-48a6-abcb-a535870fe369"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 3.5m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3165),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(7988),
                             NapomenaZaPripremu = "Nema posebnih uputa.",
                             Naziv = "CRP",
                             Opis = "Marker za upalu u tijelu.",
@@ -857,7 +912,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("14a35eb5-c4bd-4a0b-9990-c8b493367bcf"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 3m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3193),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8022),
                             NapomenaZaPripremu = "Nema posebnih uputa.",
                             Naziv = "Bilirubin",
                             Opis = "Mjerenje bilirubina, važno za otkrivanje bolesti jetre i žučnih puteva.",
@@ -870,7 +925,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("1c978bd5-9777-4c05-b2ae-de4d3b9b4fc5"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 2.5m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3227),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8062),
                             NapomenaZaPripremu = "Post od 12 sati prije testa.",
                             Naziv = "Holesterol",
                             Opis = "Mjerenje ukupnog holesterola, važno za procjenu rizika od kardiovaskularnih bolesti.",
@@ -883,7 +938,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("20b1bda2-14bc-4b3f-bac4-598e2a292519"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 2.5m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3255),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8110),
                             NapomenaZaPripremu = "Post od 12 sati prije testa.",
                             Naziv = "Trigliceridi",
                             Opis = "Mjerenje triglicerida, važno za procjenu rizika od srčanih bolesti.",
@@ -896,7 +951,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("0c9db61b-d5e5-495d-876b-30ad80a8df3d"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 4.5m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3284),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8146),
                             NapomenaZaPripremu = "Jutarnji sputum.",
                             Naziv = "Citologija sputuma",
                             Opis = "Analiza sputuma za otkrivanje abnormalnih stanica.",
@@ -909,7 +964,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("59a5aaae-ec61-476d-84f5-2621d4054160"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 5m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3313),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8182),
                             NapomenaZaPripremu = "Nema posebnih uputa.",
                             Naziv = "Nasalni bris za MRSA",
                             Opis = "Testiranje na prisutnost MRSA (meticilin-rezistentni Staphylococcus aureus) u nosnoj šupljini.",
@@ -922,7 +977,7 @@ namespace MedLabO.Services.Migrations
                             TestID = new Guid("d9f7156c-a460-4a7c-b51c-ef7d859244af"),
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 3m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3343),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8216),
                             NapomenaZaPripremu = "Jutarnji urin.",
                             Naziv = "Urinarni albumin",
                             Opis = "Mjerenje albumina u urinu, indikator oštećenja bubrega.",
@@ -1096,7 +1151,7 @@ namespace MedLabO.Services.Migrations
                             UslugaID = 1,
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 6m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3362),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8238),
                             Dostupno = true,
                             Naziv = "Krvna slika",
                             Opis = "Mjerenje osnovnih testova vezanih za krvnu sliku.",
@@ -1108,7 +1163,7 @@ namespace MedLabO.Services.Migrations
                             UslugaID = 2,
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 8m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3386),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8258),
                             Dostupno = true,
                             Naziv = "Jetreni panel",
                             Opis = "Kompletna analiza funkcije jetre.",
@@ -1120,7 +1175,7 @@ namespace MedLabO.Services.Migrations
                             UslugaID = 3,
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 4m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3401),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8275),
                             Dostupno = true,
                             Naziv = "Kardiovaskularni rizik",
                             Opis = "Procjena rizika od kardiovaskularnih bolesti.",
@@ -1132,7 +1187,7 @@ namespace MedLabO.Services.Migrations
                             UslugaID = 4,
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 5m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3415),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8292),
                             Dostupno = true,
                             Naziv = "Upalni marker",
                             Opis = "Testiranje za otkrivanje upalnih procesa u tijelu.",
@@ -1144,7 +1199,7 @@ namespace MedLabO.Services.Migrations
                             UslugaID = 5,
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 4m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3432),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8313),
                             Dostupno = true,
                             Naziv = "Bubrežni panel",
                             Opis = "Procjena funkcije bubrega i rizika od dijabetesa.",
@@ -1156,7 +1211,7 @@ namespace MedLabO.Services.Migrations
                             UslugaID = 6,
                             AdministratorID = new Guid("e6bb3c49-9aa6-4ef0-9625-b16bb3775e58"),
                             Cijena = 9m,
-                            DTKreiranja = new DateTime(2024, 1, 1, 13, 28, 45, 913, DateTimeKind.Local).AddTicks(3447),
+                            DTKreiranja = new DateTime(2024, 1, 1, 17, 10, 56, 197, DateTimeKind.Local).AddTicks(8332),
                             Dostupno = true,
                             Naziv = "Respiratorni panel",
                             Opis = "Analiza respiratornog sistema za otkrivanje infekcija.",
@@ -1189,6 +1244,14 @@ namespace MedLabO.Services.Migrations
                     b.HasIndex("TerminID");
 
                     b.ToTable("Zakljucci");
+
+                    b.HasData(
+                        new
+                        {
+                            ZakljucakID = new Guid("cf32ff76-7659-4c4f-b73e-d9dbc841f409"),
+                            Detaljno = "Povećan CRP ukazuje potencijalno postojeću upalu ili period poslije upale, te u tom slučaju bi se CRP u narednom periodu trebo vraćati u normalne okvire.",
+                            Opis = "Povećan CRP"
+                        });
                 });
 
             modelBuilder.Entity("MedLabO.Services.Database.Zvanje", b =>
