@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
-    public class CRUDService<T, TDb, TSearch, TInsert, TUpdate> : Service<T, TDb, TSearch> where T : class where TDb : class where TSearch : SearchObject
+    public class CRUDService<T, TDb, TSearch, TInsert, TUpdate, TKey> : Service<T, TDb, TSearch> where T : class where TDb : class where TSearch : SearchObject where TKey : struct
     {
         public CRUDService(MedLabOContext db, IMapper mapper) : base(db, mapper)
         {
@@ -56,14 +56,29 @@ namespace MedLabO.Services
             return _mapper.Map<T>(entity);
         }
 
-        public virtual async Task<T> Update(Guid id, TUpdate update)
+        public virtual async Task<T> Update(TKey id, TUpdate update)
         {
             var set = _db.Set<TDb>();
-            var entity = await set.FindAsync(id);
-            if (entity is null)
+            TDb entity;
+
+            if (typeof(TKey) == typeof(int))
+            {
+                entity = await set.FindAsync(new object[] { (int)(object)id });
+            }
+            else if (typeof(TKey) == typeof(Guid))
+            {
+                entity = await set.FindAsync(new object[] { (Guid)(object)id });
+            }
+            else
+            {
+                throw new InvalidOperationException("Invalid key type.");
+            }
+
+            if (entity == null)
             {
                 throw new EntityNotFoundException("Entity with that ID doesn't exist.");
             }
+
             _mapper.Map(update, entity);
             await BeforeUpdate(entity, update);
             if (_db.Entry(entity).State == EntityState.Modified)

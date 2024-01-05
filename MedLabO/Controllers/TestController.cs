@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MedLabO.Controllers
 {
     [ApiController]
-    public class TestController : BaseCRUDController<Test, TestSearchObject, TestInsertRequest, TestUpdateRequest>
+    public class TestController : BaseCRUDController<Test, TestSearchObject, TestInsertRequest, TestUpdateRequest, Guid>
     {
         ITestService _testService;
         public TestController(ILogger<BaseController<Test, TestSearchObject>> logger, ITestService service) : base(logger, service)

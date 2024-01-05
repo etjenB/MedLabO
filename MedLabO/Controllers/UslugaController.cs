@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MedLabO.Controllers
 {
     [ApiController]
-    public class UslugaController : BaseCRUDController<Models.Usluga.Usluga, UslugaSearchObject, UslugaInsertRequest, UslugaUpdateRequest>
+    public class UslugaController : BaseCRUDController<Models.Usluga.Usluga, UslugaSearchObject, UslugaInsertRequest, UslugaUpdateRequest, int>
     {
         private IUslugaService _uslugaService;
         public UslugaController(ILogger<BaseController<Models.Usluga.Usluga, UslugaSearchObject>> logger, IUslugaService service) : base(logger, service)

@@ -5,7 +5,7 @@ using MedLabO.Services.Database;
 
 namespace MedLabO.Services
 {
-    public class TestParametarService : CRUDService<Models.TestParametar, Database.TestParametar, TestParametarSearchObject, TestParametarInsertRequest, TestParametarUpdateRequest>, ITestParametarService
+    public class TestParametarService : CRUDService<Models.TestParametar, Database.TestParametar, TestParametarSearchObject, TestParametarInsertRequest, TestParametarUpdateRequest, Guid>, ITestParametarService
     {
         public TestParametarService(MedLabOContext db, IMapper mapper) : base(db, mapper)
         {

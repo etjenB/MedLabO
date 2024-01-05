@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Castle.Core.Logging;
 using MedLabO.Models;
 using MedLabO.Models.Constants;
 using MedLabO.Models.Exceptions;
@@ -6,11 +7,12 @@ using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Administrator = MedLabO.Services.Database.Administrator;
 
 namespace MedLabO.Services
 {
-    public class AdministratorService : CRUDService<Models.Administrator, Database.Administrator, AdministratorSearchObject, AdministratorInsertRequest, AdministratorUpdateRequest>, IAdministratorService
+    public class AdministratorService : CRUDService<Models.Administrator, Database.Administrator, AdministratorSearchObject, AdministratorInsertRequest, AdministratorUpdateRequest, Guid>, IAdministratorService
     {
         private UserManager<Database.ApplicationUser> _userManager;
 

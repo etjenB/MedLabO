@@ -3,7 +3,7 @@ using MedLabO.Models.SearchObjects;
 
 namespace MedLabO.Services
 {
-    public interface IObavijestService : ICRUDService<Models.Obavijest, ObavijestSearchObject, ObavijestInsertRequest, ObavijestUpdateRequest>
+    public interface IObavijestService : ICRUDService<Models.Obavijest, ObavijestSearchObject, ObavijestInsertRequest, ObavijestUpdateRequest, Guid>
     {
     }
 }

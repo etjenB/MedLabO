@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace MedLabO.Services
 {
-    public class ObavijestService : CRUDService<Models.Obavijest, Database.Obavijest, ObavijestSearchObject, ObavijestInsertRequest, ObavijestUpdateRequest>, IObavijestService
+    public class ObavijestService : CRUDService<Models.Obavijest, Database.Obavijest, ObavijestSearchObject, ObavijestInsertRequest, ObavijestUpdateRequest, Guid>, IObavijestService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MedLabO.Controllers
 {
     [ApiController]
-    public class TestParametarController : BaseCRUDController<Models.TestParametar, TestParametarSearchObject, TestParametarInsertRequest, TestParametarUpdateRequest>
+    public class TestParametarController : BaseCRUDController<Models.TestParametar, TestParametarSearchObject, TestParametarInsertRequest, TestParametarUpdateRequest, Guid>
     {
         public TestParametarController(ILogger<BaseController<TestParametar, TestParametarSearchObject>> logger, ITestParametarService service) : base(logger, service)
         {

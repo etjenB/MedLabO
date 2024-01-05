@@ -15,7 +15,7 @@ using System.Globalization;
 
 namespace MedLabO.Services
 {
-    public class TerminService : CRUDService<Models.Termin.Termin, Database.Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest>, ITerminService
+    public class TerminService : CRUDService<Models.Termin.Termin, Database.Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest, Guid>, ITerminService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private IEventPublisher _eventPublisher;

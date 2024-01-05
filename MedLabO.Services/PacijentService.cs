@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
-    public class PacijentService : CRUDService<Models.Pacijent.PacijentWithoutTermini, Database.Pacijent, PacijentSearchObject, PacijentRegistrationRequest, PacijentUpdateRequest>, IPacijentService
+    public class PacijentService : CRUDService<Models.Pacijent.PacijentWithoutTermini, Database.Pacijent, PacijentSearchObject, PacijentRegistrationRequest, PacijentUpdateRequest, Guid>, IPacijentService
     {
         private UserManager<Database.ApplicationUser> _userManager;
         private MedLabOContext _dbContext;

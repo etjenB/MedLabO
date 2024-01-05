@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace MedLabO.Services
 {
-    public class TestService : CRUDService<Models.Test.Test, Database.Test, TestSearchObject, TestInsertRequest, TestUpdateRequest>, ITestService
+    public class TestService : CRUDService<Models.Test.Test, Database.Test, TestSearchObject, TestInsertRequest, TestUpdateRequest, Guid>, ITestService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 

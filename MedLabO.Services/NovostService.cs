@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace MedLabO.Services
 {
-    public class NovostService : CRUDService<Models.Novost, Database.Novost, NovostSearchObject, NovostInsertRequest, NovostUpdateRequest>, INovostService
+    public class NovostService : CRUDService<Models.Novost, Database.Novost, NovostSearchObject, NovostInsertRequest, NovostUpdateRequest, Guid>, INovostService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 

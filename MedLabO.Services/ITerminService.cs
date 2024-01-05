@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
-    public interface ITerminService : ICRUDService<Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest>
+    public interface ITerminService : ICRUDService<Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest, Guid>
     {
         Task<ICollection<TerminMinimal>> GetTerminiOfTheDay(DateTime day);
         Task TerminOdobravanje(TerminOdobravanjeRequest request);

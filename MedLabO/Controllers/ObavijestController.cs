@@ -7,7 +7,7 @@ using MedLabO.Models;
 namespace MedLabO.Controllers
 {
     [ApiController]
-    public class ObavijestController : BaseCRUDController<Models.Obavijest, ObavijestSearchObject, ObavijestInsertRequest, ObavijestUpdateRequest>
+    public class ObavijestController : BaseCRUDController<Models.Obavijest, ObavijestSearchObject, ObavijestInsertRequest, ObavijestUpdateRequest, Guid>
     {
         public ObavijestController(ILogger<BaseController<Obavijest, ObavijestSearchObject>> logger, IObavijestService service) : base(logger, service)
         {

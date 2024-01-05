@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {
-    public interface IMedicinskoOsobljeService : ICRUDService<Models.MedicinskoOsoblje, MedicinskoOsobljeSearchObject, MedicinskoOsobljeRegistrationRequest, MedicinskoOsobljeUpdateRequest>
+    public interface IMedicinskoOsobljeService : ICRUDService<Models.MedicinskoOsoblje, MedicinskoOsobljeSearchObject, MedicinskoOsobljeRegistrationRequest, MedicinskoOsobljeUpdateRequest, Guid>
     {
         Task ChangePassword(ChangePasswordRequest request);
         Task<Models.MedicinskoOsoblje> GetByIdWithProperties(Guid id);

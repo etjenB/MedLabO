@@ -8,7 +8,7 @@ namespace MedLabO.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AdministratorController : BaseCRUDController<Models.Administrator, AdministratorSearchObject, AdministratorInsertRequest, AdministratorUpdateRequest>
+    public class AdministratorController : BaseCRUDController<Models.Administrator, AdministratorSearchObject, AdministratorInsertRequest, AdministratorUpdateRequest, Guid>
     {
         private readonly IAdministratorService _administratorService;
         public AdministratorController(ILogger<BaseController<Administrator, AdministratorSearchObject>> logger, IAdministratorService service) : base(logger, service)

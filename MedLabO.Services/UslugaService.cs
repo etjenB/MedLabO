@@ -16,7 +16,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MedLabO.Services
 {
-    public class UslugaService : CRUDService<Models.Usluga.Usluga, Database.Usluga, UslugaSearchObject, UslugaInsertRequest, UslugaUpdateRequest>, IUslugaService
+    public class UslugaService : CRUDService<Models.Usluga.Usluga, Database.Usluga, UslugaSearchObject, UslugaInsertRequest, UslugaUpdateRequest, int>, IUslugaService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
