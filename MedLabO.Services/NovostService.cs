@@ -7,17 +7,20 @@ using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 
 namespace MedLabO.Services
 {
     public class NovostService : CRUDService<Models.Novost, Database.Novost, NovostSearchObject, NovostInsertRequest, NovostUpdateRequest, Guid>, INovostService
     {
+        private readonly ILogger<NovostService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public NovostService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(db, mapper)
+        public NovostService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor, ILogger<NovostService> logger) : base(db, mapper, logger)
         {
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         public override async Task BeforeInsert(Database.Novost entity, NovostInsertRequest insert)
@@ -32,8 +35,9 @@ namespace MedLabO.Services
                 }
                 entity.AdministratorID = Guid.Parse(currentUserId);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while inserting Novost.");
                 throw new UserException("Unable to insert Novost.");
             }
         }
@@ -50,8 +54,9 @@ namespace MedLabO.Services
                 }
                 entity.AdministratorID = Guid.Parse(currentUserId);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while updating Novost.");
                 throw new UserException("Unable to update Novost.");
             }
         }

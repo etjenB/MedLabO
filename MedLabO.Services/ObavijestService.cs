@@ -6,17 +6,20 @@ using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 
 namespace MedLabO.Services
 {
     public class ObavijestService : CRUDService<Models.Obavijest, Database.Obavijest, ObavijestSearchObject, ObavijestInsertRequest, ObavijestUpdateRequest, Guid>, IObavijestService
     {
+        private readonly ILogger<ObavijestService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ObavijestService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(db, mapper)
+        public ObavijestService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor, ILogger<ObavijestService> logger) : base(db, mapper, logger)
         {
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         public override async Task BeforeInsert(Database.Obavijest entity, ObavijestInsertRequest insert)
@@ -31,8 +34,9 @@ namespace MedLabO.Services
                 }
                 entity.AdministratorID = Guid.Parse(currentUserId);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while inserting Obavijest.");
                 throw new UserException("Unable to insert Obavijest.");
             }
         }
@@ -49,8 +53,9 @@ namespace MedLabO.Services
                 }
                 entity.AdministratorID = Guid.Parse(currentUserId);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while updating Obavijest.");
                 throw new UserException("Unable to update Obavijest.");
             }
         }

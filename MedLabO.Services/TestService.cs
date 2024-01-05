@@ -6,6 +6,7 @@ using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.ML;
 using System.Security.Claims;
 
@@ -13,11 +14,13 @@ namespace MedLabO.Services
 {
     public class TestService : CRUDService<Models.Test.Test, Database.Test, TestSearchObject, TestInsertRequest, TestUpdateRequest, Guid>, ITestService
     {
+        private readonly ILogger<TestService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TestService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(db, mapper)
+        public TestService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor, ILogger<TestService> logger) : base(db, mapper, logger)
         {
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         public async Task<ICollection<Models.Test.TestBasicData>?> GetTestoviBasicData()
@@ -91,8 +94,9 @@ namespace MedLabO.Services
                 }
                 entity.AdministratorID = Guid.Parse(currentUserId);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred before insert Test.");
                 throw new UserException("Unable to insert Test.");
             }
         }

@@ -12,18 +12,21 @@ using System.Security.Claims;
 using iText.Layout;
 using MedLabO.Models.PublishingObjects;
 using System.Globalization;
+using Microsoft.Extensions.Logging;
 
 namespace MedLabO.Services
 {
     public class TerminService : CRUDService<Models.Termin.Termin, Database.Termin, TerminSearchObject, TerminInsertRequest, TerminUpdateRequest, Guid>, ITerminService
     {
+        private readonly ILogger<TerminService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private IEventPublisher _eventPublisher;
 
-        public TerminService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor, IEventPublisher eventPublisher) : base(db, mapper)
+        public TerminService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor, IEventPublisher eventPublisher, ILogger<TerminService> logger) : base(db, mapper, logger)
         {
             _httpContextAccessor = httpContextAccessor;
             _eventPublisher = eventPublisher;
+            _logger = logger;
         }
 
         public async Task<ICollection<TerminMinimal>> GetTerminiOfTheDay(DateTime day)
@@ -59,8 +62,9 @@ namespace MedLabO.Services
                 _db.Termini.Update(termin);
                 await _db.SaveChangesAsync();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while executing TerminOdobravanje.");
                 throw new UserException("Usljed greške termin nije modifikovan.");
             }
         }
@@ -88,8 +92,9 @@ namespace MedLabO.Services
                 _db.Termini.Update(termin);
                 await _db.SaveChangesAsync();
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while executing TerminOtkazivanje.");
                 throw new UserException("Usljed greške termin nije otkazan.");
             }
         }
@@ -154,9 +159,10 @@ namespace MedLabO.Services
 
                     await transaction.CommitAsync();
                 }
-                catch
+                catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
+                    _logger.LogError(ex, "Error occurred while executing TerminDodavanjeRezultata.");
                     throw new UserException("Rezultati nisu dodani zbog greške.");
                 }
             }
@@ -179,9 +185,10 @@ namespace MedLabO.Services
                 _db.Termini.Update(termin);
                 await _db.SaveChangesAsync();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new UserException(e.Message);
+                _logger.LogError(ex, "Error occurred while executing TerminDodavanjeZaključka.");
+                throw new UserException(ex.Message);
             }
         }
 
@@ -197,8 +204,9 @@ namespace MedLabO.Services
                 entity.PacijentID = Guid.Parse(currentUserId);
                 entity.Placeno = true;
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred before insert in Termin.");
                 throw new UserException("Unable to insert Termin.");
             }
 
@@ -246,10 +254,10 @@ namespace MedLabO.Services
 
                 await _db.SaveChangesAsync();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-
-                throw new UserException(e.Message);
+                _logger.LogError(ex, "Error occurred after insert Termin.");
+                throw new UserException(ex.Message);
             }
 
             string? currentUserId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.Name)?.Value;
@@ -472,8 +480,9 @@ namespace MedLabO.Services
                     return memoryStream.ToArray();
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while executing GeneratePdf.");
                 throw new UserException("Greška pri kreiranju dokumenta.");
             }
             

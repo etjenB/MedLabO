@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Castle.Core.Logging;
-using MedLabO.Models;
 using MedLabO.Models.Constants;
 using MedLabO.Models.Exceptions;
 using MedLabO.Models.Requests;
@@ -14,10 +12,12 @@ namespace MedLabO.Services
 {
     public class AdministratorService : CRUDService<Models.Administrator, Database.Administrator, AdministratorSearchObject, AdministratorInsertRequest, AdministratorUpdateRequest, Guid>, IAdministratorService
     {
+        private readonly ILogger<AdministratorService> _logger;
         private UserManager<Database.ApplicationUser> _userManager;
 
-        public AdministratorService(MedLabOContext db, IMapper mapper, UserManager<Database.ApplicationUser> userManager) : base(db, mapper)
+        public AdministratorService(MedLabOContext db, IMapper mapper, ILogger<AdministratorService> logger, UserManager<Database.ApplicationUser> userManager) : base(db, mapper, logger)
         {
+            _logger = logger;
             _userManager = userManager;
         }
 
@@ -26,6 +26,7 @@ namespace MedLabO.Services
             var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             if (user == null)
             {
+                _logger.LogWarning(new EntityNotFoundException(), $"User with ID {request.UserId} was not found.");
                 throw new EntityNotFoundException("Korisnik nije pronađen.");
             }
 
@@ -34,6 +35,7 @@ namespace MedLabO.Services
             var result = await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
             if (!result.Succeeded)
             {
+                _logger.LogError(new UserException("Error while changing password for administrator."), $"Error happened while trying to change password for user with ID {request.UserId}.");
                 throw new UserException("Lozinka nije promjenjena.");
             }
         }
@@ -55,8 +57,9 @@ namespace MedLabO.Services
                 var result = await _userManager.CreateAsync(entity, insert.Password);
                 await _userManager.AddToRoleAsync(entity, RoleNames.Administrator);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while inserting Administrator.");
                 throw new UserException("Unable to insert Administrator.");
             }
         }

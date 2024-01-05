@@ -6,6 +6,7 @@ using MedLabO.Models.Usluga;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
@@ -18,11 +19,13 @@ namespace MedLabO.Services
 {
     public class UslugaService : CRUDService<Models.Usluga.Usluga, Database.Usluga, UslugaSearchObject, UslugaInsertRequest, UslugaUpdateRequest, int>, IUslugaService
     {
+        private readonly ILogger<UslugaService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UslugaService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor) : base(db, mapper)
+        public UslugaService(MedLabOContext db, IMapper mapper, IHttpContextAccessor httpContextAccessor, ILogger<UslugaService> logger) : base(db, mapper, logger)
         {
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         public async Task<ICollection<Models.Usluga.UslugaBasicData>?> GetUslugeBasicData()
@@ -95,8 +98,9 @@ namespace MedLabO.Services
                 }
                 entity.AdministratorID = Guid.Parse(currentUserId);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred before insert Usluga.");
                 throw new UserException("Unable to insert Usluga.");
             }
 
@@ -122,8 +126,9 @@ namespace MedLabO.Services
 
                 entity.AdministratorID = Guid.Parse(currentUserId);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred before update Usluga.");
                 throw new UserException("Unable to update Usluga.");
             }
 
@@ -261,8 +266,9 @@ namespace MedLabO.Services
 
                 return _mapper.Map<List<Models.Usluga.Usluga>>(finalResult);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while executing Recommend for Usluga.");
                 throw new UserException("Nema usluga za preporučiti");
             }
            

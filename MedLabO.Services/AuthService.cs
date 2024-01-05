@@ -12,18 +12,21 @@ using Microsoft.EntityFrameworkCore;
 using MedLabO.Models.Requests;
 using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 
 namespace MedLabO.Services
 {
     public class AuthService : IAuthService
     {
+        private readonly ILogger<AuthService> _logger;
         private UserManager<Database.ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly MedLabOContext _db;
         private IMapper _mapper;
 
-        public AuthService(UserManager<Database.ApplicationUser> userManager, IConfiguration configuration, MedLabOContext db, IMapper mapper)
+        public AuthService(ILogger<AuthService> logger, UserManager<Database.ApplicationUser> userManager, IConfiguration configuration, MedLabOContext db, IMapper mapper)
         {
+            _logger = logger;
             _userManager = userManager;
             _configuration = configuration;
             _db = db;
@@ -81,8 +84,9 @@ namespace MedLabO.Services
                 await _userManager.CreateAsync(pacijent, request.Password);
                 await _userManager.AddToRoleAsync(pacijent, RoleNames.Pacijent);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Unable to register Pacijent.");
                 throw new UserException("Unable to register Pacijent.");
             }
 

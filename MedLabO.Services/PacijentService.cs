@@ -6,6 +6,7 @@ using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,15 @@ namespace MedLabO.Services
 {
     public class PacijentService : CRUDService<Models.Pacijent.PacijentWithoutTermini, Database.Pacijent, PacijentSearchObject, PacijentRegistrationRequest, PacijentUpdateRequest, Guid>, IPacijentService
     {
+        private readonly ILogger<PacijentService> _logger;
         private UserManager<Database.ApplicationUser> _userManager;
         private MedLabOContext _dbContext;
 
-        public PacijentService(MedLabOContext db, IMapper mapper, UserManager<Database.ApplicationUser> userManager) : base(db, mapper)
+        public PacijentService(MedLabOContext db, IMapper mapper, UserManager<Database.ApplicationUser> userManager, ILogger<PacijentService> logger) : base(db, mapper, logger)
         {
             _userManager = userManager;
             _dbContext = db;
+            _logger = logger;
         }
 
         public async Task ChangePassword(ChangePasswordRequest request)
@@ -59,8 +62,9 @@ namespace MedLabO.Services
                 await _userManager.CreateAsync(entity, insert.Password);
                 await _userManager.AddToRoleAsync(entity, RoleNames.Pacijent);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while inserting Pacijent.");
                 throw new UserException("Unable to register Pacijent.");
             }
         }
@@ -83,8 +87,9 @@ namespace MedLabO.Services
             {
                 await _userManager.UpdateAsync(entity);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while updating Pacijent.");
                 throw new UserException("Unable to update Pacijent.");
             }
         }

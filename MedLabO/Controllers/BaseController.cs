@@ -3,6 +3,7 @@ using MedLabO.Models.Exceptions;
 using MedLabO.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace MedLabO.Controllers
 {
@@ -12,7 +13,6 @@ namespace MedLabO.Controllers
     {
         protected readonly IService<T, TSearch> _service;
         protected readonly ILogger<BaseController<T, TSearch>> _logger;
-        private ILogger<BaseController<T, TSearch>> logger;
 
         public BaseController(ILogger<BaseController<T, TSearch>> logger, IService<T, TSearch> service)
         {
@@ -50,8 +50,9 @@ namespace MedLabO.Controllers
                 await _service.Delete(id);
                 return NoContent();
             }
-            catch (EntityNotFoundException)
+            catch (EntityNotFoundException ex)
             {
+                _logger.LogError(ex, $"Deletion failed for entity with ID {id} because entity was not found.");
                 return NotFound();
             }
             catch (Exception ex)

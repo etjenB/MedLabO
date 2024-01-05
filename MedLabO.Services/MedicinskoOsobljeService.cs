@@ -6,6 +6,7 @@ using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +18,15 @@ namespace MedLabO.Services
 {
     public class MedicinskoOsobljeService : CRUDService<Models.MedicinskoOsoblje, Database.MedicinskoOsoblje, MedicinskoOsobljeSearchObject, MedicinskoOsobljeRegistrationRequest, MedicinskoOsobljeUpdateRequest, Guid>, IMedicinskoOsobljeService
     {
+        private readonly ILogger<MedicinskoOsobljeService> _logger;
         private UserManager<Database.ApplicationUser> _userManager;
         private MedLabOContext _dbContext;
 
-        public MedicinskoOsobljeService(MedLabOContext db, IMapper mapper, UserManager<Database.ApplicationUser> userManager) : base(db, mapper)
+        public MedicinskoOsobljeService(MedLabOContext db, IMapper mapper, UserManager<Database.ApplicationUser> userManager, ILogger<MedicinskoOsobljeService> logger) : base(db, mapper, logger)
         {
             _userManager = userManager;
             _dbContext = db;
+            _logger = logger;
         }
 
         public async Task ChangePassword(ChangePasswordRequest request)
@@ -69,8 +72,9 @@ namespace MedLabO.Services
                 await _userManager.CreateAsync(entity, insert.Password);
                 await _userManager.AddToRoleAsync(entity, RoleNames.MedicinskoOsoblje);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while inserting MedicinskoOsoblje.");
                 throw new UserException("Unable to register MedicinskoOsoblje.");
             }
         }
@@ -89,11 +93,13 @@ namespace MedLabO.Services
                 throw new UserException("E-mail se vec koristi od strane drugog korisnika.");
             }
 
-            try {
+            try 
+            {
                 await _userManager.UpdateAsync(entity);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while updating MedicinskoOsoblje.");
                 throw new UserException("Unable to update MedicinskoOsoblje.");
             }
         }

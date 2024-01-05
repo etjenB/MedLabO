@@ -6,6 +6,7 @@ using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,12 @@ namespace MedLabO.Services
 {
     public class CRUDService<T, TDb, TSearch, TInsert, TUpdate, TKey> : Service<T, TDb, TSearch> where T : class where TDb : class where TSearch : SearchObject where TKey : struct
     {
-        public CRUDService(MedLabOContext db, IMapper mapper) : base(db, mapper)
+        private readonly ILogger<CRUDService<T, TDb, TSearch, TInsert, TUpdate, TKey>> _logger;
+
+        public CRUDService(MedLabOContext db, IMapper mapper, ILogger<CRUDService<T, TDb, TSearch, TInsert, TUpdate, TKey>> logger)
+            : base(db, mapper)
         {
+            _logger = logger;
         }
 
         public virtual async Task BeforeInsert(TDb entity, TInsert insert)
@@ -47,9 +52,10 @@ namespace MedLabO.Services
                 {
                     await _db.SaveChangesAsync();
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new UserException(e.Message);
+                    _logger.LogError(ex, "An error occurred during Insert operation.");
+                    throw new UserException(ex.Message);
                 }
             }
             await AfterInsert(entity, insert);
@@ -89,10 +95,10 @@ namespace MedLabO.Services
                     await _db.SaveChangesAsync();
 
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-
-                    throw new UserException(e.Message);
+                    _logger.LogError(ex, $"An error occurred during Update operation for ID: {id}");
+                    throw new UserException(ex.Message);
                 }
             }
             return _mapper.Map<T>(entity);
