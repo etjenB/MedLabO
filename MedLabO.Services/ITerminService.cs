@@ -1,11 +1,6 @@
 ﻿using MedLabO.Models.Requests.Termin;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Models.Termin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MedLabO.Services
 {

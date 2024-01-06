@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using MedLabO.Models;
 using MedLabO.Models.Exceptions;
 using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services.Database;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;

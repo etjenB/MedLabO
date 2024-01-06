@@ -1,5 +1,4 @@
 ﻿using MedLabO.Models.Constants;
-using MedLabO.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using MedLabO.Models.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using MedLabO.Models.Requests;
-using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 

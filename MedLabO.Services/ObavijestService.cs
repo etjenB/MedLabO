@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MedLabO.Models;
 using MedLabO.Models.Exceptions;
 using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;

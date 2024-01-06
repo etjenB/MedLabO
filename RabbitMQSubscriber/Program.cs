@@ -5,8 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using RabbitMQEmailNotifier.ConfigurationModels;
-using System;
-using System.IO;
 using Microsoft.Extensions.Options;
 
 class Program
