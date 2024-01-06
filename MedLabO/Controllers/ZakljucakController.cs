@@ -1,5 +1,6 @@
 ﻿using MedLabO.Models.SearchObjects;
 using MedLabO.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,12 @@ namespace MedLabO.Controllers
         public async Task<Models.Zakljucak> GetZakljucakByTerminID(string terminID)
         {
             return await _zakljucakService.GetZakljucakByTerminID(terminID);
+        }
+
+        [Authorize(Roles = "Administrator,MedicinskoOsoblje")]
+        public override Task<IActionResult> Delete(Guid id)
+        {
+            return base.Delete(id);
         }
     }
 }

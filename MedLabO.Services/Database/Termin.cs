@@ -39,10 +39,6 @@ namespace MedLabO.Services.Database
         public virtual ICollection<Usluga> TerminUsluge { get; set; } = new List<Usluga>();
         public virtual ICollection<TerminTest> TerminTestovi { get; set; } = new List<TerminTest>();
 
-        //[ForeignKey("Pacijent")]
-        //public string PacijentID { get; set; }
-        //public virtual Pacijent Pacijent { get; set; } = null!;
-
         [ForeignKey("Pacijent")]
         public Guid? PacijentID { get; set; }
 

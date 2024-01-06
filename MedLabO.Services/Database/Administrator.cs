@@ -5,9 +5,6 @@ namespace MedLabO.Services.Database
 {
     public class Administrator : ApplicationUser
     {
-        //[Key]
-        //public Guid AdministratorID { get; set; } = Guid.NewGuid();
-
         [Required]
         public string? Ime { get; set; }
 
@@ -17,8 +14,8 @@ namespace MedLabO.Services.Database
         [Required]
         public bool IsKontakt { get; set; } = false;
 
-        //Ukoliko je dati administrator kontakt, u KontaktInfo se pise kratki opis kontakta
-        //npr. KontaktInfo = "Podrska za korisnike";
+        //Ukoliko je dati administrator kontakt, u KontaktInfo se pise nacin kontakta
+        //npr. KontaktInfo = "medlabo_podrska@gmail.com";
         public string? KontaktInfo { get; set; }
 
         public virtual ICollection<Usluga> KreiraneUsluge { get; set; } = new List<Usluga>();

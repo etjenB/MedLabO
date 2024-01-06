@@ -49,7 +49,6 @@ namespace MedLabO.Services.Database
         public virtual ICollection<Termin> UslugaTermini { get; set; } = new List<Termin>();
         public virtual ICollection<Test> UslugaTestovi { get; set; } = new List<Test>();
 
-        //Foreign Key na tabelu Administrator
         [ForeignKey("Administrator")]
         public Guid? AdministratorID { get; set; }
 

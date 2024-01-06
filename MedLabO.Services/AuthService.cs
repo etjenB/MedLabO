@@ -140,51 +140,6 @@ namespace MedLabO.Services
             return tokenHandler.WriteToken(token);
         }
 
-        //public async Task<string> Login(string username, string password)
-        //{
-        //    var user = await _userManager.FindByNameAsync(username);
-
-        //    if (user != null && await _userManager.CheckPasswordAsync(user, password))
-        //    {
-        //        string Role = null;
-
-        //        if (await _userManager.IsInRoleAsync(user, RoleNames.Administrator))
-        //        {
-        //            Role = RoleNames.Administrator;
-        //        }else if(await _userManager.IsInRoleAsync(user, RoleNames.MedicinskoOsoblje))
-        //        {
-        //            Role = RoleNames.MedicinskoOsoblje;
-        //        }else if (await _userManager.IsInRoleAsync(user, RoleNames.Pacijent))
-        //        {
-        //            Role = RoleNames.Pacijent;
-        //        }
-
-        //        if (Role!=null)
-        //        {
-        //            var tokenHandler = new JwtSecurityTokenHandler();
-        //            var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Key"]);
-        //            var tokenDescriptor = new SecurityTokenDescriptor
-        //            {
-        //                Subject = new ClaimsIdentity(new Claim[]
-        //                {
-        //                    new Claim(ClaimTypes.Name, user.Id.ToString()),
-        //                    new Claim(ClaimTypes.Role, Role)
-        //                }),
-        //                Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["JwtSettings:DurationInMinutes"])),
-        //                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        //            };
-        //            var token = tokenHandler.CreateToken(tokenDescriptor);
-        //            return tokenHandler.WriteToken(token);
-        //        }
-        //        else
-        //        {
-        //            throw new UserException("User doesn't have a role.");
-        //        }
-        //    }
-
-        //    throw new UserException("Invalid login attempt.");
-        //}
-
         #endregion
     }
 }

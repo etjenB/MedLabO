@@ -32,7 +32,6 @@ namespace MedLabO.Services.Database
         public virtual ICollection<TerminTest> TerminTestovi { get; set; } = new List<TerminTest>();
         public virtual ICollection<Usluga> TestUsluge { get; set; } = new List<Usluga>();
 
-        //Foreign Key na tabelu Administrator
         [ForeignKey("Administrator")]
         public Guid? AdministratorID { get; set; }
 
@@ -42,10 +41,5 @@ namespace MedLabO.Services.Database
         public Guid? TestParametarID { get; set; }
 
         public virtual TestParametar? TestParametar { get; set; } = null!;
-
-        //[ForeignKey("Rezultat")]
-        //public Guid? RezultatID { get; set; }
-
-        //public virtual Rezultat? Rezultat { get; set; } = null!;
     }
 }

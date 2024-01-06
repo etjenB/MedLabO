@@ -2,6 +2,7 @@
 using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedLabO.Controllers
@@ -17,9 +18,28 @@ namespace MedLabO.Controllers
         }
 
         [HttpPut("ChangePassword")]
+        [Authorize(Roles = "Administrator")]
         public async Task ChangePassword(ChangePasswordRequest request)
         {
             await _administratorService.ChangePassword(request);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public override Task<Administrator> Insert([FromBody] AdministratorInsertRequest insert)
+        {
+            return base.Insert(insert);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public override Task<Administrator> Update(Guid id, [FromBody] AdministratorUpdateRequest update)
+        {
+            return base.Update(id, update);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public override Task<IActionResult> Delete(Guid id)
+        {
+            return base.Delete(id);
         }
     }
 }

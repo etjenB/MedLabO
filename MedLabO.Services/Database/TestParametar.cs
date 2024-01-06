@@ -18,12 +18,5 @@ namespace MedLabO.Services.Database
 
         //Mjerne jedinice npr. umol/L, g/L, pg itd.
         public string? Jedinica { get; set; }
-
-        //[ForeignKey("Test")]
-        //public Guid? TestID { get; set; }
-        //public virtual Test? Test { get; set; } = null!;
-        //[Key]
-        //public Guid TestParametarID { get; set; }
-        //public virtual Test Test { get; set; } = null!;
     }
 }

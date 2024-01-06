@@ -46,5 +46,23 @@ namespace MedLabO.Controllers
         {
             return await _testService.GetMostPopularTests();
         }
+
+        [Authorize(Roles = "Administrator")]
+        public override Task<Test> Insert([FromBody] TestInsertRequest insert)
+        {
+            return base.Insert(insert);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public override Task<Test> Update(Guid id, [FromBody] TestUpdateRequest update)
+        {
+            return base.Update(id, update);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public override Task<IActionResult> Delete(Guid id)
+        {
+            return base.Delete(id);
+        }
     }
 }

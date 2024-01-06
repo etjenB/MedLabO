@@ -43,12 +43,6 @@ namespace MedLabO.Services.Database
             modelBuilder.Entity<TerminTest>()
                 .HasKey(ttr => new { ttr.TestID, ttr.TerminID });
 
-            //modelBuilder.Entity<TestTerminRezultat>()
-            //    .HasOne(ttr => ttr.Rezultat)
-            //    .WithMany()
-            //    .HasForeignKey(ttr => ttr.RezultatID)
-            //    .IsRequired(false);
-
             base.OnModelCreating(modelBuilder);
 
             // Seed genders
@@ -604,7 +598,7 @@ namespace MedLabO.Services.Database
                }
            );
 
-            //seed obavijesti
+            // Seed obavijesti
             modelBuilder.Entity<Obavijest>().HasData(
                new Obavijest
                {
@@ -656,7 +650,7 @@ namespace MedLabO.Services.Database
                }
            );
 
-            //seed novosti
+            // Seed novosti
             modelBuilder.Entity<Novost>().HasData(
                new Novost
                {

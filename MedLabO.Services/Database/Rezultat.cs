@@ -28,11 +28,5 @@ namespace MedLabO.Services.Database
         //Izracunava se na osnovu RezFlo iz ove klase, MinVrijednost i MaxVrijednost iz TestParametar klase
         //Ukoliko ona postoji Obiljezen = true
         public float? RazlikaOdNormalne { get; set; }
-
-        //public virtual ICollection<TestTerminRezultat> TestTerminRezultati { get; set; } = new List<TestTerminRezultat>();
-
-        //[Key]
-        //public Guid TestID { get; set; }
-        //public virtual Test Test { get; set; } = null!;
     }
 }

@@ -2,9 +2,7 @@
 using MedLabO.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MedLabO.Controllers
 {
@@ -23,6 +21,12 @@ namespace MedLabO.Controllers
         public async Task<Models.Racun> GetRacunByTerminID(string terminID)
         {
             return await _racunService.GetRacunByTerminID(terminID);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public override Task<IActionResult> Delete(Guid id)
+        {
+            return base.Delete(id);
         }
     }
 }

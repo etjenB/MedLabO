@@ -23,7 +23,7 @@ namespace MedLabO.Controllers
         }
 
         [HttpPut("TerminOdobravanje")]
-        [Authorize(Roles = "MedicinskoOsoblje")]
+        [Authorize(Roles = "Administrator,MedicinskoOsoblje")]
         public async Task TerminOdobravanje(TerminOdobravanjeRequest request)
         {
             await _terminService.TerminOdobravanje(request);
@@ -36,17 +36,23 @@ namespace MedLabO.Controllers
         }
 
         [HttpPut("TerminDodavanjeRezultata")]
-        [Authorize(Roles = "MedicinskoOsoblje")]
+        [Authorize(Roles = "Administrator,MedicinskoOsoblje")]
         public async Task TerminDodavanjeRezultata(TerminTestRezultatRequest request)
         {
             await _terminService.TerminDodavanjeRezultata(request);
         }
 
         [HttpPut("TerminDodavanjeZakljucka")]
-        [Authorize(Roles = "MedicinskoOsoblje")]
+        [Authorize(Roles = "Administrator,MedicinskoOsoblje")]
         public async Task TerminDodavanjeZakljucka(TerminZakljucakRequest request)
         {
             await _terminService.TerminDodavanjeZakljucka(request);
+        }
+
+        [Authorize(Roles = "Administrator,MedicinskoOsoblje")]
+        public override Task<Termin> Update(Guid id, [FromBody] TerminUpdateRequest update)
+        {
+            return base.Update(id, update);
         }
     }
 }

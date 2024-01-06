@@ -2,6 +2,7 @@ using MedLabO.Models.Requests;
 using MedLabO.Models.SearchObjects;
 using MedLabO.Services;
 using MedLabO.Services.Database;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedLabO.Controllers
@@ -43,6 +44,24 @@ namespace MedLabO.Controllers
         public async Task<ICollection<Models.Usluga.Usluga>> Recommend(int uslugaId)
         {
             return await _uslugaService.Recommend(uslugaId);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public override Task<Models.Usluga.Usluga> Insert([FromBody] UslugaInsertRequest insert)
+        {
+            return base.Insert(insert);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public override Task<Models.Usluga.Usluga> Update(int id, [FromBody] UslugaUpdateRequest update)
+        {
+            return base.Update(id, update);
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public override Task<IActionResult> Delete(Guid id)
+        {
+            return base.Delete(id);
         }
     }
 }

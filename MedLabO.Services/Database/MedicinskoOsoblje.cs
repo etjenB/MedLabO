@@ -6,9 +6,6 @@ namespace MedLabO.Services.Database
 {
     public class MedicinskoOsoblje : ApplicationUser
     {
-        //[Key]
-        //public Guid MedicinskoOsobljeID { get; set; } = Guid.NewGuid();
-
         [Required]
         public string Ime { get; set; } = null!;
 
