@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+//brand
+const Color primaryMedLabOColor = Color.fromRGBO(40, 63, 144, 1);
+const Color secondaryMedLabOColor = Color.fromRGBO(199, 78, 130, 1);
+
 //text
 const Color primaryBlackTextColor = Colors.black;
 const Color primaryDarkTextColor = Colors.black45;
@@ -45,3 +49,13 @@ const SizedBox sizedBoxWidthM = SizedBox(
 const SizedBox sizedBoxWidthS = SizedBox(
   width: 5,
 );
+
+//button styles
+const ButtonStyle btnMedLabOPrimary = ButtonStyle(
+    backgroundColor: MaterialStatePropertyAll(primaryMedLabOColor),
+    textStyle:
+        MaterialStatePropertyAll(TextStyle(color: primaryWhiteTextColor)));
+const ButtonStyle btnMedLabOSecondary = ButtonStyle(
+    backgroundColor: MaterialStatePropertyAll(secondaryMedLabOColor),
+    textStyle:
+        MaterialStatePropertyAll(TextStyle(color: primaryWhiteTextColor)));

@@ -150,7 +150,15 @@ class _AdministratorProfilScreenState extends State<AdministratorProfilScreen> {
                                         Navigator.of(context).pop();
                                       }
                                     },
-                                    child: const Text('Odjavi se'),
+                                    style: btnMedLabOPrimary,
+                                    child: const Text(
+                                      'Odjavi se',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                        color: primaryWhiteTextColor,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -634,7 +642,15 @@ class _MedicinskoOsobljeProfilScreenState
                                         Navigator.of(context).pop();
                                       }
                                     },
-                                    child: const Text('Odjavi se'),
+                                    style: btnMedLabOPrimary,
+                                    child: const Text(
+                                      'Odjavi se',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 16,
+                                        color: primaryWhiteTextColor,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),

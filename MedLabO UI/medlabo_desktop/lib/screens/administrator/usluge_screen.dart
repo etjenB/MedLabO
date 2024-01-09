@@ -161,6 +161,7 @@ class _UslugeScreenState extends State<UslugeScreen>
                     },
                   );
                 },
+                style: btnMedLabOPrimary,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

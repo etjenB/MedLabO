@@ -10,6 +10,7 @@ import 'package:medlabo_desktop/providers/test_parametri_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_and_test_parametri_provider.dart';
 import 'package:medlabo_desktop/providers/testovi_provider.dart';
 import 'package:medlabo_desktop/providers/usluge_provider.dart';
+import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/constants/strings.dart';
 import 'package:medlabo_desktop/utils/general/auth_util.dart';
 import 'package:medlabo_desktop/widgets/master_screen.dart';
@@ -182,7 +183,13 @@ class _LoginPageState extends State<LoginPage> {
                               });
                             }
                           },
-                          child: const Text('Prijavi se')),
+                          style: btnMedLabOPrimary,
+                          child: const Text(
+                            'Prijavi se',
+                            style: TextStyle(
+                                color: primaryWhiteTextColor,
+                                fontWeight: FontWeight.bold),
+                          )),
                     ],
                   ),
                 ),

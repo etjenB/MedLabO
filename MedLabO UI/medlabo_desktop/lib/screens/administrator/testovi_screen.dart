@@ -967,6 +967,7 @@ class _TestoviScreenState extends State<TestoviScreen>
                     },
                   );
                 },
+                style: btnMedLabOPrimary,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:medlabo_desktop/models/obavijest/obavijest.dart';
 import 'package:medlabo_desktop/providers/obavijesti_provider.dart';
+import 'package:medlabo_desktop/utils/constants/design.dart';
 import 'package:medlabo_desktop/utils/general/util.dart';
 import 'package:provider/provider.dart';
 
@@ -109,7 +110,15 @@ class _ObavijestiScreenState extends State<ObavijestiScreen> {
                         alignment: Alignment.centerRight,
                         child: ElevatedButton(
                           onPressed: () => _showObavijestModal(context, item),
-                          child: const Text('Pročitaj'),
+                          style: btnMedLabOPrimary,
+                          child: const Text(
+                            'Pročitaj',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              color: primaryWhiteTextColor,
+                            ),
+                          ),
                         ),
                       ),
                     ],

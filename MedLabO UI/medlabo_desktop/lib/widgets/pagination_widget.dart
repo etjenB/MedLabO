@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medlabo_desktop/utils/constants/design.dart';
 
 class PaginationWidget extends StatelessWidget {
   final int currentPage;
@@ -20,7 +21,15 @@ class PaginationWidget extends StatelessWidget {
         ElevatedButton(
           onPressed:
               currentPage == 1 ? null : () => onPageChanged(currentPage - 1),
-          child: const Text('Prethodna'),
+          style: btnMedLabOPrimary,
+          child: const Text(
+            'Prethodna',
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              color: primaryWhiteTextColor,
+            ),
+          ),
         ),
         const SizedBox(width: 20),
         Text('Stranica $currentPage/$totalPages'),
@@ -50,7 +59,15 @@ class PaginationWidget extends StatelessWidget {
           onPressed: currentPage >= totalPages
               ? null
               : () => onPageChanged(currentPage + 1),
-          child: const Text('Sljedeća'),
+          style: btnMedLabOPrimary,
+          child: const Text(
+            'Sljedeća',
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              color: primaryWhiteTextColor,
+            ),
+          ),
         ),
       ],
     );

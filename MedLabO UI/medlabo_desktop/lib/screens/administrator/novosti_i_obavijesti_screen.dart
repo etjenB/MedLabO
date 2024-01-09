@@ -197,6 +197,7 @@ class _NovostWidgetState extends State<NovostWidget>
                     },
                   );
                 },
+                style: btnMedLabOPrimary,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -960,6 +961,7 @@ class _ObavijestWidgetState extends State<ObavijestWidget>
                     },
                   );
                 },
+                style: btnMedLabOPrimary,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

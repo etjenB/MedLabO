@@ -163,6 +163,7 @@ class _UposleniciScreenState extends State<UposleniciScreen>
                 },
               );
             },
+            style: btnMedLabOPrimary,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
