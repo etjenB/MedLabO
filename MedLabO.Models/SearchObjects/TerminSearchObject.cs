@@ -4,6 +4,10 @@
     {
         public string? FTS { get; set; }
         public string? PacijentId { get; set; }
+        //public string? TerminWhereUslugaId { get; set; }
+        public int TerminWhereUslugaId { get; set; } = 0;
+        public string? TerminiFrom { get; set; }
+        public string? TerminiTo { get; set; }
         public bool Obavljen { get; set; } = false;
         public bool Finaliziran { get; set; } = false;
         public bool UObradi { get; set; } = false;

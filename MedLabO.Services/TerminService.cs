@@ -402,6 +402,39 @@ namespace MedLabO.Services
                 query = query.Include("Zakljucak");
             }
 
+            /*if (!string.IsNullOrEmpty(search?.TerminWhereUslugaId))
+            {
+                var uslugaId = 0;
+                if (int.TryParse(search?.TerminWhereUslugaId, out uslugaId))
+                {
+
+                }
+                query = query.Where(t=> t.TerminUsluge.Any(u=>u.UslugaID == string));
+            }*/
+
+            if (search != null && search.TerminWhereUslugaId != 0)
+            {
+                query = query.Where(t => t.TerminUsluge.Any(u => u.UslugaID == search.TerminWhereUslugaId));
+            }
+
+            if (!string.IsNullOrEmpty(search?.TerminiFrom))
+            {
+                var dtTer = DateTime.Now;
+                if (DateTime.TryParse(search?.TerminiFrom, out dtTer))
+                {
+                    query = query.Where(t => t.DTTermina >= dtTer);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(search?.TerminiTo))
+            {
+                var dtTer = DateTime.Now;
+                if (DateTime.TryParse(search?.TerminiTo, out dtTer))
+                {
+                    query = query.Where(t => t.DTTermina <= dtTer);
+                }
+            }
+
             return base.AddInclude(query, search);
         }
 

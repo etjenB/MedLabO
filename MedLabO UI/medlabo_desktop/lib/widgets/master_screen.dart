@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medlabo_desktop/screens/administrator/novosti_i_obavijesti_screen.dart';
+import 'package:medlabo_desktop/screens/administrator/reporting_usluga_screen.dart';
 import 'package:medlabo_desktop/screens/administrator/testovi_screen.dart';
 import 'package:medlabo_desktop/screens/administrator/uposlenici_screen.dart';
 import 'package:medlabo_desktop/screens/administrator/usluge_screen.dart';
@@ -39,6 +40,7 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
         const PacijentiScreen(),
         const UposleniciScreen(),
         const IzvjestajiScreen(),
+        const ReportingUslugaScreen(),
         const AdministratorProfilScreen(),
       ];
       items = [
@@ -55,6 +57,8 @@ class _MasterScreenWidgetState extends State<MasterScreenWidget> {
             icon: Icons.work_outline, label: 'Uposlenici'),
         const SideNavigationBarItem(
             icon: Icons.document_scanner_outlined, label: 'Izvještaji'),
+        const SideNavigationBarItem(
+            icon: Icons.document_scanner_outlined, label: 'Reporting usluga'),
         const SideNavigationBarItem(
             icon: Icons.account_circle_outlined, label: 'Profil'),
       ];
