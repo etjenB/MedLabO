@@ -9,8 +9,10 @@
       "type": "identityapp"
     },
     "mssql1": {
-      "ignored": "true",
-      "type": "mssql"
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/medlabodbserver/databases/200204",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:MedLabOContextConnectionString"
     }
   }
 }
